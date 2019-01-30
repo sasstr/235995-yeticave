@@ -1,7 +1,7 @@
 # Личный проект «YetiCave»
 
 * Студент: [Alexander Strakhovenko](https://up.htmlacademy.ru/php/8/user/235995).
-* Наставник: `Неизвестно`.
+* Наставник: [Игорь Антонов](https://htmlacademy.ru/profile/antonov).
 
 ---
 
