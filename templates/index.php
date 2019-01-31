@@ -1,9 +1,3 @@
-<?php
-$is_auth = rand(0, 1);
-
-$user_name = 'Alexander Strakhovenko'; // укажите здесь ваше имя
-?>
-
     <section class="promo">
         <h2 class="promo__title">Нужен стафф для катки?</h2>
         <p class="promo__text">На нашем интернет-аукционе ты найдёшь самое эксклюзивное сноубордическое и горнолыжное снаряжение.</p>
