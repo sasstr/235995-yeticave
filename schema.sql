@@ -5,14 +5,14 @@ USE yeticave;
 
 CREATE TABLE categories (
   `id` INT NOT NULL PRIMARY KEY,
-  `name` CHAR(25) NOT NULL UNIQUE
+  `name` VARCHAR(25) NOT NULL UNIQUE
 );
 
 CREATE TABLE lots (
   `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  `title` CHAR(128) NOT NULL,
+  `title` VARCHAR(128) NOT NULL,
   `description` TEXT NOT NULL,
-  `url-image` CHAR(256),
+  `url-image` VARCHAR(256),
   `starting_price` INT UNSIGNED NOT NULL,
   `starting_date` DATE NOT NULL,
   `bet_step` INT UNSIGNED NOT NULL,
@@ -22,11 +22,11 @@ CREATE TABLE lots (
  CREATE TABLE users (
   `id` INT AUTO_INCREMENT PRIMARY KEY,
   `registration_date` DATETIME DEFAULT  current_timestamp NOT NULL,
-  `email` CHAR(128) NOT NULL UNIQUE,
-  `password` CHAR(64) NOT NULL,
-  `name` CHAR(64) NOT NULL,
-  `contacts` CHAR(64),
-  `avatar` CHAR(256)
+  `email` VARCHAR(128) NOT NULL UNIQUE,
+  `password` VARCHAR(64) NOT NULL,
+  `name` VARCHAR(64) NOT NULL,
+  `contacts` VARCHAR(64),
+  `avatar` VARCHAR(256)
 );
 
 CREATE TABLE rate (
