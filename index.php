@@ -1,9 +1,10 @@
 <?php
+require_once('config.php');
 require_once('functions.php');
 require_once('data.php');
-$index_data = render('index', $index_main);
+$index_page = render('index', $major_indexes);
 print render('layout', [
-    'main_content' => $index_data,
+    'main_content' => $index_page,
     'title' => $title,
     'categories' => $categories,
     'is_auth' => $is_auth,
