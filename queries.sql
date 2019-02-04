@@ -36,10 +36,13 @@ SELECT name FROM categories;
 -- FROM lots l
 
 -- показать лот по его id. Получите также название категории, к которой принадлежит лот;
-
+-- SELECT  FROM lots l WHERE id = 3;
 
 -- обновить название лота по его идентификатору;
-
+ UPDATE lots SET title = 'Маска Oakley Canopy 2019 XXL' WHERE id = 6;
 
 -- получить список самых свежих ставок для лота по его идентификатору
-
+SELECT r.`date`, r.`id` ,r.`amount`
+FROM rates r
+WHERE r.`id` = 1
+ORDER BY r.`date` DESC;
