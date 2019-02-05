@@ -32,11 +32,11 @@ SELECT name FROM categories;
 
 -- получить самые новые, открыте лоты. Каждый лот должен включать название, стартовую цену,
 -- ссылку на изображение, цену, кол-во ставок, название категории;
--- SELECT l.`title`, l.`starting_price`, l.`url_image` MAX(rates.`amount`)
--- FROM lots l
+-- SELECT l.`title`, l.`starting_price`, l.`url_image`, c.`name`
+-- FROM lots l, categories c
 
 -- показать лот по его id. Получите также название категории, к которой принадлежит лот;
--- SELECT  FROM lots l WHERE id = 3;
+-- SELECT l.`title` c.`name` FROM lots l, categories c WHERE id = 2;
 
 -- обновить название лота по его идентификатору;
  UPDATE lots SET title = 'Маска Oakley Canopy 2019 XXL' WHERE id = 6;
