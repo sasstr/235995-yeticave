@@ -19,7 +19,7 @@ $avatar = $_POST['']; // avatar - нет поля name в разметке
 $sql = INSERT INTO users (email, password, name, contacts, avatar) VALUES (?, ?, ?, ?, ?); // Запрос к БД
 $stmt = mysqli_prepare($link, $sql);
 mysqli_stmt_bind_param($stmt, 'ssssb', $email, $password, $name, $contacts, $avatar);
-mysqli_stmt_execute($stmt);
+mysqli_stmt_execute($stmt); // Выполняет подготовленный запрос
 
 */
 
