@@ -44,7 +44,7 @@
 </header>
 
 <main class="container">
-    <?= $main_content; ?>
+    <?= $content; ?>
 </main>
 </div>
 

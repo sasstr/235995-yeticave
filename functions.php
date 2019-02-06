@@ -1,10 +1,9 @@
 <?php
-date_default_timezone_set('europe/moscow');
+MOSCOW_TIME_ZONE;
 /**
- * Функция шаблонизатор проверяет наличие файла шаблона и возращает его.
- * Функция получает парметрами название файла шаблона и массив переменных.
- * @param string $file_name
- * @param array $data_array
+ * Проверяет наличие файла шаблона и возращает его.
+ * @param string $file_name название файла шаблона
+ * @param array $data_array массив переменных
  *
  * @return string возращает разметку шаблона
  */
@@ -14,13 +13,13 @@ function render ($file_name, $data_array) {
         return '';
     }
     ob_start();
-    extract($data_array);
+    extract($data_array, EXTR_SKIP);
     require_once ($path);
     return ob_get_clean();
 };
 /**
  * Функция форматирует цену товара и добавляет знак рубля.
- *@param integer $price
+ * @param integer $price
  *
  * @return string возращает отформатированную цену по тысячам со знаком рубля.
  */

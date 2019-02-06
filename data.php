@@ -1,7 +1,7 @@
 <?php
 $time_until_midnight = show_time();
 $is_auth = rand(0, 1);
-$title = 'Главная'; // может создать массив ? @TODO
+$title = 'Главная';
 $user_name = htmlspecialchars('Александр Страховенко');
 $user_avatar = 'img/user.jpg';
 $categories = ['Доски и лыжи', 'Крепления', 'Ботинки', 'Одежда', 'Инструменты', 'Разное'];

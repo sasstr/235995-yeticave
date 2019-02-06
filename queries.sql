@@ -32,28 +32,29 @@ SELECT name FROM categories;
 
 -- получить самые новые, открыте лоты. Каждый лот должен включать название, стартовую цену,
 -- ссылку на изображение, цену, кол-во ставок, название категории;
-/* SELECT l.`title`, l.`starting_price`, l.`url_image`, c.`name`
-FROM lots l,
-JOIN categories c
-ON l.`id` = c.`id`
-JOIN rates r
-ON l.`id` = r.`id`
-GROUP BY l.`starting_date` */
+/*
+SELECT lots.`title`, lots.`starting_price`, lots.`url_image`, categ.`name`
+FROM lots
+JOIN categories categ
+ON lots.`id` = categ.`id`
+JOIN rates
+ON lots.`id` = rates.`id`
+GROUP BY lots.`starting_date` */
 
 -- показать лот по его id. Получите также название категории, к которой принадлежит лот;
-SELECT l.`title` c.`name`
-FROM lots l
-JOIN categories c
-ON l.`id` = c.`id`
+SELECT lots.`title` categ.`name`
+FROM lots
+JOIN categories categ
+ON lots.`id` = categ.`id`
 WHERE `id` = 2;
 
 -- обновить название лота по его идентификатору;
- UPDATE lots
- SET title = 'Маска Oakley Canopy 2019 XXL'
- WHERE id = 6;
+UPDATE lots
+SET title = 'Маска Oakley Canopy 2019 XXL'
+WHERE id = 6;
 
 -- получить список самых свежих ставок для лота по его идентификатору
-SELECT r.`date`, r.`id` ,r.`amount`
-FROM rates r
-WHERE r.`id` = 1
-ORDER BY r.`date` DESC;
+SELECT rates.`date`, rates.`id`, rates.`amount`
+FROM rates
+WHERE rates.`id` = 1
+ORDER BY rates.`date` DESC;
