@@ -43,6 +43,7 @@ $lots = [
         'url' => 'img/lot-6.jpg',
     ]
 ];
+
 $major_indexes = [
     'categories' => $categories,
     'lots' => $lots,
