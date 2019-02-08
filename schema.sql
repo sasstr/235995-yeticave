@@ -32,9 +32,3 @@ CREATE TABLE lots (
   `avatar` VARCHAR(256),
   INDEX user_email(email(10))
 ) ENGINE = InnoDB;
-
-CREATE TABLE rates (
-  `id` INT AUTO_INCREMENT PRIMARY KEY,
-  `date` TIMESTAMP DEFAULT  current_timestamp NOT NULL,
-  `amount`  INT UNSIGNED NOT NULL
-) ENGINE = InnoDB;
