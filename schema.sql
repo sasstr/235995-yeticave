@@ -38,4 +38,4 @@ CREATE TABLE rates (
   `id` INT AUTO_INCREMENT PRIMARY KEY,
   `date` TIMESTAMP DEFAULT  current_timestamp NOT NULL,
   `amount`  INT UNSIGNED NOT NULL
-);
+) ENGINE = InnoDB;
