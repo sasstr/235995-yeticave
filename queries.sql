@@ -39,6 +39,7 @@ JOIN categories categ
 ON lots.category_id = categ.id
 JOIN rates
 ON rates.lots_id = lots.id
+WHERE lots.winner_id = 0
 GROUP BY rates.lots_id
 ORDER BY lots.starting_date DESC;
 
