@@ -19,7 +19,7 @@ CREATE TABLE lots (
   `finishing_date` TIMESTAMP,
   `user_id` INT(10) NOT NULL,
   `winner_id` INT(10),
-  `category_id` INT unsigned NOT NULL
+  `category_id` INT NOT NULL
   -- FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
 ) ENGINE = InnoDB;
 

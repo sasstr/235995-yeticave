@@ -22,22 +22,25 @@ VALUES
 ('muj@grush.eat', 'zanachka_est', 'John', 'пос. Дубки ул Центральная 34', NULL),
 ('good@rich.com', 'neskaju', 'Ben', 'London, Big-Ben 45', NULL);
 
-INSERT INTO rates(`amount`)
+INSERT INTO rates(`rate_amount`, `user_id`, `lots_id`)
 VALUES
-('8500'),
-('7800');
+('8500', 3, 3),
+('7800', 5, 5),
+('5600', 6, 6);
 
 -- получить все категории  +++
 SELECT name FROM categories;
 
 -- получить самые новые, открыте лоты. Каждый лот должен включать название, стартовую цену,
--- ссылку на изображение, цену, название категории;  ---
-SELECT lots.`title`, `starting_price`, `url_image`, categ.`name`
+-- ссылку на изображение, цену, название категории;
+SELECT lots.title, starting_price, url_image, MAX(rates.rate_amount ), categ.name
 FROM lots
 JOIN categories categ
-ON lots.`category_id` = categ.`id`
-WHERE lots.`winner_id` IS NULL
-ORDER BY lots.`starting_date`DESC;
+ON lots.category_id = categ.id
+JOIN rates
+ON rates.lots_id = lots.id
+GROUP BY rates.lots_id
+ORDER BY lots.starting_date DESC;
 
 -- показать лот по его id. Получите также название категории, к которой принадлежит лот; +++
 SELECT lots.`title`, categ.`name`
