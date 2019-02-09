@@ -42,7 +42,7 @@ WHERE lots.`winner_id` IS NULL
 ON lots.`id` = rates.`id` */
 GROUP BY lots.`starting_date`;
 
--- показать лот по его id. Получите также название категории, к которой принадлежит лот; +++
+-- показать лот по его id. Получите также название категории, к которой принадлежит лот; +++  123
 SELECT lots.`title`, categ.`name`
 FROM lots
 JOIN categories categ
