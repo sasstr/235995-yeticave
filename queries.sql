@@ -31,30 +31,27 @@ VALUES
 SELECT name FROM categories;
 
 -- получить самые новые, открыте лоты. Каждый лот должен включать название, стартовую цену,
--- ссылку на изображение, цену, кол-во ставок, название категории;
----  Этот не работает пока...---
-SELECT lots.`title`, lots.`starting_price`, lots.`url_image`, categ.`name`
+-- ссылку на изображение, цену, название категории;  ---
+SELECT lots.`title`, `starting_price`, `url_image`, categ.`name`
 FROM lots
 JOIN categories categ
-ON lots.`id` = categ.`id`
+ON lots.`category_id` = categ.`id`
 WHERE lots.`winner_id` IS NULL
-/* JOIN rates
-ON lots.`id` = rates.`id` */
-GROUP BY lots.`starting_date`;
+ORDER BY lots.`starting_date`DESC;
 
--- показать лот по его id. Получите также название категории, к которой принадлежит лот; +++  123
+-- показать лот по его id. Получите также название категории, к которой принадлежит лот; +++
 SELECT lots.`title`, categ.`name`
 FROM lots
 JOIN categories categ
 ON lots.`id` = categ.`id`
 WHERE categ.`id` = 2;
 
--- обновить название лота по его идентификатору; +++
+-- обновить название лота по его идентификатору;
 UPDATE lots
 SET title = 'Маска Oakley Canopy 2019 XXL'
 WHERE id = 6;
 
--- получить список самых свежих ставок для лота по его идентификатору +++
+-- получить список самых свежих ставок для лота по его идентификатору
 SELECT rates.`date`, rates.`id`, rates.`amount`
 FROM rates
 WHERE rates.`id` = 1
