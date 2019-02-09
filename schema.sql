@@ -40,6 +40,6 @@ CREATE TABLE rates (
   `rate_amount`  INT UNSIGNED NOT NULL,
   `user_id` INT NOT NULL,
   `lots_id` INT NOT NULL,
-  INDEX `rates_user_id`(user_id),
-  INDEX `rates_lots_id`(lots_id)
+  INDEX rates_user_id(user_id),
+  INDEX rates_lots_id(lots_id)
 ) ENGINE = InnoDB;

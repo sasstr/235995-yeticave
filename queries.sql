@@ -7,7 +7,7 @@ VALUES
   ('Инструменты'),
   ('Разное');
 
-INSERT INTO lots(`title`, `description`, `url_image`, `starting_price`, `starting_date`, `bet_step`, `user_id`, `winner_id`, `category_id`)
+INSERT INTO lots(`title`, `description`, `url_image`, `starting_price`, `starting_date`, `rate_step`, `user_id`, `winner_id`, `category_id`)
 VALUES
 ('2014 Rossignol District Snowboard', 'настоящий сноуборд', 'img/lot-1.jpg', 10999, '2019-01-01 21:15:10', 700, 1, 1, 1),
 ('DC Ply Mens 2016/2017 Snowboard', 'самая быстрая доска', 'img/lot-2.jpg', 159999, '2019-02-03 10:45:10', 2000, 2, 2, 2),
