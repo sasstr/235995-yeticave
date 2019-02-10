@@ -8,6 +8,17 @@ CREATE TABLE categories (
   `name` VARCHAR(25) NOT NULL
 ) ENGINE = InnoDB;
 
+ CREATE TABLE users (
+  `id` INT AUTO_INCREMENT PRIMARY KEY,
+  `registration_date` TIMESTAMP DEFAULT  current_timestamp NOT NULL,
+  `email` VARCHAR(128) NOT NULL UNIQUE,
+  `password` VARCHAR(64) NOT NULL,
+  `name` VARCHAR(64) NOT NULL,
+  `contacts` VARCHAR(64),
+  `avatar` VARCHAR(256),
+  INDEX user_email(email)
+) ENGINE = InnoDB;
+
 CREATE TABLE lots (
   `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `title` VARCHAR(128) NOT NULL,
@@ -19,19 +30,8 @@ CREATE TABLE lots (
   `finishing_date` TIMESTAMP,
   `user_id` INT(10) NOT NULL,
   `winner_id` INT(10),
-  `category_id` INT NOT NULL
-  -- FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
-) ENGINE = InnoDB;
-
- CREATE TABLE users (
-  `id` INT AUTO_INCREMENT PRIMARY KEY,
-  `registration_date` TIMESTAMP DEFAULT  current_timestamp NOT NULL,
-  `email` VARCHAR(128) NOT NULL UNIQUE,
-  `password` VARCHAR(64) NOT NULL,
-  `name` VARCHAR(64) NOT NULL,
-  `contacts` VARCHAR(64),
-  `avatar` VARCHAR(256),
-  INDEX user_email(email)
+  `category_id` INT NOT NULL,
+  -- FOREIGN KEY (`user_id`) REFERENCES `users`(`id`)
 ) ENGINE = InnoDB;
 
 CREATE TABLE rates (

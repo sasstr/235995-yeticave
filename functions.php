@@ -1,4 +1,5 @@
 <?php
+require_once('mysql_helper.php');
 MOSCOW_TIME_ZONE;
 /**
  * Проверяет наличие файла шаблона и возращает его.
@@ -63,13 +64,8 @@ mysqli_stmt_close($stmt);  // закрываем запрос
 
 `db_insert($link, $sql, $data);`. */
 
-
-
-/*
-
+/* Функция для соединения с БД*/
 function db_connect() {
-    // $link = mysqli_connect(DB_SETUP['HOST'], DB_SETUP['LOGIN'], DB_SETUP['PASSWORD'], DB_SETUP['NAME']);
-    // $link = mysqli_connect(implode(',', DB_SETUP));
     $link = mysqli_connect(...DB_SETUP);
         if ($link == false) {
             print("Ошибка подключения: " . mysqli_connect_error());
@@ -79,12 +75,15 @@ function db_connect() {
     return $link;
 };
 
+/* Функция для обработки INSERT запросов */
 function db_insert($link, $sql, $data) {
-    $stmt = db_get_prepare_stmt($link, $sql, $data);
+    $link = db_connect(); // соеденились с базой
+    $stmt = db_get_prepare_stmt($link, $sql, $data); // подготовили запрос
     mysqli_stmt_execute($stmt); // Выполняет подготовленный запрос
+    $rows = mysqli_stmt_affected_rows($stmt); // кол-во строк, которые вставлены в БД
     mysqli_stmt_close($stmt); // закрываем запрос
+    return $rows; // возращаем кол-во изменененных строк в БД
 };
-*/
 
 /*
 // $stmt = mysqli_prepare($link, $sql);
