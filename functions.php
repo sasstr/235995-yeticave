@@ -74,20 +74,27 @@ function db_connect() {
     mysqli_set_charset($link, 'utf8');
     return $link;
 };
+/* Функция формирует запрос к БД INSERT получает параметрами
+   имя таблицы и массив полей и массив значений*/
+function make_insert_query_sql ($table_name, $array_of_column , $array_of_values) {
+    $sql = 'INSERT INTO' . $table_name . '( '. implode(', ', $array_of_column) .' )'
+    . 'VALUES' . implode(', ', $array_of_values);
+    return $sql;
+  };
 
 /* Функция для обработки INSERT запросов */
 function db_insert($link, $sql, $data) {
     $link = db_connect(); // соеденились с базой
+    // mysql_real_escape_string(); экранирует спец символы  в запросе
     $stmt = db_get_prepare_stmt($link, $sql, $data); // подготовили запрос
     mysqli_stmt_execute($stmt); // Выполняет подготовленный запрос
     $rows = mysqli_stmt_affected_rows($stmt); // кол-во строк, которые вставлены в БД
     mysqli_stmt_close($stmt); // закрываем запрос
     return $rows; // возращаем кол-во изменененных строк в БД
 };
+/* ! Чушь какая то получается !
 
-/*
-// $stmt = mysqli_prepare($link, $sql);
-// mysqli_stmt_bind_param($stmt, 'ssssb', implode(",", $data););
+
 ! Таким образом, все задачи, связанные с взаимодействием
 ! с БД будут решаться с помощью трех функций.
 
@@ -101,5 +108,4 @@ function db_insert($link, $sql, $data) {
 ! Функции будут возвращать текст запросов, которые дальше можно передавать
 ! в ранее описанные универсальные функции.
 ! Или могут вызывать эти универсальные функции самостоятельно.
-! Подумай.
 */
