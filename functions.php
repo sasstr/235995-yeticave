@@ -1,4 +1,5 @@
 <?php
+require_once('mysql_helper.php');
 MOSCOW_TIME_ZONE;
 /**
  * Проверяет наличие файла шаблона и возращает его.
@@ -63,13 +64,8 @@ mysqli_stmt_close($stmt);  // закрываем запрос
 
 `db_insert($link, $sql, $data);`. */
 
-
-
-/*
-
+/* Функция для соединения с БД*/
 function db_connect() {
-    // $link = mysqli_connect(DB_SETUP['HOST'], DB_SETUP['LOGIN'], DB_SETUP['PASSWORD'], DB_SETUP['NAME']);
-    // $link = mysqli_connect(implode(',', DB_SETUP));
     $link = mysqli_connect(...DB_SETUP);
         if ($link == false) {
             print("Ошибка подключения: " . mysqli_connect_error());
@@ -78,17 +74,27 @@ function db_connect() {
     mysqli_set_charset($link, 'utf8');
     return $link;
 };
+/* Функция формирует запрос к БД INSERT получает параметрами
+   имя таблицы и массив полей и массив значений*/
+function make_insert_query_sql ($table_name, $array_of_column , $array_of_values) {
+    $sql = 'INSERT INTO' . $table_name . '( '. implode(', ', $array_of_column) .' )'
+    . 'VALUES' . implode(', ', $array_of_values);
+    return $sql;
+  };
 
+/* Функция для обработки INSERT запросов */
 function db_insert($link, $sql, $data) {
-    $stmt = db_get_prepare_stmt($link, $sql, $data);
+    $link = db_connect(); // соеденились с базой
+    // mysql_real_escape_string(); экранирует спец символы  в запросе
+    $stmt = db_get_prepare_stmt($link, $sql, $data); // подготовили запрос
     mysqli_stmt_execute($stmt); // Выполняет подготовленный запрос
+    $rows = mysqli_stmt_affected_rows($stmt); // кол-во строк, которые вставлены в БД
     mysqli_stmt_close($stmt); // закрываем запрос
+    return $rows; // возращаем кол-во изменененных строк в БД
 };
-*/
+/* ! Чушь какая то получается !
 
-/*
-// $stmt = mysqli_prepare($link, $sql);
-// mysqli_stmt_bind_param($stmt, 'ssssb', implode(",", $data););
+
 ! Таким образом, все задачи, связанные с взаимодействием
 ! с БД будут решаться с помощью трех функций.
 
@@ -102,5 +108,4 @@ function db_insert($link, $sql, $data) {
 ! Функции будут возвращать текст запросов, которые дальше можно передавать
 ! в ранее описанные универсальные функции.
 ! Или могут вызывать эти универсальные функции самостоятельно.
-! Подумай.
 */
