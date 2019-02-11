@@ -56,7 +56,7 @@ SET title = 'Маска Oakley Canopy 2019 XXL'
 WHERE id = 6;
 
 -- получить список самых свежих ставок для лота по его идентификатору
-SELECT rates.`date`, rates.`id`, rates.`amount`
+SELECT rates.`date`, rates.`id`, rates.`rate_amount`
 FROM rates
 WHERE rates.`id` = 1
 ORDER BY rates.`date` DESC;
