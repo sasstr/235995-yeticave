@@ -94,7 +94,18 @@ function db_insert($link, $sql, $data) {
 };
 /* ! Чушь какая то получается !
 
+function get_lots($link)
+    {
+        $result = [];
+        $sql = “your_sql”;
+        $result_query = mysqli_query($link, $sql);
+        if ($result_query !== false) {
+            $result = mysqli_fetch_all($result_query, MYSQLI_ASSOC);
+        }
+        return $result;
+    }
 
+ну и далее в таком же стиле.
 ! Таким образом, все задачи, связанные с взаимодействием
 ! с БД будут решаться с помощью трех функций.
 
