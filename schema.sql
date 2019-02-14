@@ -41,5 +41,5 @@ CREATE TABLE rates (
   `rate_amount`  INT UNSIGNED NOT NULL,
   `user_id` INT UNSIGNED NOT NULL,
   `lots_id` INT UNSIGNED NOT NULL,
-  INDEX rates_user_id(user_id) -- Индекса по полю user_id достаточно
+  INDEX rates_user_id(user_id)
 ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8;

@@ -66,33 +66,40 @@ mysqli_stmt_close($stmt);  // закрываем запрос
 
 /* Функция для соединения с БД*/
 function db_connect() {
-    $link = mysqli_connect(...DB_SETUP);
+    $link = mysqli_connect(DB_SETUP['HOST'], DB_SETUP['LOGIN'], DB_SETUP['PASSWORD'], DB_SETUP['NAME']);
         if ($link == false) {
             print("Ошибка подключения: " . mysqli_connect_error());
-            exit();
+            die();
     };
     mysqli_set_charset($link, 'utf8');
     return $link;
 };
-/* Функция формирует запрос к БД INSERT получает параметрами
-   имя таблицы и массив полей и массив значений*/
-function make_insert_query_sql ($table_name, $array_of_column , $array_of_values) {
-    $sql = 'INSERT INTO' . $table_name . '( '. implode(', ', $array_of_column) .' )'
-    . 'VALUES' . implode(', ', $array_of_values);
-    return $sql;
-  };
 
-/* Функция для обработки INSERT запросов */
-function db_insert($link, $sql, $data) {
-    $link = db_connect(); // соеденились с базой
-    // mysql_real_escape_string(); экранирует спец символы  в запросе
-    $stmt = db_get_prepare_stmt($link, $sql, $data); // подготовили запрос
-    mysqli_stmt_execute($stmt); // Выполняет подготовленный запрос
-    $rows = mysqli_stmt_affected_rows($stmt); // кол-во строк, которые вставлены в БД
-    mysqli_stmt_close($stmt); // закрываем запрос
-    return $rows; // возращаем кол-во изменененных строк в БД
-};
-/* ! Чушь какая то получается !
+function get_categories($link)
+{
+    $sql = 'SELECT `name` FROM categories';
+    $result = mysqli_query($link, $sql);
+    if ($result !== false) {
+        $categories = mysqli_fetch_all($result, MYSQLI_ASSOC);
+    }
+    return $categories;
+}
+
+function get_lots($link)
+{
+    $sql = 'SELECT lots.`title` AS `lots_title`, lots.`starting_price`, lots.`img_path`, categories.`name` AS `categories_name`
+            FROM lots
+            JOIN categories ON categories.`id` = lots.`category_id`
+            WHERE lots.`winner_id` IS NULL
+            ORDER BY lots.`starting_date`;';
+    $result = mysqli_query($link, $sql);
+    if ($result !== false) {
+        $lots = mysqli_fetch_all($result, MYSQLI_ASSOC);
+    }
+    return $lots;
+}
+
+/*
 
 function get_lots($link)
     {
@@ -119,4 +126,20 @@ function get_lots($link)
 ! Функции будут возвращать текст запросов, которые дальше можно передавать
 ! в ранее описанные универсальные функции.
 ! Или могут вызывать эти универсальные функции самостоятельно.
+---------------------------------------------------------------------------------
+На главной странице показываются карточки девяти новых лотов.
+Это лоты, у которых не истек срок их публикации, отсортированные
+от самых новых к старым. В прошлом задании вы написали SQL-запрос
+для получения таких записей. Сейчас вам будет необходимо заменить
+существующий массив с лотами на данные, полученные из MySQL по этому запросу.
+
+Также в футере страницы находится список категорий.
+Пока это статичный список, т.е. его отдельные пункты прописаны прямо в верстке.
+В этом задании вы должны заменить его на данные из БД.
+
+Необходимые действия
+
+В сценарии главной страницы выполните подключение к MySQL
+Отправьте SQL-запрос для получения списка новых лотов
+Используйте эти данные для показа карточек лотов на главной странице
 */

@@ -6,7 +6,6 @@ require_once('data.php');
 /*   ДЗ
 1. Написать формулу render для всех шаблонов (данные для контента будем брать из MySQL) ??? ---
 2. Создать формулы по обработки запросов к БД  ---
-3. Добавить в schema.sql create index для мэйлов юзера +++
 */
 
 $index_page = render('index', $major_indexes);
