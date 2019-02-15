@@ -100,9 +100,8 @@ function get_categories($link)
  * @param [type] $link принимает ресурс соединения
  * @return Возращает список лотов
  */
-function get_lots($link)
-{
-    $sql = 'SELECT lots.`title` AS `lots_title`, lots.`starting_price`, lots.`img_path`, categories.`name` AS `categories_name`
+function get_lots($link) {
+    $sql = 'SELECT lots.`title` AS `lots_title`, lots.`id`, lots.`starting_price`, lots.`img_path`, categories.`name` AS `categories_name`
             FROM lots
             JOIN categories ON categories.`id` = lots.`category_id`
             WHERE lots.`winner_id` IS NULL and lots.`finishing_date` > CURRENT_TIMESTAMP
