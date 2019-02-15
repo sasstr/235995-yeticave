@@ -3,11 +3,11 @@ require_once('config.php');
 require_once('functions.php');
 require_once('data.php');
 
-$title = 'Логин';
+$title = 'Мои лоты';
 
-$login = render('login', $login_page);
+$my_lots = render('my-lots', $my_lots_page);
 print render('layout', [
-    'content' => $login,
+    'content' => $my_lots,
     'title' => $title,
     'categories' => $categories,
     'is_auth' => $is_auth,

@@ -33,3 +33,11 @@ $all_lots_page = [
 $login_page = [
     'categories' => $categories,
 ];
+
+$login_page = [
+    'categories' => $categories,
+];
+
+$my_lots_page = [
+    'categories' => $categories,
+];
