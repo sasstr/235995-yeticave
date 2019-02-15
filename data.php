@@ -25,3 +25,11 @@ $add_lot_page = [
 $p_404 = [
     'categories' => $categories,
 ];
+
+$all_lots_page = [
+    'categories' => $categories,
+];
+
+$login_page = [
+    'categories' => $categories,
+];
