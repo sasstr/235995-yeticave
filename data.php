@@ -21,3 +21,7 @@ $lot_page = [
 $add_lot_page = [
     'categories' => $categories,
 ];
+
+$p_404 = [
+    'categories' => $categories,
+];
