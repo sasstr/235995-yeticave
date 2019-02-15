@@ -65,6 +65,11 @@ mysqli_stmt_close($stmt);  // закрываем запрос
 `db_insert($link, $sql, $data);`. */
 
 /* Функция для соединения с БД*/
+/**
+ * Устанавливает соединение с БД
+ *
+ * @return $link возращает ресурс соединения
+ */
 function db_connect() {
     $link = mysqli_connect(DB_SETUP['HOST'], DB_SETUP['LOGIN'], DB_SETUP['PASSWORD'], DB_SETUP['NAME']);
         if ($link == false) {
@@ -74,7 +79,12 @@ function db_connect() {
     mysqli_set_charset($link, 'utf8');
     return $link;
 };
-
+/**
+ * Возращеает список категорий для меню на сайте
+ *
+ * @param [type] $link принимает ресурс соединения
+ * @return Возращает список категорий
+ */
 function get_categories($link)
 {
     $sql = 'SELECT `name` FROM categories';
@@ -84,7 +94,12 @@ function get_categories($link)
     }
     return $categories;
 }
-
+/**
+ * Возращеает список лотов - карточек товара
+ * лимит 9 шт
+ * @param [type] $link принимает ресурс соединения
+ * @return Возращает список лотов
+ */
 function get_lots($link)
 {
     $sql = 'SELECT lots.`title` AS `lots_title`, lots.`starting_price`, lots.`img_path`, categories.`name` AS `categories_name`

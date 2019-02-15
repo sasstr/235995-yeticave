@@ -13,3 +13,7 @@ $major_indexes = [
     'lots' => $lots,
     'time_until_midnight' => $time_until_midnight
 ];
+
+$lot_page = [
+    'categories' => $categories,
+];

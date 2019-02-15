@@ -25,7 +25,7 @@
         <?php if (boolval($is_auth)): ?>
             <div class="user-menu__logged">
                 <p><?= $user_name ?></p>
-                <img src="<?= $user_avatar ?>" width="40" height="40" alt="Пользователь"> <!--TODO Можно будет убрать если не угадал -->
+                <img src="<?= $user_avatar ?>" width="40" height="40" alt="Пользователь">
             </div>
         <?php else: ?>
             <ul class="user-menu__list">
