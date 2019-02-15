@@ -41,3 +41,11 @@ $login_page = [
 $my_lots_page = [
     'categories' => $categories,
 ];
+
+$search_page = [
+    'categories' => $categories,
+];
+
+$sign_up_page = [
+    'categories' => $categories,
+];
