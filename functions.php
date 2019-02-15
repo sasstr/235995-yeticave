@@ -90,8 +90,8 @@ function get_lots($link)
     $sql = 'SELECT lots.`title` AS `lots_title`, lots.`starting_price`, lots.`img_path`, categories.`name` AS `categories_name`
             FROM lots
             JOIN categories ON categories.`id` = lots.`category_id`
-            WHERE lots.`winner_id` IS NULL
-            ORDER BY lots.`starting_date`;';
+            WHERE lots.`winner_id` IS NULL and lots.`finishing_date` > CURRENT_TIMESTAMP
+            ORDER BY lots.`starting_date` LIMIT 9;';
     $result = mysqli_query($link, $sql);
     if ($result !== false) {
         $lots = mysqli_fetch_all($result, MYSQLI_ASSOC);
@@ -127,9 +127,13 @@ function get_lots($link)
 ! в ранее описанные универсальные функции.
 ! Или могут вызывать эти универсальные функции самостоятельно.
 ---------------------------------------------------------------------------------
-На главной странице показываются карточки девяти новых лотов.
-Это лоты, у которых не истек срок их публикации, отсортированные
-от самых новых к старым. В прошлом задании вы написали SQL-запрос
+На главной странице показываются карточки девяти новых лотов.+++
+
+Это лоты, у которых не истек срок их публикации, +++
+
+отсортированные от самых новых к старым.  +++
+
+В прошлом задании вы написали SQL-запрос
 для получения таких записей. Сейчас вам будет необходимо заменить
 существующий массив с лотами на данные, полученные из MySQL по этому запросу.
 
