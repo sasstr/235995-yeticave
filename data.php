@@ -17,3 +17,7 @@ $major_indexes = [
 $lot_page = [
     'categories' => $categories,
 ];
+
+$add_lot_page = [
+    'categories' => $categories,
+];
