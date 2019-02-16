@@ -3,13 +3,14 @@ require_once('config.php');
 require_once('functions.php');
 require_once('data.php');
 
-$index_page = render('index', $major_indexes);
+$title = 'Мои лоты';
+
+$my_lots = render('my-lots', $my_lots_page);
 print render('layout', [
-    'content' => $index_page,
+    'content' => $my_lots,
     'title' => $title,
     'categories' => $categories,
     'is_auth' => $is_auth,
     'user_name' => $user_name,
     'user_avatar' => $user_avatar
 ]);
-?>

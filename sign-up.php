@@ -3,13 +3,14 @@ require_once('config.php');
 require_once('functions.php');
 require_once('data.php');
 
-$index_page = render('index', $major_indexes);
+$title = 'Страница поиска';
+
+$sign_up = render('sign-up', $sign_up_page);
 print render('layout', [
-    'content' => $index_page,
+    'content' => $sign_up,
     'title' => $title,
     'categories' => $categories,
     'is_auth' => $is_auth,
     'user_name' => $user_name,
     'user_avatar' => $user_avatar
 ]);
-?>

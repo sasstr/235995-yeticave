@@ -65,58 +65,78 @@ mysqli_stmt_close($stmt);  // закрываем запрос
 `db_insert($link, $sql, $data);`. */
 
 /* Функция для соединения с БД*/
+/**
+ * Устанавливает соединение с БД
+ *
+ * @return $link возращает ресурс соединения
+ */
 function db_connect() {
-    $link = mysqli_connect(...DB_SETUP);
+    $link = mysqli_connect(DB_SETUP['HOST'], DB_SETUP['LOGIN'], DB_SETUP['PASSWORD'], DB_SETUP['NAME']);
         if ($link == false) {
             print("Ошибка подключения: " . mysqli_connect_error());
-            exit();
+            die();
     };
     mysqli_set_charset($link, 'utf8');
     return $link;
 };
-/* Функция формирует запрос к БД INSERT получает параметрами
-   имя таблицы и массив полей и массив значений*/
-function make_insert_query_sql ($table_name, $array_of_column , $array_of_values) {
-    $sql = 'INSERT INTO' . $table_name . '( '. implode(', ', $array_of_column) .' )'
-    . 'VALUES' . implode(', ', $array_of_values);
-    return $sql;
-  };
-
-/* Функция для обработки INSERT запросов */
-function db_insert($link, $sql, $data) {
-    $link = db_connect(); // соеденились с базой
-    // mysql_real_escape_string(); экранирует спец символы  в запросе
-    $stmt = db_get_prepare_stmt($link, $sql, $data); // подготовили запрос
-    mysqli_stmt_execute($stmt); // Выполняет подготовленный запрос
-    $rows = mysqli_stmt_affected_rows($stmt); // кол-во строк, которые вставлены в БД
-    mysqli_stmt_close($stmt); // закрываем запрос
-    return $rows; // возращаем кол-во изменененных строк в БД
-};
-/* ! Чушь какая то получается !
-
-function get_lots($link)
-    {
-        $result = [];
-        $sql = “your_sql”;
-        $result_query = mysqli_query($link, $sql);
-        if ($result_query !== false) {
-            $result = mysqli_fetch_all($result_query, MYSQLI_ASSOC);
-        }
-        return $result;
+/**
+ * Возращеает список категорий для меню на сайте
+ *
+ * @param [type] $link принимает ресурс соединения
+ * @return Возращает список категорий
+ */
+function get_categories($link)
+{
+    $sql = 'SELECT `name` FROM categories';
+    $result = mysqli_query($link, $sql);
+    if ($result !== false) {
+        $categories = mysqli_fetch_all($result, MYSQLI_ASSOC);
     }
+    return $categories;
+}
+/**
+ * Возращеает список лотов - карточек товара
+ * лимит 9 шт
+ * @param [type] $link принимает ресурс соединения
+ * @return Возращает список лотов
+ */
+function get_lots($link) {
+    $sql = 'SELECT lots.`title` AS `lots_title`, lots.`id`, lots.`starting_price`, lots.`img_path`, categories.`name` AS `categories_name`
+            FROM lots
+            JOIN categories ON categories.`id` = lots.`category_id`
+            WHERE lots.`winner_id` IS NULL and lots.`finishing_date` > CURRENT_TIMESTAMP
+            ORDER BY lots.`starting_date` LIMIT 9;';
+    $result = mysqli_query($link, $sql);
+    if ($result !== false) {
+        $lots = mysqli_fetch_all($result, MYSQLI_ASSOC);
+    }
+    return $lots;
+}
 
-ну и далее в таком же стиле.
-! Таким образом, все задачи, связанные с взаимодействием
-! с БД будут решаться с помощью трех функций.
+/**
+ * @param $link ресурс соединения
+ * @param $lot_id номер id по которому надо получить лот
+ *
+ * @return Возращает лот по id из БД
+ */
 
-! Далее. После этого, ты можешь в отдельном модуле сделать функции,
-! которые будут формировать сами запросы.
-! Например:
-
-`getLots()` - возвращает все лоты;
-`save_lot()` - сохраняет лот в базе и т.д.
-
-! Функции будут возвращать текст запросов, которые дальше можно передавать
-! в ранее описанные универсальные функции.
-! Или могут вызывать эти универсальные функции самостоятельно.
-*/
+function get_lot_by_id ($link, $lot_id) {
+    $sql = 'SELECT lots.`title`
+    AS `lots_title`,
+        lots.`description`,
+        lots.`id`,
+        lots.`rate_step`,
+        lots.`starting_date`,
+        lots.`finishing_date`,
+        lots.`img_path`,
+        categories.`name` AS `categories_name`
+            FROM lots
+            JOIN categories ON categories.`id` = lots.`category_id`
+            WHERE lots.`winner_id` IS NULL and lots.`finishing_date` > CURRENT_TIMESTAMP
+            ORDER BY lots.`starting_date`;';
+    // $result = mysqli_query($link, $sql);
+    if ($result !== false) {
+        // $lot = mysqli_fetch($result, MYSQLI_ASSOC);
+    }
+    return $lot;
+}
