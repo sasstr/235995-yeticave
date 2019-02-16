@@ -112,3 +112,31 @@ function get_lots($link) {
     }
     return $lots;
 }
+
+/**
+ * @param $link ресурс соединения
+ * @param $lot_id номер id по которому надо получить лот
+ *
+ * @return Возращает лот по id из БД
+ */
+
+function get_lot_by_id ($link, $lot_id) {
+    $sql = 'SELECT lots.`title`
+    AS `lots_title`,
+        lots.`description`,
+        lots.`id`,
+        lots.`rate_step`,
+        lots.`starting_date`,
+        lots.`finishing_date`,
+        lots.`img_path`,
+        categories.`name` AS `categories_name`
+            FROM lots
+            JOIN categories ON categories.`id` = lots.`category_id`
+            WHERE lots.`winner_id` IS NULL and lots.`finishing_date` > CURRENT_TIMESTAMP
+            ORDER BY lots.`starting_date`;';
+    // $result = mysqli_query($link, $sql);
+    if ($result !== false) {
+        // $lot = mysqli_fetch($result, MYSQLI_ASSOC);
+    }
+    return $lot;
+}
