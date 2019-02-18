@@ -121,6 +121,7 @@ function get_lots($link) {
  */
 
 function get_lot_by_id ($link, $lot_id) {
+    $link = db_connect();
     $sql = 'SELECT lots.`title`
             AS `lots_title`,
             lots.`description`,
@@ -134,5 +135,8 @@ function get_lot_by_id ($link, $lot_id) {
     if ($result !== false) {
         $lot = mysqli_fetch_assoc($result);
         return $lot;
+    } else {
+        /* $error = mysqli_error($link);
+        show_error($content, $error); */
     }
 }
