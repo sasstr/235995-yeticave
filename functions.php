@@ -82,7 +82,7 @@ function db_connect() {
 /**
  * Возращеает список категорий для меню на сайте
  *
- * @param [type] $link принимает ресурс соединения
+ * @param resource $link принимает ресурс соединения
  * @return Возращает список категорий
  */
 function get_categories($link)
@@ -97,7 +97,7 @@ function get_categories($link)
 /**
  * Возращеает список лотов - карточек товара
  * лимит 9 шт
- * @param [type] $link принимает ресурс соединения
+ * @param resource $link принимает ресурс соединения
  * @return Возращает список лотов
  */
 function get_lots($link) {
@@ -121,7 +121,6 @@ function get_lots($link) {
  */
 
 function get_lot_by_id ($link, $lot_id) {
-    $link = db_connect();
     $sql = 'SELECT lots.`title`
             AS `lots_title`,
             lots.`description`,
@@ -135,8 +134,5 @@ function get_lot_by_id ($link, $lot_id) {
     if ($result !== false) {
         $lot = mysqli_fetch_assoc($result);
         return $lot;
-    } else {
-        /* $error = mysqli_error($link);
-        show_error($content, $error); */
     }
 }

@@ -14,10 +14,6 @@ $major_indexes = [
     'time_until_midnight' => $time_until_midnight
 ];
 
-$lot_page = [
-    'categories' => $categories,
-];
-
 $add_lot_page = [
     'categories' => $categories,
 ];

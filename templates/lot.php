@@ -1,5 +1,3 @@
-<? $lot = get_lot_by_id($link, $_GET['id']);
-?>
 <nav class="nav">
       <ul class="nav__list container">
         <?php foreach ($categories as $val): ?>
