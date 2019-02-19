@@ -120,17 +120,16 @@ function get_lots($link) {
  */
 
  function get_lot_by_id ($link, $lot_id) {
-     
+
     $sql = 'SELECT lots.`title`
             AS `lots_title`,
             lots.`description`,
             lots.`id`,
             lots.`img_path`,
-            `сategories`.`name` AS `categories_name`
+            `categories`.`name` AS `categories_name`
             FROM lots
             JOIN categories ON categories.`id` = lots.`category_id`
-            WHERE lots.`id`=' . intval($lot_id) .';';
-
+            WHERE lots.`id`=' . intval($lot_id) . ';';
     $result = mysqli_query($link, $sql);
     if ($result !== false) {
         return mysqli_fetch_assoc($result);
