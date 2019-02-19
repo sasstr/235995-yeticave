@@ -82,7 +82,7 @@ function db_connect() {
 /**
  * Возращеает список категорий для меню на сайте
  *
- * @param [type] $link принимает ресурс соединения
+ * @param resource $link принимает ресурс соединения
  * @return Возращает список категорий
  */
 function get_categories($link)
@@ -97,7 +97,7 @@ function get_categories($link)
 /**
  * Возращеает список лотов - карточек товара
  * лимит 9 шт
- * @param [type] $link принимает ресурс соединения
+ * @param resource $link принимает ресурс соединения
  * @return Возращает список лотов
  */
 function get_lots($link) {
@@ -122,21 +122,17 @@ function get_lots($link) {
 
 function get_lot_by_id ($link, $lot_id) {
     $sql = 'SELECT lots.`title`
-    AS `lots_title`,
-        lots.`description`,
-        lots.`id`,
-        lots.`rate_step`,
-        lots.`starting_date`,
-        lots.`finishing_date`,
-        lots.`img_path`,
-        categories.`name` AS `categories_name`
+            AS `lots_title`,
+            lots.`description`,
+            lots.`id`,
+            lots.`img_path`,
+            categories.`name` AS `categories_name`
             FROM lots
             JOIN categories ON categories.`id` = lots.`category_id`
-            WHERE lots.`winner_id` IS NULL and lots.`finishing_date` > CURRENT_TIMESTAMP
-            ORDER BY lots.`starting_date`;';
-    // $result = mysqli_query($link, $sql);
+            WHERE lots.`id`=' . intval($lot_id) .';';
+    $result = mysqli_query($link, $sql);
     if ($result !== false) {
-        // $lot = mysqli_fetch($result, MYSQLI_ASSOC);
+        $lot = mysqli_fetch_assoc($result);
+        return $lot;
     }
-    return $lot;
 }
