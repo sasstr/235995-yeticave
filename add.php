@@ -3,7 +3,12 @@ require_once('config.php');
 require_once('functions.php');
 require_once('data.php');
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+define( 'INSERT_NEW_LOT',
+        'INSERT INTO lots (`title`, `description`, `img_path`, `starting_price`, `rate_step`, `finishing_date` `category_id`)
+        VALUES (?, ?, ?, ?, ?, ?, ?);'
+);
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $new_lot = $_POST;
     $errors = [];
 
@@ -12,11 +17,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $errors = [];
     foreach ($required_fields as $field) {
         if (empty($new_lot[$field])) {
-            $errors[$field] = 'Заполните это поле он не может быть пустым.';
+            $errors[$field] = 'Заполните это поле оно не может быть пустым.';
         }
 
         if($field === 'category' && $new_lot[$field] === 'Выберите категорию') {
-            $errors[$field] = 'Выберите категорию';
+            $errors[$field] = 'Выберите категорию из списка';
         }
     }
 
@@ -32,6 +37,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
     }
 
+    if(!checkdate($new_lot['lot-date']) || strtotime($new_lot['lot-date']) < strtotime('tomorrow')) {
+        $errors['lot-date'] = 'Введите корректную дату завершения торгов, которая позже текущей даты хотя бы на один день';
+    }
 
 }
 
@@ -44,15 +52,3 @@ print render('layout', [
     'user_name' => $user_name,
     'user_avatar' => $user_avatar
 ]);
-
-/* if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-header("Location: /index.php?success=true");
-}
-
-<?php if (isset($_GET['success'])): ?>
-    <div class="alert alert-success">
-        <p>Спасибо за ваше сообщение!
-        </p>
-    </div>
-<?php endif; ?>
-*/
