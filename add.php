@@ -51,6 +51,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $errors['img_path'] = 'Необходимо загрузить фото с расширением PNG или JPEG';
         }
     }
+
+    if (count($errors)) {
+        $errors['form'] = 'Пожалуйста, исправьте ошибки в форме.';
+    }
 }
 
 $add_lot = render('add', $add_lot_page);
