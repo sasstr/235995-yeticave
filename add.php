@@ -3,10 +3,12 @@ require_once('config.php');
 require_once('functions.php');
 require_once('data.php');
 
-define('IMG_FILE_TYPES', ['image/jpeg', 'image/png']);
-
+define('IMG_FILE_TYPES', ['image/jpeg', 'image/jpg', 'image/png']);
+define('ALL_CATEGORIES',
+        'SELECT * FROM categories
+        ORDER BY id;');
 define( 'INSERT_NEW_LOT',
-        'INSERT INTO lots (`title`, `description`, `img_path`, `starting_price`, `rate_step`, `finishing_date` `category_id`, `author_id`)
+        'INSERT INTO lots (`title`, `description`, `img-file`, `starting_price`, `rate_step`, `finishing_date` `category_id`, `author_id`)
         VALUES (?, ?, ?, ?, ?, ?, ?, 7);'
 );
 
@@ -42,27 +44,42 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
 
-    if (isset($_FILES['img_path'])) {
+    if (isset($_FILES['img-file'])) {
         $finfo = finfo_open(FILEINFO_MIME_TYPE);
-        $file_name = $_FILES['img_path']['tmp_name'];
+        $file_name = $_FILES['img-file']['tmp_name'];
         $file_type = finfo_file($finfo, $file_name);
 
         if(!array_search($file_type, IMG_FILE_TYPES)) {
-            $errors['img_path'] = 'Необходимо загрузить фото с расширением PNG или JPEG';
+            $errors['img-file'] = 'Необходимо загрузить фото с расширением PNG или JPEG';
         }
     }
 
     if (count($errors)) {
         $errors['form'] = 'Пожалуйста, исправьте ошибки в форме.';
+        $add_lot = render('add', [
+            'add_lot_page' => $add_lot_page,
+            'categories' => $categories,
+            'errors' => $errors
+        ]);
+        print render('layout', [
+            'content' => $add_lot,
+            'title' => 'Добавить новый лот',
+            'categories' => $categories,
+            'is_auth' => $is_auth,
+            'user_name' => $user_name,
+            'user_avatar' => $user_avatar
+        ]);
+    } else {
+        $add_lot = render('add', $add_lot_page);
+        print render('layout', [
+            'content' => $add_lot,
+            'title' => 'Добавить новый лот',
+            'categories' => $categories,
+            'is_auth' => $is_auth,
+            'user_name' => $user_name,
+            'user_avatar' => $user_avatar
+        ]);
     }
 }
 
-$add_lot = render('add', $add_lot_page);
-print render('layout', [
-    'content' => $add_lot,
-    'title' => 'Добавить новый лот',
-    'categories' => $categories,
-    'is_auth' => $is_auth,
-    'user_name' => $user_name,
-    'user_avatar' => $user_avatar
-]);
+
