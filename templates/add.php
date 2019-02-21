@@ -73,6 +73,6 @@
           <span class="form__error"><?php isset($errors['lot-date']) ? print $errors['lot-date'] : print '' ?></span>
         </div>
       </div>
-        <span class="form__error <?php if($errors['lot-date']): ?>form__error--bottom<?php endif;?>"><?php isset($errors['form']) ? print $errors['form'] : print '' ?></span>
+        <span class="form__error <?php if($errors): ?>form__error--bottom<?php endif;?>"><?php isset($errors['form']) ? print $errors['form'] : print '' ?></span>
       <button type="submit" class="button">Добавить лот</button>
     </form>
