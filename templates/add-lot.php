@@ -7,7 +7,7 @@
         <?php endforeach ?>
       </ul>
     </nav>
-    <form class="form form--add-lot container <?php if($errors): ?>form--invalid<?php endif;?>" action="add.php" method="post" enctype="multipart/form-data"> <!-- form--invalid -->
+    <form class="form form--add-lot container <?php if($errors): ?>form--invalid<?php endif;?>" action="add-lot.php" method="post" enctype="multipart/form-data"> <!-- form--invalid -->
       <h2>Добавление лота</h2>
       <div class="form__container-two">
         <div class="form__item  <?php if($errors['lot-name']): ?>form__item--invalid<?php endif;?>"> <!-- form__item--invalid -->
@@ -42,7 +42,7 @@
         <div class="preview">
           <button class="preview__remove" type="button">x</button>
           <div class="preview__img">
-            <img src="img/avatar.jpg" width="113" height="113" alt="Изображение лота">
+            <img src="<?= $img_src?>" width="113" height="113" alt="Изображение лота"> <!-- src="img/avatar.jpg" -->
           </div>
         </div>
         <div class="form__input-file">

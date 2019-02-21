@@ -3,7 +3,10 @@ require_once('config.php');
 require_once('functions.php');
 require_once('data.php');
 
-define('IMG_FILE_TYPES', ['image/jpeg', 'image/jpg', 'image/png']);
+define('IMG_FILE_TYPES', ['jpg' =>'image/jpeg',
+                          'jpeg' => 'image/pjpeg',
+                          'png' =>'image/png']);
+
 define('ALL_CATEGORIES',
         'SELECT * FROM categories
         ORDER BY id;');
@@ -44,19 +47,35 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
 
-    if (isset($_FILES['img-file'])) {
+    if (isset($_FILES['img-file']['name']) && !empty($_FILES['img-file']['name'])) {
+        var_dump($_FILES);
         $finfo = finfo_open(FILEINFO_MIME_TYPE);
-        $file_name = $_FILES['img-file']['tmp_name'];
-        $file_type = finfo_file($finfo, $file_name);
+        $file_type = finfo_file($finfo, $_FILES['img-file']['tmp_name']);
 
         if(!array_search($file_type, IMG_FILE_TYPES)) {
-            $errors['img-file'] = 'Необходимо загрузить фото с расширением PNG или JPEG';
+            $errors['img-file'] = 'Необходимо загрузить фото с расширением JPEG, JPG или PNG';
+        } else {
+            $finfo = finfo_open(FILEINFO_MIME_TYPE);
+            $file_type = finfo_file($finfo, $_FILES['img-file']['tmp_name']);
+            $file_type_img = ['image/jpeg' => 'jpg',
+                            'image/pjpeg' => 'jpeg',
+                            'image/png' => 'png'
+                            ];
+            $file_name_uniq = uniqid() . $file_type_img[$file_type];
+            var_dump($file_name_uniq);
+
+            $file_name = $_FILES['img-file']['name'];
+            $file_tmp_name = $_FILES['img-file']['tmp_name'];
+            $file_path = __DIR__ . '/img/';
+            $file_url = '/upload/' . $file_name_uniq;
+            move_uploaded_file($file_tmp_name, $file_path . $file_name);
+            $img_src= $file_url . $file_name_uniq;
         }
     }
 
     if (count($errors)) {
         $errors['form'] = 'Пожалуйста, исправьте ошибки в форме.';
-        $add_lot = render('add', [
+        $add_lot = render('add-lot', [
             'add_lot_page' => $add_lot_page,
             'categories' => $categories,
             'errors' => $errors
@@ -70,7 +89,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'user_avatar' => $user_avatar
         ]);
     } else {
-        $add_lot = render('add', $add_lot_page);
+        $add_lot = render('add-lot', $add_lot_page);
         print render('layout', [
             'content' => $add_lot,
             'title' => 'Добавить новый лот',
@@ -81,5 +100,3 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         ]);
     }
 }
-
-
