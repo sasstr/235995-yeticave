@@ -55,18 +55,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if(!array_search($file_type, IMG_FILE_TYPES)) {
             $errors['img-file'] = 'Необходимо загрузить фото с расширением JPEG, JPG или PNG';
         } else {
-            $finfo = finfo_open(FILEINFO_MIME_TYPE);
-            $file_type = finfo_file($finfo, $_FILES['img-file']['tmp_name']);
-            $file_type_img = ['image/jpeg' => 'jpg',
-                            'image/pjpeg' => 'jpeg',
-                            'image/png' => 'png'
-                            ];
-            $file_name_uniq = uniqid() . $file_type_img[$file_type];
-            var_dump($file_name_uniq);
-
-            $file_name = $_FILES['img-file']['name'];
             $file_tmp_name = $_FILES['img-file']['tmp_name'];
-            $file_path = __DIR__ . '/img/';
+            $finfo = finfo_open(FILEINFO_MIME_TYPE);
+            $file_type = finfo_file($finfo, $file_tmp_name);
+            $file_name_uniq = uniqid() . pathinfo($file_tmp_name, PATHINFO_EXTENSION);
+            var_dump($file_name_uniq);
+            $file_name = $_FILES['img-file']['name'];
+            $file_path = __DIR__ . '/upload/';
             $file_url = '/upload/' . $file_name_uniq;
             move_uploaded_file($file_tmp_name, $file_path . $file_name);
             $img_src= $file_url . $file_name_uniq;
@@ -75,7 +70,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if (count($errors)) {
         $errors['form'] = 'Пожалуйста, исправьте ошибки в форме.';
-        $add_lot = render('add-lot', [
+        $add_lot = render('add', [
             'add_lot_page' => $add_lot_page,
             'categories' => $categories,
             'errors' => $errors
@@ -89,7 +84,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'user_avatar' => $user_avatar
         ]);
     } else {
-        $add_lot = render('add-lot', $add_lot_page);
+        $add_lot = render('add', $add_lot_page);
         print render('layout', [
             'content' => $add_lot,
             'title' => 'Добавить новый лот',

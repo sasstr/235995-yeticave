@@ -12,4 +12,3 @@ print render('layout', [
     'user_name' => $user_name,
     'user_avatar' => $user_avatar
 ]);
-?>
