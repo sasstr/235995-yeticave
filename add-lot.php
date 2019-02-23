@@ -58,6 +58,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             move_uploaded_file($file_tmp_name, $file_path . $file_name_uniq);
 
             $link = db_connect();
+            if (!$link) {
+                printf("Не удалось подключиться: %s\n", mysqli_connect_error());
+                exit();
+            }
             // Создание подготовленного выражения
             $sql = 'INSERT INTO lots (`title`,
                                       `description`,
@@ -72,6 +76,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);';
             $author_id = 7;
             $user_id = 4;
+            $starting_date = date_format(date_create('now'), 'Y-m-d H:i:s');
             $lot_data = [$new_lot['lot-name'],
                         $new_lot['message'],
                         $file_url,
@@ -83,12 +88,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         $new_lot['category'],
                         $author_id
                         ];
-            $starting_date = date_format(date_create('now'), 'Y-m-d H:i:s');
+            
             $stmt = mysqli_prepare($link, $sql);
-            if (!$link) {
-                printf("Не удалось подключиться: %s\n", mysqli_connect_error());
-                exit();
-            }
+            
             var_dump($link);
             var_dump($new_lot);
 
@@ -118,7 +120,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     }
             */
              $res = mysqli_stmt_get_result($stmt); 
-            var_dump($res);
+            var_dump($res);  // Тут все время FALSE  :-(
 
             // Проверка на добавление в БД записи о новом лоте и перенаправление на страницу с новым лотом.
             if ($res) {
