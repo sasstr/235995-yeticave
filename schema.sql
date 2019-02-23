@@ -26,7 +26,7 @@ CREATE TABLE lots (
   `description` TEXT NOT NULL,
   `img_path` VARCHAR(256),
   `starting_price` INT UNSIGNED NOT NULL,
-  `starting_date` TIMESTAMP NOT NULL,
+  `starting_date` TIMESTAMP NOT NULL DEFAULT TIMESTAMP,
   `rate_step` INT UNSIGNED NOT NULL,
   `finishing_date` TIMESTAMP,
   `user_id` INT UNSIGNED NOT NULL,
