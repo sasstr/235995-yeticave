@@ -10,7 +10,7 @@ CREATE TABLE categories (
 
 CREATE TABLE users (
   `id` INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-  `registration_date` TIMESTAMP DEFAULT  current_timestamp NOT NULL,
+  `registration_date` TIMESTAMP DEFAULT  CURRENT_TIMESTAMP NOT NULL,
   `email` VARCHAR(128) NOT NULL UNIQUE,
   `password` CHAR(64) NOT NULL,
   `name` VARCHAR(64) NOT NULL,
@@ -26,7 +26,7 @@ CREATE TABLE lots (
   `description` TEXT NOT NULL,
   `img_path` VARCHAR(256),
   `starting_price` INT UNSIGNED NOT NULL,
-  `starting_date` TIMESTAMP NOT NULL DEFAULT TIMESTAMP,
+  `starting_date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `rate_step` INT UNSIGNED NOT NULL,
   `finishing_date` TIMESTAMP,
   `user_id` INT UNSIGNED NOT NULL,
@@ -38,7 +38,7 @@ CREATE TABLE lots (
 
 CREATE TABLE rates (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  `date` TIMESTAMP DEFAULT  current_timestamp NOT NULL,
+  `date` TIMESTAMP DEFAULT  CURRENT_TIMESTAMP NOT NULL,
   `rate_amount`  INT UNSIGNED NOT NULL,
   `user_id` INT UNSIGNED NOT NULL,
   `lots_id` INT UNSIGNED NOT NULL,

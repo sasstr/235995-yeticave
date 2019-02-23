@@ -51,7 +51,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $file_name = $_FILES['img-file']['name'];
             $finfo = finfo_open(FILEINFO_MIME_TYPE);
             $file_type = finfo_file($finfo, $file_tmp_name);
-            $file_name_uniq = uniqid() . '.' . pathinfo($file_name , PATHINFO_EXTENSION);
+            $file_name_uniq = uniqid('lot-') . '.' . pathinfo($file_name , PATHINFO_EXTENSION);
             $file_path = __DIR__ . '/upload/';
             $file_url = '/upload/' . trim($file_name_uniq);
             // Перемещение загруженного файла в папку сайта
