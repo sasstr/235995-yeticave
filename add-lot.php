@@ -59,7 +59,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             $link = db_connect();
             // Создание подготовленного выражения
-            const $sql = 'INSERT INTO lots (`title`,
+            $sql = 'INSERT INTO lots (`title`,
                                       `description`,
                                       `img_path`,
                                       `starting_price`,
@@ -72,6 +72,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);';
             $author_id = 7;
             $user_id = 4;
+            $lot_data = [$new_lot['lot-name'],
+                        $new_lot['message'],
+                        $file_url,
+                        $new_lot['lot-rate'],
+                        $starting_date,
+                        $new_lot['lot-step'],
+                        $new_lot['lot-date'],
+                        $user_id,
+                        $new_lot['category'],
+                        $author_id
+                        ];
             $starting_date = date_format(date_create('now'), 'Y-m-d H:i:s');
             $stmt = mysqli_prepare($link, $sql);
             if (!$link) {
@@ -81,17 +92,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             var_dump($link);
             var_dump($new_lot);
 
-            mysqli_stmt_bind_param($stmt, 'sssssssisi', $new_lot['lot-name'],
-                                                    $new_lot['message'],
-                                                    $file_url,
-                                                    $new_lot['lot-rate'],
-                                                    $starting_date,
-                                                    $new_lot['rate-step'],
-                                                    $new_lot['lot-date'],
-                                                    $user_id,
-                                                    $new_lot['category'],
-                                                    $author_id);
-            /* $stmt = db_get_prepare_stmt($link, $sql, [$new_lot['lot-name'],
+            /*mysqli_stmt_bind_param($stmt, 'sssssssisi', $new_lot['lot-name'],
                                                     $new_lot['message'],
                                                     $file_url,
                                                     $new_lot['lot-rate'],
@@ -100,10 +101,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                     $new_lot['lot-date'],
                                                     $user_id,
                                                     $new_lot['category'],
-                                                    $author_id
-                                                    ]); */
+                                                    $author_id);*/
+            $stmt = db_get_prepare_stmt($link, $sql, $lot_data); 
             var_dump($stmt);
-            $res = mysqli_stmt_execute($stmt);
+            mysqli_stmt_execute($stmt);
+            /*$res = mysqli_stmt_execute($stmt);
+// Функция добавляет новый лот в БД и в случае успеха перенаправляет пользователя на страницу нового лота.
+                function db_insert_data($link, $sql, $data = []) {
+                    $stmt = db_get_prepare_stmt($link, $sql, $data);
+                    mysqli_stmt_execute($stmt);
+                    $res = mysqli_stmt_get_result($stmt); 
+                    if ($res) {
+                    $lot_id = mysqli_insert_id($link);
+                    header("Location: lot.php?id=" . $lot_id);
+                    exit();
+                    }
+            */
+             $res = mysqli_stmt_get_result($stmt); 
             var_dump($res);
 
             // Проверка на добавление в БД записи о новом лоте и перенаправление на страницу с новым лотом.
