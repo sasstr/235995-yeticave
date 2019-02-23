@@ -1,4 +1,4 @@
-<nav class="nav">
+    <nav class="nav">
       <ul class="nav__list container">
       <?php foreach ($categories as $val): ?>
             <li class="nav__item">
@@ -42,7 +42,7 @@
         <div class="preview">
           <button class="preview__remove" type="button">x</button>
           <div class="preview__img">
-            <img src="<?= $img_src?>" width="113" height="113" alt="Изображение лота"> <!-- src="img/avatar.jpg" -->
+            <img src="src="<? print $file_url ?>" width="113" height="113" alt="Изображение лота"> <!--  -->
           </div>
         </div>
         <div class="form__input-file">
