@@ -87,7 +87,7 @@ function db_connect() {
  */
 function get_categories($link)
 {
-    $sql = 'SELECT `name` FROM categories';
+    $sql = 'SELECT `name`, `id` FROM categories';
     $result = mysqli_query($link, $sql);
     if ($result !== false) {
         $categories = mysqli_fetch_all($result, MYSQLI_ASSOC);
@@ -108,9 +108,8 @@ function get_lots($link) {
             ORDER BY lots.`starting_date` LIMIT 9;';
     $result = mysqli_query($link, $sql);
     if ($result !== false) {
-        $lots = mysqli_fetch_all($result, MYSQLI_ASSOC);
+        return mysqli_fetch_all($result, MYSQLI_ASSOC);
     }
-    return $lots;
 }
 
 /**
@@ -120,19 +119,19 @@ function get_lots($link) {
  * @return Возращает лот по id из БД
  */
 
-function get_lot_by_id ($link, $lot_id) {
+ function get_lot_by_id ($link, $lot_id) {
+
     $sql = 'SELECT lots.`title`
             AS `lots_title`,
             lots.`description`,
             lots.`id`,
             lots.`img_path`,
-            categories.`name` AS `categories_name`
+            `categories`.`name` AS `categories_name`
             FROM lots
             JOIN categories ON categories.`id` = lots.`category_id`
-            WHERE lots.`id`=' . intval($lot_id) .';';
+            WHERE lots.`id`=' . intval($lot_id) . ';';
     $result = mysqli_query($link, $sql);
     if ($result !== false) {
-        $lot = mysqli_fetch_assoc($result);
-        return $lot;
+        return mysqli_fetch_assoc($result);
     }
 }
