@@ -22,7 +22,7 @@
           <?php $category = $_POST['category'] ?? 'Выберите категорию';  ?>
             <option><?= htmlspecialchars($category) ?></option>
             <?php foreach ($categories as $val): ?>
-                <option><?= htmlspecialchars($val['name']); ?></option>
+                <option value="<?= htmlspecialchars($val['id']); ?>"><?= htmlspecialchars($val['name']); ?></option>
             <?php endforeach ?>
             <? if ($category !== 'Выберите категорию') :
                 print '<option> Выберите категорию </option>';

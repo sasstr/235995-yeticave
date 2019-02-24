@@ -87,7 +87,7 @@ function db_connect() {
  */
 function get_categories($link)
 {
-    $sql = 'SELECT `name` FROM categories';
+    $sql = 'SELECT `name`, `id` FROM categories';
     $result = mysqli_query($link, $sql);
     if ($result !== false) {
         $categories = mysqli_fetch_all($result, MYSQLI_ASSOC);

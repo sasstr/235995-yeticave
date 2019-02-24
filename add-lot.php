@@ -73,7 +73,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                       `user_id`,
                                       `category_id`,
                                       `author_id`)
-                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);';
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);';
             $author_id = 7;
             $user_id = 4;
             $starting_date = date_format(date_create('now'), 'Y-m-d H:i:s');
@@ -88,11 +88,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         $new_lot['category'],
                         $author_id
                         ];
-            
+
             $stmt = mysqli_prepare($link, $sql);
-            
-            var_dump($link);
-            var_dump($new_lot);
+
+            // var_dump($link);
+            // var_dump($new_lot);
 
             /*mysqli_stmt_bind_param($stmt, 'sssssssisi', $new_lot['lot-name'],
                                                     $new_lot['message'],
@@ -104,23 +104,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                     $user_id,
                                                     $new_lot['category'],
                                                     $author_id);*/
-            $stmt = db_get_prepare_stmt($link, $sql, $lot_data); 
-            var_dump($stmt);
-            mysqli_stmt_execute($stmt);
+            $stmt = db_get_prepare_stmt($link, $sql, $lot_data);
+            // var_dump($stmt);
+            $res = mysqli_stmt_execute($stmt);
             /*$res = mysqli_stmt_execute($stmt);
 // Функция добавляет новый лот в БД и в случае успеха перенаправляет пользователя на страницу нового лота.
                 function db_insert_data($link, $sql, $data = []) {
                     $stmt = db_get_prepare_stmt($link, $sql, $data);
                     mysqli_stmt_execute($stmt);
-                    $res = mysqli_stmt_get_result($stmt); 
+                    $res = mysqli_stmt_get_result($stmt);
                     if ($res) {
                     $lot_id = mysqli_insert_id($link);
                     header("Location: lot.php?id=" . $lot_id);
                     exit();
                     }
-            */
-             $res = mysqli_stmt_get_result($stmt); 
-            var_dump($res);  // Тут все время FALSE  :-(
+
+             $res = mysqli_stmt_get_result($stmt);*/
+            // var_dump($res);  Тут все время FALSE  :-(
 
             // Проверка на добавление в БД записи о новом лоте и перенаправление на страницу с новым лотом.
             if ($res) {
@@ -161,6 +161,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'user_name' => $user_name,
             'user_avatar' => $user_avatar
         ]);
+        exit();
     }
 } else {
         $add_lot = render('add', [
