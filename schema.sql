@@ -31,8 +31,7 @@ CREATE TABLE lots (
   `finishing_date` TIMESTAMP,
   `user_id` INT UNSIGNED NOT NULL,
   `winner_id` INT UNSIGNED DEFAULT NULL,
-  `category_id` INT NOT NULL,
-  `author_id` INT NOT NULL
+  `category_id` INT NOT NULL
 ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8;
 
 

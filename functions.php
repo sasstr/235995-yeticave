@@ -135,3 +135,21 @@ function get_lots($link) {
         return mysqli_fetch_assoc($result);
     }
 }
+/**
+ * Undocumented function
+ *
+ * @param resource $link
+ * @param string $sql подготовленное выражение
+ * @param array $data
+ * @return void
+ */
+// Функция добавляет новый лот в БД и в случае успеха перенаправляет пользователя на страницу нового лота.
+function add_new_lot_to_db($link, $sql, $data = []) {
+    $stmt = db_get_prepare_stmt($link, $sql, $data);
+    $res = mysqli_stmt_execute($stmt);
+    if ($res) {
+    $lot_id = mysqli_insert_id($link);
+    header('Location: lot.php?id=' . $lot_id);
+    exit();
+    }
+}

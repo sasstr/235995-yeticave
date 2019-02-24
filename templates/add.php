@@ -12,21 +12,21 @@
       <div class="form__container-two">
         <div class="form__item  <?php if($errors['lot-name']): ?>form__item--invalid<?php endif;?>"> <!-- form__item--invalid -->
           <label for="lot-name">Наименование</label>
-          <?php $lot_name = $_POST['lot-name'] ?? '';  ?>
+          <?php $lot_name = $_POST['lot-name'] ?? ''; ?>
           <input id="lot-name" type="text" name="lot-name" placeholder="Введите наименование лота" value='<?= htmlspecialchars($lot_name) ?>' required>
           <span class="form__error"><? isset($errors['lot-name']) ? print $errors['lot-name'] : print '' ?></span>
         </div>
         <div class="form__item  <?php if($errors['category']): ?>form__item--invalid<?php endif;?>">
           <label for="category">Категория</label>
+          <? $value = $_POST['category'] ?? ''; ?>
           <select id="category" name="category" required>
-          <?php $category = $_POST['category'] ?? 'Выберите категорию';  ?>
-            <option><?= htmlspecialchars($category) ?></option>
-            <?php foreach ($categories as $val): ?>
-                <option value="<?= htmlspecialchars($val['id']); ?>"><?= htmlspecialchars($val['name']); ?></option>
-            <?php endforeach ?>
-            <? if ($category !== 'Выберите категорию') :
-                print '<option> Выберите категорию </option>';
-            endif ?>
+            <option value="-1">Выберите категорию</option>
+            <?php foreach ($categories as $key => $val): ?>
+                <option value="<?= htmlspecialchars($val['id']); ?>"
+                <?php if ($val['id'] === $value): print ' selected'; endif; ?> >
+                    <?=htmlspecialchars($val['name']); ?>
+                </option>
+            <?php endforeach; ?>
           </select>
           <span class="form__error"><?php isset($errors['category']) ? print $errors['category'] : print '' ?></span>
         </div>
