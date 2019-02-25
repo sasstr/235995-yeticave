@@ -23,7 +23,7 @@
             <option value="-1">Выберите категорию</option>
             <?php foreach ($categories as $key => $val): ?>
                 <option value="<?= htmlspecialchars($val['id']); ?>"
-                <?php if ($val['id'] === $value): print ' selected'; endif; ?> >
+                    <?php if ($val['id'] === $value): print ' selected'; endif; ?> >
                     <?=htmlspecialchars($val['name']); ?>
                 </option>
             <?php endforeach; ?>

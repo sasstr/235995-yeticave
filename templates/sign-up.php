@@ -7,26 +7,30 @@
         <?php endforeach ?>
       </ul>
     </nav>
-    <form class="form container" action="https://echo.htmlacademy.ru" method="post"> <!-- form--invalid -->
+    <form class="form container <?php if($errors): ?>form--invalid<?php endif;?>" action="sign-up.php" method="post" enctype="multipart/form-data"> <!-- form--invalid -->
       <h2>Регистрация нового аккаунта</h2>
-      <div class="form__item"> <!-- form__item--invalid -->
+      <div class="form__item <?php if($errors['email']): ?>form__item--invalid<?php endif;?>"> <!-- form__item--invalid -->
         <label for="email">E-mail*</label>
-        <input id="email" type="text" name="email" placeholder="Введите e-mail" required>
-        <span class="form__error">Введите e-mail</span>
+        <?php $email = $_POST['email'] ?? ''; ?>
+        <input id="email" type="text" name="email" placeholder="Введите e-mail" value='<?= htmlspecialchars($email) ?>' required>
+        <span class="form__error"><?php isset($errors['email']) ? print $errors['email'] : print '' ?><!-- Введите e-mail --></span>
       </div>
-      <div class="form__item">
+      <div class="form__item <?php if($errors['password']): ?>form__item--invalid<?php endif;?>">
         <label for="password">Пароль*</label>
-        <input id="password" type="text" name="password" placeholder="Введите пароль" required>
+        <?php $password = $_POST['password'] ?? ''; ?>
+        <input id="password" type="password" name="password" placeholder="Введите пароль" value='<?= htmlspecialchars($password) ?>' required>
         <span class="form__error">Введите пароль</span>
       </div>
-      <div class="form__item">
+      <div class="form__item <?php if($errors['name']): ?>form__item--invalid<?php endif;?>">
         <label for="name">Имя*</label>
-        <input id="name" type="text" name="name" placeholder="Введите имя" required>
+        <?php $name = $_POST['name'] ?? ''; ?>
+        <input id="name" type="text" name="name" placeholder="Введите имя" value='<?= htmlspecialchars($name) ?>' required>
         <span class="form__error">Введите имя</span>
       </div>
-      <div class="form__item">
+      <div class="form__item <?php if($errors['message']): ?>form__item--invalid<?php endif;?>">
         <label for="message">Контактные данные*</label>
-        <textarea id="message" name="message" placeholder="Напишите как с вами связаться" required></textarea>
+        <?php $message_up = $_POST['message'] ?? ''; ?>
+        <textarea id="message" name="message" placeholder="Напишите как с вами связаться" value='<?= htmlspecialchars($message_up) ?>' required></textarea>
         <span class="form__error">Напишите как с вами связаться</span>
       </div>
       <div class="form__item form__item--file form__item--last">
@@ -38,13 +42,13 @@
           </div>
         </div>
         <div class="form__input-file">
-          <input class="visually-hidden" type="file" id="photo2" value="">
+          <input class="visually-hidden" type="file" name='img-avatar' id="photo2" value="">
           <label for="photo2">
             <span>+ Добавить</span>
           </label>
         </div>
       </div>
-      <span class="form__error form__error--bottom">Пожалуйста, исправьте ошибки в форме.</span>
+      <span class="form__error <?php if($errors): ?>form__error--bottom<?php endif;?>">Пожалуйста, исправьте ошибки в форме.</span>
       <button type="submit" class="button">Зарегистрироваться</button>
-      <a class="text-link" href="#">Уже есть аккаунт</a>
+      <a class="text-link" href="login.php">Уже есть аккаунт</a>
     </form>
