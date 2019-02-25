@@ -35,20 +35,24 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 	}
 
 	if (count($errors)) {
-		/* $page_content = render('login', ['login' => $login, 'errors' => $errors]); */
+        $login = render('login', [
+            'categories' => $categories,
+            'errors' => $errors,
+            'login' => $login,
+        ]);
+        print render('layout', [
+            'content' => $login,
+            'title' => 'Вход на сайт под своим логином и паролем',
+            'categories' => $categories,
+            'is_auth' => $is_auth,
+            'user_name' => $user_name,
+            'user_avatar' => $user_avatar
+        ]);
 	}
 	else {
 		header("Location: /index.php");
 		exit();
 	}
-}
-else {
-    if (isset($_SESSION['user'])) {
-        /* $page_content = render('welcome.php', ['username' => $_SESSION['user']['name']]); */
-    }
-    else {
-        /* $page_content = render('login', []); */
-    }
 }
 
 $login = render('login', $login_page);

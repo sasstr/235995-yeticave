@@ -20,7 +20,25 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             }
         }
     }
+    // Валидация на загрузку файла с картинкой лота
+    if (isset($_FILES['img-avatar']['name']) && !empty($_FILES['img-avatar']['name'])) {
 
+        $finfo = finfo_open(FILEINFO_MIME_TYPE);
+        $file_type = finfo_file($finfo, $_FILES['img-avatar']['tmp_name']);
+
+        if(!array_search($file_type, IMG_FILE_TYPES)) {
+            $errors['img-avatar'] = 'Необходимо загрузить фото с расширением JPEG, JPG или PNG';
+        } else {
+            $file_tmp_name = $_FILES['img-avatar']['tmp_name'];
+            $file_name = $_FILES['img-avatar']['name'];
+            $finfo = finfo_open(FILEINFO_MIME_TYPE);
+            $file_type = finfo_file($finfo, $file_tmp_name);
+            $file_name_uniq = uniqid('avatar-') . '.' . pathinfo($file_name , PATHINFO_EXTENSION);
+            $file_url = '/upload/' . trim($file_name_uniq);
+            // Перемещение загруженного файла в папку сайта
+            move_uploaded_file($file_tmp_name, UPLOAD_DIR . $file_name_uniq);
+        }
+    }
     if (empty($errors)) {
         $email = mysqli_real_escape_string($link, $sign_up['email']);
         $sql = "SELECT id FROM users WHERE email = '$email'";
@@ -46,8 +64,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         else {
             $password = password_hash($sign_up['password'], PASSWORD_DEFAULT);
 
-            $sql = 'INSERT INTO users (registration_date, email, name, password) VALUES (NOW(), ?, ?, ?)';
-            $stmt = db_get_prepare_stmt($link, $sql, [$sign_up['email'], $sign_up['name'], $password]);
+            $sql = 'INSERT INTO users (registration_date, email, name, password, avatar) VALUES (NOW(), ?, ?, ?, ?)';
+            $stmt = db_get_prepare_stmt($link, $sql, [$sign_up['email'], $sign_up['name'], $password, $file_url]);
             $res = mysqli_stmt_execute($stmt);
 
             if ($res && empty($errors)) {
@@ -56,7 +74,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             }
         }
     } else {
-
         $sign_up_tpl = render('sign-up', [
                 'categories' => $categories,
                 'errors' => &$errors,
@@ -72,10 +89,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         ]);
     }
 }
-
 $sign_up_tpl = render('sign-up', [
                         'categories' => $categories,
-                        'sign_up' => $sign_up
+                        'sign_up' => &$sign_up
 ]);
 print render('layout', [
     'content' => $sign_up_tpl,

@@ -33,7 +33,7 @@
         <textarea id="message" name="message" placeholder="Напишите как с вами связаться" required><?= htmlspecialchars($message_up) ?></textarea>
         <span class="form__error">Напишите как с вами связаться</span>
       </div>
-      <div class="form__item form__item--file form__item--last">
+      <div class="form__item form__item--file form__item--last <?php if(isset($errors['img-avatar'])): ?>form__item--invalid<?php endif;?>">
         <label>Аватар</label>
         <div class="preview">
           <button class="preview__remove" type="button">x</button>
