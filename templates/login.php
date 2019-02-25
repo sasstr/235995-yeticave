@@ -19,7 +19,7 @@
         <label for="password">Пароль*</label>
         <?php $password = $login['password'] ?? ''; ?>
         <input id="password" type="text" name="password" value="<?= htmlspecialchars($password) ?>" placeholder="Введите пароль" required>
-        <span class="form__error">Введите пароль</span>
+        <span class="form__error"><?php isset($errors['password']) ? print $errors['password'] : print '' ?></span> <!-- Введите пароль -->
       </div>
       <button type="submit" class="button">Войти</button>
     </form>

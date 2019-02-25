@@ -2,9 +2,10 @@
 require_once('config.php');
 require_once('functions.php');
 require_once('data.php');
-
+session_start();
 if (!isset($_SESSION['user'])) {
-    header("Location: /login.php");
+    http_response_code(403);
+    /* header("Location: /login.php"); */
     exit();
     }
 
