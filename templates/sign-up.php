@@ -46,6 +46,7 @@
           <label for="photo2">
             <span>+ Добавить</span>
           </label>
+          <span class="form__error"><?php isset($errors['img-avatar']) ? print $errors['img-avatar'] : print '' ?></span>
         </div>
       </div>
       <span class="form__error <?php if(isset($errors)): ?>form__error--bottom<?php endif;?>">Пожалуйста, исправьте ошибки в форме.</span>

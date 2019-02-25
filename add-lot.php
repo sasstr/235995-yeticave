@@ -3,8 +3,10 @@ require_once('config.php');
 require_once('functions.php');
 require_once('data.php');
 
-
-
+if (!isset($_SESSION['user'])) {
+    header("Location: /login.php");
+    exit();
+    }
 
 // Получаем данные из формы создания нового лота и валидируем все поля
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -39,6 +41,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
     $file_url = MOCK_IMG;
 // Валидация на загрузку файла с картинкой лота
+    // Проверяем есть ли каталог для загрузки картинок на сервере
+    if(!file_exists('/upload/')){
+        mkdir('/upload/');
+    }
     if (isset($_FILES['img-file']['name']) && !empty($_FILES['img-file']['name'])) {
 
         $finfo = finfo_open(FILEINFO_MIME_TYPE);

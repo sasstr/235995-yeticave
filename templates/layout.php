@@ -20,11 +20,12 @@
             <input class="main-header__search-btn" type="submit" name="find" value="Найти">
         </form>
         <a class="main-header__add-lot button" href="add-lot.php">Добавить лот</a>
-
+        <!-- здесь должен быть PHP код для показа имени пользователя -->
         <nav class="user-menu">
-        <?php if (boolval($is_auth)): ?>
+        <?php if (isset($_SESSION['user'])): ?>
             <div class="user-menu__logged">
-                <p><?= $user_name ?></p>
+                <p><?= htmlspecialchars($_SESSION['user']['name']) ?></p>
+                <a href="/logout.php">Выход</a>
                 <img src="<?= $user_avatar ?>" width="40" height="40" alt="Пользователь">
             </div>
         <?php else: ?>
@@ -37,8 +38,6 @@
                 </li>
             </ul>
         <?php endif ?>
-        <!-- здесь должен быть PHP код для показа имени пользователя -->
-
         </nav>
     </div>
 </header>

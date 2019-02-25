@@ -21,6 +21,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
     }
     // Валидация на загрузку файла с картинкой лота
+    // Проверяем есть ли каталог для загрузки картинок на сервере
+    if(!file_exists('/upload/')){
+        mkdir('/upload/');
+    }
     if (isset($_FILES['img-avatar']['name']) && !empty($_FILES['img-avatar']['name'])) {
 
         $finfo = finfo_open(FILEINFO_MIME_TYPE);
