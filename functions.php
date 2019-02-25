@@ -153,3 +153,40 @@ function add_new_lot_to_db($link, $sql, $data = []) {
     exit();
     }
 }
+/**
+ * Функция проверяет расширение загружаемых картинок и
+ * перемещает загружаемые файлы в указанный каталог
+ * @param array  $files файлы из массива $_FILES
+ * @param string $dir_local директория куда будут загружаться файлы на сервере локально
+ * @param string $dir_global директория куда будут загружаться файлы на сервере глобально
+ * @param string $prefix префикс перед уникальным названием файла
+ * @param array $img_types расширения файлов допустимых для загрузки
+ * @return void
+ */
+function move_img_to_upload ($files, $dir_local, $dir_global, $prefix, $img_types) {
+
+    $array_directories = scandir(__DIR__, 1);
+    foreach ($array_directories as $key => $value) {
+        if ( is_dir($key) ) {
+
+        }
+    };
+    if (isset($files['img-file']['name']) && !empty($files['img-file']['name'])) {
+
+        $finfo = finfo_open(FILEINFO_MIME_TYPE);
+        $file_type = finfo_file($finfo, $files['img-file']['tmp_name']);
+
+        if(!array_search($file_type, $img_types)) {
+            $errors['img-file'] = 'Необходимо загрузить фото с расширением JPEG, JPG или PNG';
+        } else {
+            $file_tmp_name = $files['img-file']['tmp_name'];
+            $file_name = $files['img-file']['name'];
+            // $finfo = finfo_open(FILEINFO_MIME_TYPE);
+            $file_type = finfo_file($finfo, $file_tmp_name);
+            $file_name_uniq = uniqid($prefix) . '.' . pathinfo($file_name , PATHINFO_EXTENSION);
+            $file_url = $directory . trim($file_name_uniq);
+            // Перемещение загруженного файла в папку сайта
+            move_uploaded_file($file_tmp_name, $dir_global . $file_name_uniq);
+        }
+    }
+}

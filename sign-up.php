@@ -3,8 +3,6 @@ require_once('config.php');
 require_once('functions.php');
 require_once('data.php');
 
-$tpl_data = [];
-
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $sign_up = $_POST;
     $errors = [];
@@ -15,9 +13,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         if (empty($sign_up[$field])) {
             $errors[] = "Не заполнено поле " . $field;
         }
-        if ($field === "email") {
+        if (!empty($sign_up[$field]) && $field === "email") {
             if (!filter_var($sign_up['email'], FILTER_VALIDATE_EMAIL)) {
-            $errors[$field] = 'Email должен быть корректным';
+            $errors[$field] = 'E-mail должен быть корректным';
+
             }
         }
     }
@@ -28,7 +27,21 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $res = mysqli_query($link, $sql);
 
         if (mysqli_num_rows($res) > 0) {
-            $errors[] = 'Пользователь с этим email уже зарегистрирован';
+            $errors['email'] = 'Пользователь с этим email уже зарегистрирован';
+            $sign_up_tpl = render('sign-up', [
+                'categories' => $categories,
+                'errors' => $errors,
+                'sign_up' => $sign_up
+            ]);
+            print render('layout', [
+                'content' => $sign_up_tpl,
+                'title' => 'Страница регистрации нового пользователя',
+                'categories' => $categories,
+                'is_auth' => $is_auth,
+                'user_name' => $user_name,
+                'user_avatar' => $user_avatar
+            ]);
+            exit();
         }
         else {
             $password = password_hash($sign_up['password'], PASSWORD_DEFAULT);
@@ -42,24 +55,28 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 exit();
             }
         }
-        $tpl_data['errors'] = $errors;
-        $tpl_data['values'] = $sign_up;
-        if(count($errors)){
-            $sign_up_tpl = render('sign-up', $sign_up_page);
-            print render('layout', [
-                'content' => $sign_up_tpl,
-                'title' => 'Страница регистрации нового пользователя',
+    } else {
+
+        $sign_up_tpl = render('sign-up', [
                 'categories' => $categories,
-                'is_auth' => $is_auth,
-                'user_name' => $user_name,
-                'user_avatar' => $user_avatar,
-                'errors' => $tpl_data['errors'],
-                'values' => $tpl_data['values']
+                'errors' => &$errors,
+                'sign_up' => $sign_up
             ]);
-        }
+        print render('layout', [
+            'content' => $sign_up_tpl,
+            'title' => 'Страница регистрации нового пользователя',
+            'categories' => $categories,
+            'is_auth' => $is_auth,
+            'user_name' => $user_name,
+            'user_avatar' => $user_avatar
+        ]);
     }
 }
-$sign_up_tpl = render('sign-up', $sign_up_page);
+
+$sign_up_tpl = render('sign-up', [
+                        'categories' => $categories,
+                        'sign_up' => $sign_up
+]);
 print render('layout', [
     'content' => $sign_up_tpl,
     'title' => 'Страница регистрации нового пользователя',
