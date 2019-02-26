@@ -42,7 +42,7 @@
         <div class="preview">
           <button class="preview__remove" type="button">x</button>
           <div class="preview__img">
-            <img src="src="<?print $file_url?>" width="113" height="113" alt="Изображение лота"> <!--  -->
+            <img src="<?print $file_url?>" width="113" height="113" alt="Изображение лота"> <!--  -->
           </div>
         </div>
         <div class="form__input-file">

@@ -81,7 +81,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $user_id,
                 $new_lot['category']
                 ];
-
+    var_dump($lot_data);
         add_new_lot_to_db($link, ADD_NEW_LOT, $lot_data);
         if(count($errors)){
             $errors['form'] = 'Пожалуйста, исправьте ошибки в форме.';

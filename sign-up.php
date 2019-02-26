@@ -7,7 +7,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $sign_up = $_POST;
     $errors = [];
 
-    $req_fields = ['email', 'password', 'name', 'message'];
+    $req_fields = ['email', 'password', 'name'];
 
     foreach ($req_fields as $field) {
         if (empty($sign_up[$field])) {
@@ -20,6 +20,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             }
         }
     }
+    $file_url = MOCK_IMG;
     // Валидация на загрузку файла с картинкой лота
     // Проверяем есть ли каталог для загрузки картинок на сервере
     if(!file_exists('/upload/')){
@@ -68,8 +69,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         else {
             $password = password_hash($sign_up['password'], PASSWORD_DEFAULT);
 
-            $sql = 'INSERT INTO users (registration_date, email, name, password, avatar) VALUES (NOW(), ?, ?, ?, ?)';
-            $stmt = db_get_prepare_stmt($link, $sql, [$sign_up['email'], $sign_up['name'], $password, $file_url]);
+            $sql = 'INSERT INTO users (registration_date, email, name, password, contacts, avatar) VALUES (NOW(), ?, ?, ?, ?, ?)';
+            $stmt = db_get_prepare_stmt($link, $sql, [$sign_up['email'], $sign_up['name'], $password, $sign_up['message'], $file_url]);
             $res = mysqli_stmt_execute($stmt);
 
             if ($res && empty($errors)) {
