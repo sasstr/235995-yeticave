@@ -29,4 +29,14 @@ const ADD_NEW_LOT = 'INSERT INTO lots ( `title`,
                                         )
 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);';
 
-const MOCK_IMG = 'http://placehold.it/150x100?text=Лот+на+фотосессии';
+const MOCK_IMG_LOT = 'http://placehold.it/150x100?text=Лот+на+фотосессии';
+const MOCK_IMG = 'http://placehold.it/150x100?text=Фото+аватарки+на+фотосессии';
+
+const RATES_DATA = 'SELECT
+                    `users`.`name`,
+                    `rates`.`rate_amount`,
+                    `rates`.`date`
+                    FROM `rates`
+                    JOIN `users` ON `users`.`id` = `rates`.`user_id`
+                    WHERE `rates`.`lot_id` = ?
+                    ORDER BY `rates`.`date` DESC;';

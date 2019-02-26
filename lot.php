@@ -17,8 +17,6 @@ $lot = get_lot_by_id($link, $lot_id);
             'content' => $lot_page,
             'title' => 'Лот',
             'categories' => $categories,
-            'is_auth' => $is_auth,
-            'user_name' => $user_name,
             'user_avatar' => $user_avatar
         ]);
     } else {
@@ -28,8 +26,6 @@ $lot = get_lot_by_id($link, $lot_id);
             'content' => $page_404,
             'title' => '404 страница не найдена',
             'categories' => $categories,
-            'is_auth' => $is_auth,
-            'user_name' => $user_name,
             'user_avatar' => $user_avatar
         ]);
     }

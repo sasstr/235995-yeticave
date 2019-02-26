@@ -40,7 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if( ($new_lot['lot-date']) !== date('Y-m-d' , strtotime($new_lot['lot-date'])) || strtotime($new_lot['lot-date']) < strtotime('tomorrow')) {
         $errors['lot-date'] = 'Введите корректную дату завершения торгов, которая позже текущей даты хотя бы на один день';
     }
-    $file_url = MOCK_IMG;
+    $file_url = MOCK_IMG_LOT;
 // Валидация на загрузку файла с картинкой лота
     // Проверяем есть ли каталог для загрузки картинок на сервере
     if(!file_exists('/upload/')){
@@ -122,7 +122,5 @@ print render('layout', [
     'content' => $add_lot,
     'title' => 'Добавить новый лот',
     'categories' => $categories,
-    'is_auth' => $is_auth,
-    'user_name' => $user_name,
     'user_avatar' => $user_avatar
 ]);

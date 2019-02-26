@@ -60,7 +60,5 @@ print render('layout', [
     'content' => $login,
     'title' => 'Вход на сайт под своим логином и паролем',
     'categories' => $categories,
-    'is_auth' => $is_auth,
-    'user_name' => $user_name,
     'user_avatar' => $user_avatar
 ]);

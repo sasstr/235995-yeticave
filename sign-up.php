@@ -60,8 +60,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 'content' => $sign_up_tpl,
                 'title' => 'Страница регистрации нового пользователя',
                 'categories' => $categories,
-                'is_auth' => $is_auth,
-                'user_name' => $user_name,
                 'user_avatar' => $user_avatar
             ]);
             exit();
@@ -88,8 +86,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             'content' => $sign_up_tpl,
             'title' => 'Страница регистрации нового пользователя',
             'categories' => $categories,
-            'is_auth' => $is_auth,
-            'user_name' => $user_name,
             'user_avatar' => $user_avatar
         ]);
     }
@@ -102,7 +98,5 @@ print render('layout', [
     'content' => $sign_up_tpl,
     'title' => 'Страница регистрации нового пользователя',
     'categories' => $categories,
-    'is_auth' => $is_auth,
-    'user_name' => $user_name,
     'user_avatar' => $user_avatar
 ]);
