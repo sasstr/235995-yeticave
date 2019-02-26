@@ -3,6 +3,8 @@ require_once('config.php');
 require_once('functions.php');
 require_once('data.php');
 
+session_start();
+
 $lot_id = (int) $_GET['id'];
 $lot = get_lot_by_id($link, $lot_id);
 
