@@ -26,7 +26,7 @@
             <div class="user-menu__logged">
                 <p><?= htmlspecialchars($_SESSION['user']['name']) ?></p>
                 <a href="/logout.php">Выход</a>
-                <img src="img/user.jpg" width="40" height="40" alt="Пользователь">
+                <img src="https://joeschmoe.io/api/v1//male/random" width="40" height="40" alt="Пользователь">
             </div>
         <?php else: ?>
             <ul class="user-menu__list">

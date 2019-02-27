@@ -38,5 +38,5 @@ const RATES_DATA = 'SELECT
                     `rates`.`date`
                     FROM `rates`
                     JOIN `users` ON `users`.`id` = `rates`.`user_id`
-                    WHERE `rates`.`lot_id` = ?
+                    WHERE `rates`.`lots_id` = ?
                     ORDER BY `rates`.`date` DESC;';
