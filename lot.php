@@ -1,10 +1,8 @@
 <?php
 require_once('config.php');
+require_once('init.php');
 require_once('functions.php');
 require_once('data.php');
-
-session_start();
-
 
 $lot_id = (int) $_GET['id'];
 $lot = get_lot_by_id($link, $lot_id);
@@ -13,7 +11,6 @@ $lot = get_lot_by_id($link, $lot_id);
 
     if (isset($_SESSION['user'])){
         $rates_data = select_data_by_lot_id ($link, RATES_DATA, $lot_id);
-        var_dump($rates_data);
         $lot_page = render('lot', [
             'categories' => $categories,
             'lot' => $lot,

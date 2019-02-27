@@ -1,4 +1,5 @@
 <?php
+session_start();
 $link = db_connect();
 $time_until_midnight = show_time();
 $title = 'Главная';
