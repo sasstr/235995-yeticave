@@ -39,36 +39,10 @@ function show_time() {
     $diff = date_diff($now, $tomorrow);
     return date_interval_format($diff,"%H:%I");
 }
-
-/* // Регистрация пользователя на сайте
-$email = mysqli_real_escape_string($link, $_POST['email']); // Так для всех полей надо делать?
-$password = password_hash($_POST['password']);
-$name = $_POST['name'];
-$contacts = $_POST['message'];
-$avatar = $_POST['']; // avatar - нет поля name в разметке
-
-$sql = INSERT INTO users (email, password, name, contacts, avatar) VALUES (?, ?, ?, ?, ?); // Запрос к БД
-$stmt = mysqli_prepare($link, $sql);
-mysqli_stmt_bind_param($stmt, 'ssssb', $email, $password, $name, $contacts, $avatar);
-mysqli_stmt_execute($stmt); // Выполняет подготовленный запрос
-mysqli_stmt_close($stmt);  // закрываем запрос
-
-! Все функции для работы с MySQL лучше выносить в отдельный модуль. Задача на подумать.
-! Попробуй написать несколько универсальных функций:
-
-`db_insert()` - выполняет запрос на добавление данных;
-`db_update()` - выполняет запрос на обновление данных;
-`db_delete()` - выполняет запрос на удаление данных;
-
- Спека функции может выглядеть так:
-
-`db_insert($link, $sql, $data);`. */
-
-/* Функция для соединения с БД*/
 /**
- * Устанавливает соединение с БД
+ * Функция устанавливает связь с базой данных
  *
- * @return $link возращает ресурс соединения
+ * @return resource возращает ресурс соединения
  */
 function db_connect() {
     $link = mysqli_connect(DB_SETUP['HOST'], DB_SETUP['LOGIN'], DB_SETUP['PASSWORD'], DB_SETUP['NAME']);
@@ -83,7 +57,7 @@ function db_connect() {
  * Возращеает список категорий для меню на сайте
  *
  * @param resource $link принимает ресурс соединения
- * @return Возращает список категорий
+ * @return array Возращает список категорий
  */
 function get_categories($link)
 {
@@ -98,7 +72,7 @@ function get_categories($link)
  * Возращеает список лотов - карточек товара
  * лимит 9 шт
  * @param resource $link принимает ресурс соединения
- * @return Возращает список лотов
+ * @return array Возращает список лотов
  */
 function get_lots($link) {
     $sql = 'SELECT lots.`title` AS `lots_title`, lots.`id`, lots.`starting_price`, lots.`img_path`, categories.`name` AS `categories_name`
@@ -113,10 +87,10 @@ function get_lots($link) {
 }
 
 /**
- * @param $link ресурс соединения
- * @param $lot_id номер id по которому надо получить лот
+ * @param resource $link ресурс соединения
+ * @param integer $lot_id номер id по которому надо получить лот
  *
- * @return Возращает лот по id из БД
+ * @return string Возращает лот по id из БД
  */
 
  function get_lot_by_id ($link, $lot_id) {
@@ -134,4 +108,35 @@ function get_lots($link) {
     if ($result !== false) {
         return mysqli_fetch_assoc($result);
     }
+}
+/**
+ * Функция добавляет новый лот в БД и в случае успеха перенаправляет пользователя на страницу нового лота.
+ *
+ * @param resource $link
+ * @param string $sql подготовленное выражение
+ * @param array $data
+ * @return void
+ */
+function add_new_lot_to_db($link, $sql, $data = []) {
+    $stmt = db_get_prepare_stmt($link, $sql, $data);
+    $res = mysqli_stmt_execute($stmt);
+    if ($res) {
+    $lot_id = mysqli_insert_id($link);
+    header('Location: lot.php?id=' . $lot_id);
+    exit();
+    }
+}
+/**
+ * Функция возращает результат запроса по выборке из базы данных
+ *
+ * @param resource $link
+ * @param string $sql подготовленное выражение
+ * @param integer $lot_id номер id по которому надо получить
+ * @return Возращает результат запроса по выборке из базы данных
+ */
+function select_data_by_lot_id ($link, $sql, $lot_id) {
+    $stmt = mysqli_prepare($link, $sql);
+    mysqli_stmt_bind_param($stmt, 'i', $lot_id);
+    mysqli_stmt_execute($stmt);
+    return mysqli_stmt_get_result($stmt);
 }

@@ -20,25 +20,24 @@
             <input class="main-header__search-btn" type="submit" name="find" value="Найти">
         </form>
         <a class="main-header__add-lot button" href="add-lot.php">Добавить лот</a>
-
+        <!-- здесь должен быть PHP код для показа имени пользователя -->
         <nav class="user-menu">
-        <?php if (boolval($is_auth)): ?>
+        <?php if (isset($_SESSION['user'])): ?>
             <div class="user-menu__logged">
-                <p><?= $user_name ?></p>
-                <img src="<?= $user_avatar ?>" width="40" height="40" alt="Пользователь">
+                <p><?= htmlspecialchars($_SESSION['user']['name']) ?></p>
+                <a href="/logout.php">Выход</a>
+                <img src="https://joeschmoe.io/api/v1//male/random" width="40" height="40" alt="Пользователь">
             </div>
         <?php else: ?>
             <ul class="user-menu__list">
                 <li class="user-menu__item">
-                <a href="#">Регистрация</a>
+                <a href="sign-up.php">Регистрация</a>
                 </li>
                 <li class="user-menu__item">
-                <a href="#">Вход</a>
+                <a href="login.php">Вход</a>
                 </li>
             </ul>
         <?php endif ?>
-        <!-- здесь должен быть PHP код для показа имени пользователя -->
-
         </nav>
     </div>
 </header>
