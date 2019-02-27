@@ -6,7 +6,6 @@ require_once('data.php');
 
 if (!isset($_SESSION['user'])) {
     http_response_code(403);
-    /* header("Location: /login.php"); */
     exit();
     }
 
@@ -21,7 +20,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $errors[$field] = 'Заполните это поле оно не может быть пустым.';
         }
 // Валидация на выбор категории
-        if($field === 'category' && $new_lot[$field] === "-1") {
+        if($field === 'category' && $new_lot[$field] === "CATEGORY_SELECTOR") {
             $errors[$field] = 'Выберите категорию из списка';
         }
     }
@@ -44,9 +43,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $file_url = MOCK_IMG_LOT;
 // Валидация на загрузку файла с картинкой лота
     // Проверяем есть ли каталог для загрузки картинок на сервере
-    if(!file_exists('UPLOAD_LOCAL_DIR')){
-        mkdir('UPLOAD_LOCAL_DIR');
+    if(!file_exists(UPLOAD_LOCAL_DIR)) {
+        mkdir(UPLOAD_LOCAL_DIR);
+        if (!file_exists(UPLOAD_LOCAL_DIR)) {
+            $errors['img-file'] = 'Не удалось найти или создать папку для загрузки файла';
+            // exit();
+        }
     }
+
     if (isset($_FILES['img-file']['name']) && !empty($_FILES['img-file']['name'])) {
 
         $finfo = finfo_open(FILEINFO_MIME_TYPE);
@@ -60,7 +64,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $finfo = finfo_open(FILEINFO_MIME_TYPE);
             $file_type = finfo_file($finfo, $file_tmp_name);
             $file_name_uniq = uniqid('lot-') . '.' . pathinfo($file_name , PATHINFO_EXTENSION);
-            $file_url = 'UPLOAD_LOCAL_DIR' . trim($file_name_uniq);
+            $file_url = UPLOAD_LOCAL_DIR . trim($file_name_uniq);
             // Перемещение загруженного файла в папку сайта
             move_uploaded_file($file_tmp_name, UPLOAD_DIR . $file_name_uniq);
         }

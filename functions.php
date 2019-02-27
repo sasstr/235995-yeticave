@@ -28,6 +28,25 @@ function render ($file_name, $data_array) {
  function format_price ($price) {
     return number_format(ceil($price), 0, ',', ' ') . RUBLE_SYMBOL;
 };
+
+/**
+ * Функция возращает верное написание слова из массива
+ *
+ * @param integer $time
+ * @param array $words
+ * @return string возращает правилный вариант склонения слова в русском языке
+ */
+function get_correct_word ($time, $words) {
+    if ($time % 100 > 4 && $time % 100 < 21) {
+      return $words[0];
+    } elseif ($time % 10 === 1) {
+      return $words[1];
+    } elseif ($time % 10 > 1 && $time % 10 < 5) {
+      return $words[2];
+    }
+    return $words[0];
+};
+
 /**
  * Функция рассчитывает разницу от текущего времни до конца суток
  *
@@ -37,6 +56,17 @@ function show_time() {
     $now = date_create('now');
     $tomorrow = date_create('tomorrow');
     $diff = date_diff($now, $tomorrow);
-    return date_interval_format($diff,"%H:%I");
+    return date_interval_format($diff,'%H:%I');
 }
 
+function get_interval ($date_end) {
+    $now = date_create('now');
+    $diff = date_diff($now, $date_end);
+    date_interval_format($diff,'d.m.Y в H:i');
+
+
+};
+
+
+
+session_start();

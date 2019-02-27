@@ -1,9 +1,9 @@
 <?php
-session_start();
+
 $link = db_connect();
 $time_until_midnight = show_time();
 $title = 'Главная';
-$user_avatar = 'img/user.jpg';
+$user_avatar = MOCK_IMG; /* 'img/user.jpg' */
 $categories = get_categories($link);
 $lots = get_lots($link);
 

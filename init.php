@@ -20,8 +20,7 @@ function db_connect() {
  * @param resource $link принимает ресурс соединения
  * @return array Возращает список категорий
  */
-function get_categories($link)
-{
+function get_categories($link) {
     $sql = 'SELECT `name`, `id` FROM categories';
     $result = mysqli_query($link, $sql);
     if ($result !== false) {
@@ -82,9 +81,9 @@ function add_new_lot_to_db($link, $sql, $data = []) {
     $stmt = db_get_prepare_stmt($link, $sql, $data);
     $res = mysqli_stmt_execute($stmt);
     if ($res) {
-    $lot_id = mysqli_insert_id($link);
-    header('Location: lot.php?id=' . $lot_id);
-    exit();
+        $lot_id = mysqli_insert_id($link);
+        header('Location: lot.php?id=' . $lot_id);
+        exit();
     }
 }
 /**

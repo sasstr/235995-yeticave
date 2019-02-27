@@ -6,6 +6,8 @@ const PHP_EXTENSION = '.php';
 const UPLOAD_DIR = __DIR__ . '/upload/';
 const UPLOAD_LOCAL_DIR = '/upload/';
 const CATEGORY_SELECTOR = '-1';
+const HOURS = ['часов', 'час', 'часа'];
+const MINUTES = ['минут', 'минута', 'минуты'];
 
 // Массив с данными для подключения к базе данных yeticave
 const DB_SETUP = [
@@ -32,7 +34,7 @@ const ADD_NEW_LOT = 'INSERT INTO lots ( `title`,
 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);';
 
 const MOCK_IMG_LOT = 'http://placehold.it/150x100?text=Лот+на+фотосессии';
-const MOCK_IMG = 'http://placehold.it/150x100?text=Фото+аватарки+на+фотосессии';
+const MOCK_IMG = 'https://joeschmoe.io/api/v1//male/random';
 
 const RATES_DATA = 'SELECT
                     `users`.`name`,
