@@ -4,6 +4,8 @@ const RUBLE_SYMBOL = '&#x20BD';
 const TEMPLATE_PATH = 'templates/';
 const PHP_EXTENSION = '.php';
 const UPLOAD_DIR = __DIR__ . '/upload/';
+const UPLOAD_LOCAL_DIR = '/upload/';
+const CATEGORY_SELECTOR = '-1';
 
 // Массив с данными для подключения к базе данных yeticave
 const DB_SETUP = [

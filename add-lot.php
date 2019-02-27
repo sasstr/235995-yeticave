@@ -1,8 +1,9 @@
 <?php
 require_once('config.php');
 require_once('functions.php');
+require_once('init.php');
 require_once('data.php');
-session_start();
+
 if (!isset($_SESSION['user'])) {
     http_response_code(403);
     /* header("Location: /login.php"); */
@@ -43,8 +44,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $file_url = MOCK_IMG_LOT;
 // Валидация на загрузку файла с картинкой лота
     // Проверяем есть ли каталог для загрузки картинок на сервере
-    if(!file_exists('/upload/')){
-        mkdir('/upload/');
+    if(!file_exists('UPLOAD_LOCAL_DIR')){
+        mkdir('UPLOAD_LOCAL_DIR');
     }
     if (isset($_FILES['img-file']['name']) && !empty($_FILES['img-file']['name'])) {
 
@@ -59,7 +60,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $finfo = finfo_open(FILEINFO_MIME_TYPE);
             $file_type = finfo_file($finfo, $file_tmp_name);
             $file_name_uniq = uniqid('lot-') . '.' . pathinfo($file_name , PATHINFO_EXTENSION);
-            $file_url = '/upload/' . trim($file_name_uniq);
+            $file_url = 'UPLOAD_LOCAL_DIR' . trim($file_name_uniq);
             // Перемещение загруженного файла в папку сайта
             move_uploaded_file($file_tmp_name, UPLOAD_DIR . $file_name_uniq);
         }
@@ -81,7 +82,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $user_id,
                 $new_lot['category']
                 ];
-    var_dump($lot_data);
         add_new_lot_to_db($link, ADD_NEW_LOT, $lot_data);
         if(count($errors)){
             $errors['form'] = 'Пожалуйста, исправьте ошибки в форме.';
@@ -109,8 +109,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         'content' => $add_lot,
         'title' => 'Добавить новый лот',
         'categories' => $categories,
-        'is_auth' => $is_auth,
-        'user_name' => $user_name,
         'user_avatar' => $user_avatar
     ]);
     exit();
