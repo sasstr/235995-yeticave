@@ -86,22 +86,12 @@ function add_new_lot_to_db($link, $sql, $data = []) {
     }
 }
 
-function add_new_rate_to_db($link, $sql, $data = []) {
+function add_new_rate_to_db($link, $sql, $data = [], $lot_id) {
     $stmt = db_get_prepare_stmt($link, $sql, $data);
     $res = mysqli_stmt_execute($stmt);
     if ($res) {
-        $lot_page = render('lot', [
-            'categories' => $categories,
-            'lot' => $lot,
-            'rates_data' => $rates_data,
-            'min_rate' => $min_rate
-            ]);
-            print render('layout', [
-                'content' => $lot_page,
-                'title' => 'Лот',
-                'categories' => $categories,
-                'user_avatar' => $user_avatar
-            ]);
+        $lot_id = mysqli_insert_id($link);
+        header('Location: lot.php?id=' . $lot_id);
         exit();
     }
 }

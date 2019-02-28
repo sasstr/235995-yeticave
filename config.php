@@ -31,7 +31,7 @@ const ADD_NEW_LOT = 'INSERT INTO lots ( `title`,
                                         `user_id`,
                                         `category_id`
                                         )
-VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);';
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);';
 
 const MOCK_IMG_LOT = 'http://placehold.it/150x100?text=Лот+на+фотосессии';
 const MOCK_IMG = 'https://joeschmoe.io/api/v1//male/random';
@@ -52,4 +52,4 @@ const ADD_NEW_RATE = 'INSERT INTO rates ( `rate_amount`,
                                         `user_id`,
                                         `lots_id`
                                         )
-VALUES (?, ?, ?);';
+                    VALUES (?, ?, ?);';

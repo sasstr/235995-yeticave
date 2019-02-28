@@ -11,14 +11,13 @@ $lot = get_lot_by_id($link, $lot_id);
     if (isset($_SESSION['user'])){
         $rates_data = select_data_by_lot_id ($link, RATES_DATA, $lot_id);
         $rates_history = $rates_data[0];
-        var_dump($rates_history);
         $min_rate = $rates_data[0]['rate_step'] + $rates_data[0]['rate_amount'];
-        var_dump($rates_data);
         if ( is_int(isset($_POST['cost'])) > 0
             && ($_POST['cost']) >= $min_rate
-            && !empty($errors['cost'])) {
+            /* && empty($errors['cost']) */) {
                 $data = [$_POST['cost'], $_SESSION['user']['id'], $lot_id];
-                add_new_rate_to_db($link, $sql, $data);
+                var_dump($data);
+                add_new_rate_to_db($link, ADD_NEW_RATE, $data, $_GET['id']);
         } elseif (empty($errors['cost'])) {
             $errors['cost'] = 'Это поле необходимо заполнить';
         } elseif (1) {
