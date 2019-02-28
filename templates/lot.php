@@ -21,21 +21,22 @@
         <?php if (isset($_SESSION['user'])) : ?>
           <div class="lot-item__state">
             <div class="lot-item__timer timer">
+            <?php isset($rates_data[0]['finishing_date']) ?  ($rates_data[0]['finishing_date']) : print '' ?>
               10:54
             </div>
             <div class="lot-item__cost-state">
               <div class="lot-item__rate">
                 <span class="lot-item__amount">Текущая цена</span>
-                <span class="lot-item__cost">10 999</span>
+                <span class="lot-item__cost"><?=  isset($rates_data[0]['rate_amount']) ?  $rates_data[0]['rate_amount'] : print '' ?></span><!-- 10 999 -->
               </div>
               <div class="lot-item__min-cost">
-                Мин. ставка <span>12 000 р</span>
+                Мин. ставка <span><?= isset($rates_data[0]['rate_step']) ? $min_rate : print '' ?></span><!-- 12 000 р -->
               </div>
             </div>
             <form class="lot-item__form" action="lot.php" method="post" enctype="application/x-www-form-urlencoded">
               <p class="lot-item__form-item form__item form__item--invalid">
                 <label for="cost">Ваша ставка</label>
-                <input id="cost" type="text" name="cost" placeholder="12 000">
+                <input id="cost" type="text" name="cost" placeholder="<?= $min_rate ?>"><!-- 12 000 -->
                 <span class="form__error">Введите наименование лота</span>
               </p>
               <button type="submit" class="button">Сделать ставку</button>

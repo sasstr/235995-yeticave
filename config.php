@@ -39,8 +39,11 @@ const MOCK_IMG = 'https://joeschmoe.io/api/v1//male/random';
 const RATES_DATA = 'SELECT
                     `users`.`name`,
                     `rates`.`rate_amount`,
-                    `rates`.`date`
+                    `rates`.`date`,
+                    `lots`.`rate_step`,
+                    `lots`.`finishing_date`
                     FROM `rates`
                     JOIN `users` ON `users`.`id` = `rates`.`user_id`
+                    JOIN `lots` ON `users`.`id` = `lots`.`user_id`
                     WHERE `rates`.`lots_id` = ?
                     ORDER BY `rates`.`date` DESC;';

@@ -1,5 +1,4 @@
 <?
-
 /**
  * Функция устанавливает связь с базой данных
  * @return resource возращает ресурс соединения
@@ -98,6 +97,6 @@ function select_data_by_lot_id ($link, $sql, $lot_id) {
     $stmt = mysqli_prepare($link, $sql);
     mysqli_stmt_bind_param($stmt, 'i', $lot_id);
     mysqli_stmt_execute($stmt);
-    return mysqli_stmt_get_result($stmt);
+    return mysqli_fetch_all(mysqli_stmt_get_result($stmt), MYSQLI_ASSOC);
 }
 

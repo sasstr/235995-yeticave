@@ -47,7 +47,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         mkdir(UPLOAD_LOCAL_DIR);
         if (!file_exists(UPLOAD_LOCAL_DIR)) {
             $errors['img-file'] = 'Не удалось найти или создать папку для загрузки файла';
-            // exit();
+            // exit(); @TODO Надо ли тут остановить скрипт????
         }
     }
 
