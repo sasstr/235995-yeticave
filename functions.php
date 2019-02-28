@@ -62,7 +62,7 @@ function show_time() {
 function get_interval ($date_end) {
     $now = date_create('now');
     $diff = date_diff($now, $date_end);
-    date_interval_format($diff,'d.m.Y в H:i');
+    date_interval_format($diff,'d.m.Y H:i');
 
 
 };

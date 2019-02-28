@@ -29,7 +29,7 @@ function get_categories($link) {
 }
 /**
  * Возращеает список лотов - карточек товара
- * лимит 9 шт
+ * лимит 9 шт.
  * @param resource $link принимает ресурс соединения
  * @return array Возращает список лотов
  */
@@ -41,7 +41,7 @@ function get_lots($link) {
             ORDER BY lots.`starting_date` LIMIT 9;';
     $result = mysqli_query($link, $sql);
     if ($result !== false) {
-        return mysqli_fetch_all($result, MYSQLI_ASSOC);
+        return mysqli_fetch_all($result , MYSQLI_ASSOC);
     }
 }
 
@@ -85,6 +85,26 @@ function add_new_lot_to_db($link, $sql, $data = []) {
         exit();
     }
 }
+
+function add_new_rate_to_db($link, $sql, $data = []) {
+    $stmt = db_get_prepare_stmt($link, $sql, $data);
+    $res = mysqli_stmt_execute($stmt);
+    if ($res) {
+        $lot_page = render('lot', [
+            'categories' => $categories,
+            'lot' => $lot,
+            'rates_data' => $rates_data,
+            'min_rate' => $min_rate
+            ]);
+            print render('layout', [
+                'content' => $lot_page,
+                'title' => 'Лот',
+                'categories' => $categories,
+                'user_avatar' => $user_avatar
+            ]);
+        exit();
+    }
+}
 /**
  * Функция возращает результат запроса по выборке из базы данных
  *
@@ -100,3 +120,8 @@ function select_data_by_lot_id ($link, $sql, $lot_id) {
     return mysqli_fetch_all(mysqli_stmt_get_result($stmt), MYSQLI_ASSOC);
 }
 
+function select_id_by_email ($link, $email) {
+    $email = mysqli_real_escape_string($link, $sign_up['email']);
+    $sql = "SELECT id FROM users WHERE email = '$email'";
+    return mysqli_query($link, $sql);
+};

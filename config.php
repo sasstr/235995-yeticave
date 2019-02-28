@@ -47,3 +47,9 @@ const RATES_DATA = 'SELECT
                     JOIN `lots` ON `users`.`id` = `lots`.`user_id`
                     WHERE `rates`.`lots_id` = ?
                     ORDER BY `rates`.`date` DESC;';
+
+const ADD_NEW_RATE = 'INSERT INTO rates ( `rate_amount`,
+                                        `user_id`,
+                                        `lots_id`
+                                        )
+VALUES (?, ?, ?);';

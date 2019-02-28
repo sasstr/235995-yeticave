@@ -21,16 +21,16 @@
         <?php if (isset($_SESSION['user'])) : ?>
           <div class="lot-item__state">
             <div class="lot-item__timer timer">
-            <?php isset($rates_data[0]['finishing_date']) ?  ($rates_data[0]['finishing_date']) : print '' ?>
+            <?php isset($rates_data['finishing_date']) ?  ($rates_data['finishing_date']) : print '' ?>
               10:54
             </div>
             <div class="lot-item__cost-state">
               <div class="lot-item__rate">
                 <span class="lot-item__amount">Текущая цена</span>
-                <span class="lot-item__cost"><?=  isset($rates_data[0]['rate_amount']) ?  $rates_data[0]['rate_amount'] : print '' ?></span><!-- 10 999 -->
+                <span class="lot-item__cost"><?=  isset($rates_data['rate_amount']) ?  $rates_data['rate_amount'] : print '' ?></span><!-- 10 999 -->
               </div>
               <div class="lot-item__min-cost">
-                Мин. ставка <span><?= isset($rates_data[0]['rate_step']) ? $min_rate : print '' ?></span><!-- 12 000 р -->
+                Мин. ставка <span><?= isset($rates_data['rate_step']) ? $min_rate : print '' ?></span><!-- 12 000 р -->
               </div>
             </div>
             <form class="lot-item__form" action="lot.php" method="post" enctype="application/x-www-form-urlencoded">
@@ -47,11 +47,11 @@
             <h3>История ставок (<span>10</span>)</h3>
 
             <table class="history__list">
-            <?php foreach ($rates_data as $rate => $data) : ?>
+            <?php foreach ($rates_data as $rate => $val) : ?>
                 <tr class="history__item">
-                    <td class="history__name"><?= $data['name'] ?></td>
-                    <td class="history__price"><?= $data['rate_amount'] ?></td>
-                    <td class="history__time"><?= $data['date'] ?><!-- 5 минут назад --></td>
+                    <td class="history__name"><?php if(isset($val['name'])): print $val['name'] ?><?php endif;?></td>
+                    <td class="history__price"><?php if(isset($val['rate_amount'])): print $val['rate_amount'] ?><?php endif;?></td>
+                    <td class="history__time"><?php if(isset($val['date'])): print $val['date'] ?><?php endif;?><!-- 5 минут назад --></td>
                 </tr>
               <?php endforeach ?>
             </table>
