@@ -7,68 +7,52 @@ require_once('data.php');
 $lot_id = (int) $_GET['id'];
 $lot = get_lot_by_id($link, $lot_id);
  if(isset($lot_id) && isset($lot)){
-
-    if (isset($_SESSION['user'])){
+    if (isset($_SESSION['user'])) {
         $rates_data = select_data_by_lot_id ($link, RATES_DATA, $lot_id);
-        $rates_history = $rates_data[0];
+        var_dump($rates_data);
         $min_rate = $rates_data[0]['rate_step'] + $rates_data[0]['rate_amount'];
+        $starting_price = $rates_data[0]['starting_price'];
 
-         if (empty($_POST['cost'])) {
-            $errors['cost'] = 'Это поле необходимо заполнить';
-        } elseif ($_POST['cost'] <= 0 || is_int($errors['cost'])) {
-            $errors['cost'] = 'Значение должно положительным целым числом';
-        } elseif (is_int(isset($_POST['cost'])) > 0
-            && ($_POST['cost']) >= $min_rate
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $errors = [];
+            $session_user = $_SESSION['user'];
+            $post_cost = POST['cost'];
+            if (empty($post_cost)) {
+                $errors['cost'] = 'Это поле необходимо заполнить';
+            }elseif ($post_cost <= 0 || is_int($errors['cost'])) {
+                $errors['cost'] = 'Значение должно положительным целым числом';
+            }elseif (is_int(isset($_POST['cost'])) > 0
+            && ($post_cost) >= $min_rate
             && empty($errors['cost'])) {
-            $data = [$_POST['cost'], $_SESSION['user']['id'], $lot_id];
-            add_new_rate_to_db($link, ADD_NEW_RATE, $data, $_GET['id']);
-        $lot_page = render('lot', [
-            'categories' => $categories,
-            'lot' => $lot,
-            'rates_data' => $rates_data,
-            'min_rate' => $min_rate,
-            'rates_history' => $rates_history
-            ]);
-            print render('layout', [
-                'content' => $lot_page,
-                'title' => 'Лот',
+            $data = [$post_cost, $session_user['id'], $lot_id];
+            add_new_rate_to_db($link, ADD_NEW_RATE, $data, $lot_id);
+
+            include_template ('lot', 'Лот', $categories, $user_avatar,  [
                 'categories' => $categories,
-                'user_avatar' => $user_avatar
-            ]);
+                'lot' => $lot,
+                'rates_data' => $rates_data,
+                'min_rate' => &$min_rate,
+                'lot_id' => $lot_id
+                ]);
+        header('Location: lot.php?id=' . $_POST['lot_id']);
         exit();
+
+            /* add_new_rate($_SESSION['user'], $link, $lot_id, $_POST['cost'], RATES_DATA, ADD_NEW_RATE); */
         }
-        } else {
-            $lot_page = render('lot', [
-            'categories' => $categories,
-            'lot' => $lot
+    }
+    include_template ('lot', 'Лот', $categories, $user_avatar,
+            ['categories' => $categories,
+            'lot' => $lot,
+            'lot_id' => $lot_id
             ]);
-            print render('layout', [
-                'content' => $lot_page,
-                'title' => 'Лот',
-                'categories' => $categories,
-                'user_avatar' => $user_avatar
-            ]);
-            exit();
-        }
-        $lot_page = render('lot', [
-            'categories' => $categories,
-            'lot' => $lot
-            ]);
-            print render('layout', [
-                'content' => $lot_page,
-                'title' => 'Лот',
-                'categories' => $categories,
-                'user_avatar' => $user_avatar
-            ]);
-            exit();
     } else {
         http_response_code(404);
-        $page_404 = render('404', $p_404);
-        print render('layout', [
-            'content' => $page_404,
-            'title' => '404 страница не найдена',
-            'categories' => $categories,
-            'user_avatar' => $user_avatar
-        ]);
+        include_template ('404', '404 страница не найдена', $categories, $user_avatar, $p_404);
     }
-
+}
+header('Location: lot.php?id=' . $_POST['lot_id']);
+include_template ('lot', 'Лот', $categories, $user_avatar,
+['categories' => $categories,
+'lot' => $lot,
+'lot_id' => $lot_id
+]);

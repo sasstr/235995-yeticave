@@ -63,10 +63,31 @@ function get_interval ($date_end) {
     $now = date_create('now');
     $diff = date_diff($now, $date_end);
     date_interval_format($diff,'d.m.Y H:i');
+    /* if () {
 
-
+    }
+ */
 };
 
-
+/**
+ * Добавляет контент переданной страницы к основному шаблону и отрисовывает его
+ *
+ * @param string $page_name Название страницы
+ * @param string $page_title Тайтл страницы
+ * @param array $categories массив категорий
+ * @param string $user_avatar ссылка на аватар пользователя
+ * @param array $data массив данных для отрисовки шаблона локальной страницы
+ * @return void
+ */
+function include_template ($page_name, $page_title, $categories, $user_avatar, $data = []) {
+    $page_content = render($page_name, $data);
+        print render('layout', [
+            'content' => $page_content,
+            'title' => $page_title,
+            'categories' => $categories,
+            'user_avatar' => $user_avatar
+        ]);
+        exit();
+};
 
 session_start();

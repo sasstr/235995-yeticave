@@ -36,6 +36,7 @@
             <form class="lot-item__form" action="lot.php" method="post" enctype="application/x-www-form-urlencoded">
               <p class="lot-item__form-item form__item <?php if(isset($errors['cost'])): ?>form__item--invalid<?php endif;?>">
                 <label for="cost">Ваша ставка</label>
+                <input type="hidden" name="lot_id" value='<?= $lot_id ?>'>
                 <input id="cost" type="text" name="cost" placeholder="<?= $min_rate ?>"><!-- 12 000 -->
                 <!-- <span class="form__error">Введите наименование лота</span> -->
                 <span class="form__error"><?php isset($errors['lot-step']) ? print $errors['lot-step'] : print '' ?></span>

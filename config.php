@@ -37,6 +37,19 @@ const MOCK_IMG_LOT = 'http://placehold.it/150x100?text=Лот+на+фотосе�
 const MOCK_IMG = 'https://joeschmoe.io/api/v1//male/random';
 
 const RATES_DATA = 'SELECT
+                    `users`.`id`,
+                    `rates`.`rate_amount`,
+                    `lots`.`rate_step`,
+                    `lots`.`starting_price`,
+                    `rates`.`date`,
+                    `lots`.`finishing_date`,
+                    `rates`.`lots_id`
+                    FROM `rates`
+                    JOIN `users` ON `users`.`id` = `rates`.`user_id`
+                    JOIN `lots` ON `users`.`id` = `lots`.`user_id`
+                    WHERE `rates`.`lots_id` = ?';
+
+const HISTORY_DATA = 'SELECT
                     `users`.`name`,
                     `rates`.`rate_amount`,
                     `rates`.`date`,
