@@ -47,7 +47,7 @@ const RATES_DATA = 'SELECT
                     FROM `rates`
                     JOIN `users` ON `users`.`id` = `rates`.`user_id`
                     JOIN `lots` ON `users`.`id` = `lots`.`user_id`
-                    WHERE `rates`.`lots_id` = ?';
+                    WHERE `lots`.`id` = ?';
 
 const HISTORY_DATA = 'SELECT
                     `users`.`name`,

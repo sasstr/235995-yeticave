@@ -5,15 +5,22 @@ require_once('init.php');
 require_once('data.php');
 
 $lot_id = (int) $_GET['id'];
+var_dump($lot_id);
 $lot = get_lot_by_id($link, $lot_id);
  if(isset($lot_id) && isset($lot)){
     if (isset($_SESSION['user'])) {
+        var_dump(isset($_SESSION['user']));
         $rates_data = select_data_by_lot_id ($link, RATES_DATA, $lot_id);
         var_dump($rates_data);
-        $min_rate = $rates_data[0]['rate_step'] + $rates_data[0]['rate_amount'];
         $starting_price = $rates_data[0]['starting_price'];
+        var_dump($starting_price);
+        $amount = ($rates_data[0]['rate_amount'] === 0 ) ? $starting_price : $rates_data[0]['rate_amount'];
+        var_dump($amount);
+        $min_rate = $rates_data[0]['rate_step'] + $amount;
+        var_dump($min_rate);
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
             $errors = [];
             $session_user = $_SESSION['user'];
             $post_cost = POST['cost'];
@@ -46,11 +53,17 @@ $lot = get_lot_by_id($link, $lot_id);
             'lot_id' => $lot_id
             ]);
     } else {
-        http_response_code(404);
-        include_template ('404', '404 страница не найдена', $categories, $user_avatar, $p_404);
+        include_template ('lot', 'Лот', $categories, $user_avatar,
+            ['categories' => $categories,
+            'lot' => $lot,
+            'lot_id' => $lot_id
+            ]);
     }
+}else {
+    http_response_code(404);
+    include_template ('404', '404 страница не найдена', $categories, $user_avatar, $p_404);
 }
-header('Location: lot.php?id=' . $_POST['lot_id']);
+/* header('Location: lot.php?id=' . $_POST['lot_id']); */
 include_template ('lot', 'Лот', $categories, $user_avatar,
 ['categories' => $categories,
 'lot' => $lot,
