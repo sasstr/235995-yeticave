@@ -61,12 +61,13 @@ function show_time() {
 
 function get_interval ($date_end) {
     $now = date_create('now');
-    $diff = date_diff($now, $date_end);
-    date_interval_format($diff,'d.m.Y H:i');
-    /* if () {
-
+    $n_time = time();
+    var_dump($n);
+    if($now < $date_end) {
+        $diff = date_diff($now, $date_end);
+        return date_interval_format($diff,'d.m.Y H:i');
     }
- */
+    return $errors = 'Ставку делать уже поздно - время вышло!';
 };
 
 /**

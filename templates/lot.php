@@ -33,10 +33,10 @@
                 Мин. ставка <span><?= isset($rates_data[0]['rate_step']) ? $min_rate : print '' ?></span><!-- 12 000 р -->
               </div>
             </div>
-            <form class="lot-item__form" action="lot.php" method="post" enctype="application/x-www-form-urlencoded">
+            <form class="lot-item__form" action="lot.php"  method="post" enctype="application/x-www-form-urlencoded"> <!-- lot.php -->
               <p class="lot-item__form-item form__item <?php if(isset($errors['cost'])): ?>form__item--invalid<?php endif;?>">
                 <label for="cost">Ваша ставка</label>
-                <input type="hidden" name="lot_id" value='<?= $lot_id ?>'>
+                <input type="hidden" name="id" value='<? isset($lot_id) ? print $lot_id : print ''; ?>'>
                 <input id="cost" type="text" name="cost" placeholder="<?php isset($min_rate) ? print $min_rate : print ''; ?>"><!-- 12 000 -->
                 <!-- <span class="form__error">Введите наименование лота</span> -->
                 <span class="form__error"><?php isset($errors['lot-step']) ? print $errors['lot-step'] : print '' ?></span>
