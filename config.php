@@ -52,12 +52,9 @@ const RATES_DATA = 'SELECT
 const HISTORY_DATA = 'SELECT
                     `users`.`name`,
                     `rates`.`rate_amount`,
-                    `rates`.`date`,
-                    `lots`.`rate_step`,
-                    `lots`.`finishing_date`
+                    `rates`.`date`
                     FROM `rates`
                     JOIN `users` ON `users`.`id` = `rates`.`user_id`
-                    JOIN `lots` ON `users`.`id` = `lots`.`user_id`
                     WHERE `rates`.`lots_id` = ?
                     ORDER BY `rates`.`date` DESC;';
 

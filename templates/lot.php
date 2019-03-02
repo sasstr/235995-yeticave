@@ -49,11 +49,11 @@
             <h3>История ставок (<span>10</span>)</h3>
 
             <table class="history__list">
-            <?php foreach ($rates_data[0] as $rate => $val) : ?>
+            <?php foreach ($history_data[0] as $rate => $val) : ?>
                 <tr class="history__item">
-                    <td class="history__name"><?php if(isset($val['name'])): print $val['name'] ?><?php endif;?></td>
-                    <td class="history__price"><?php if(isset($val['rate_amount'])): print $val['rate_amount'] ?><?php endif;?></td>
-                    <td class="history__time"><?php if(isset($val['date'])): print $val['date'] ?><?php endif;?><!-- 5 минут назад --></td>
+                    <td class="history__name"><?php if(isset($rate['name'])): print $rate['name'] ?><?php endif;?></td>
+                    <td class="history__price"><?php if(isset($rate['rate_amount'])): print $rate['rate_amount'] ?><?php endif;?></td>
+                    <td class="history__time"><?php if(isset($rate['date'])): print $rate['date'] ?><?php endif;?><!-- 5 минут назад --></td>
                 </tr>
               <?php endforeach ?>
               <tr class="history__item">

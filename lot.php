@@ -18,7 +18,8 @@ $lot = get_lot_by_id($link, $lot_id);
         var_dump($amount);
         $min_rate = $rates_data[0]['rate_step'] + $amount;
         var_dump($min_rate);
-
+        $history_data = select_data_by_lot_id ($link, HISTORY_DATA, $lot_id);
+        var_dump($history_data);
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             $errors = [];
@@ -38,6 +39,7 @@ $lot = get_lot_by_id($link, $lot_id);
                 'categories' => $categories,
                 'lot' => $lot,
                 'rates_data' => $rates_data,
+                'history_data' => &$history_data,
                 'min_rate' => &$min_rate,
                 'lot_id' => $lot_id
                 ]);
