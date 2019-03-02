@@ -37,7 +37,7 @@
               <p class="lot-item__form-item form__item <?php if(isset($errors['cost'])): ?>form__item--invalid<?php endif;?>">
                 <label for="cost">Ваша ставка</label>
                 <input type="hidden" name="lot_id" value='<?= $lot_id ?>'>
-                <input id="cost" type="text" name="cost" placeholder="<?= $min_rate ?>"><!-- 12 000 -->
+                <input id="cost" type="text" name="cost" placeholder="<?php isset($min_rate) ? print $min_rate : print ''; ?>"><!-- 12 000 -->
                 <!-- <span class="form__error">Введите наименование лота</span> -->
                 <span class="form__error"><?php isset($errors['lot-step']) ? print $errors['lot-step'] : print '' ?></span>
               </p>
@@ -49,11 +49,11 @@
             <h3>История ставок (<span>10</span>)</h3>
 
             <table class="history__list">
-            <?php foreach ($history_data[0] as $rate => $val) : ?>
+            <?php foreach ($history_data as $rate => $val) : ?>
                 <tr class="history__item">
-                    <td class="history__name"><?php if(isset($rate['name'])): print $rate['name'] ?><?php endif;?></td>
-                    <td class="history__price"><?php if(isset($rate['rate_amount'])): print $rate['rate_amount'] ?><?php endif;?></td>
-                    <td class="history__time"><?php if(isset($rate['date'])): print $rate['date'] ?><?php endif;?><!-- 5 минут назад --></td>
+                    <td class="history__name"><?php if(isset($val['name'])): print $val['name'] ?><?php endif;?></td>
+                    <td class="history__price"><?php if(isset($val['rate_amount'])): print $val['rate_amount'] ?><?php endif;?></td>
+                    <td class="history__time"><?php if(isset($val['date'])): print $val['date'] ?><?php endif;?><!-- 5 минут назад --></td>
                 </tr>
               <?php endforeach ?>
               <tr class="history__item">

@@ -18,8 +18,9 @@ $lot = get_lot_by_id($link, $lot_id);
         var_dump($amount);
         $min_rate = $rates_data[0]['rate_step'] + $amount;
         var_dump($min_rate);
+        $r_d = select_data_by_lot_id ($link, HISTORY_DATA, $lot_id);
         $history_data = select_data_by_lot_id ($link, HISTORY_DATA, $lot_id);
-        var_dump($history_data);
+        var_dump($history_data[0]);
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             $errors = [];
@@ -52,7 +53,9 @@ $lot = get_lot_by_id($link, $lot_id);
     include_template ('lot', 'Лот', $categories, $user_avatar,
             ['categories' => $categories,
             'lot' => $lot,
-            'lot_id' => $lot_id
+            'lot_id' => $lot_id,
+            'history_data' => &$history_data,
+            'min_rate' => &$min_rate
             ]);
     } else {
         include_template ('lot', 'Лот', $categories, $user_avatar,
