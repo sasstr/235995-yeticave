@@ -58,7 +58,7 @@ function show_time() {
     $diff = date_diff($now, $tomorrow);
     return date_interval_format($diff,'%H:%I');
 }
-
+// TODO Доделать функцию подсчета интервала времени.
 function get_interval ($date_end) {
     $now = date_create('now');
     $n_time = time();

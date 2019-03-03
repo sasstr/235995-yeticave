@@ -62,6 +62,12 @@ const RATES_DATA = 'SELECT
                     JOIN `lots` ON `users`.`id` = `lots`.`user_id`
                     WHERE `rates`.`lots_id` = ?;';
 
+const STARTING_PRICE = 'SELECT `lots`.`starting_price`,
+                        `lots`.`rate_step`,
+                        `lots`.`finishing_date`
+                        FROM `lots`
+                        WHERE `lots`.`id` = ?';
+
 const HISTORY_DATA = 'SELECT
                     `users`.`name`,
                     `rates`.`rate_amount`,

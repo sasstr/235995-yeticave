@@ -7,39 +7,63 @@ require_once('data.php');
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_SESSION['user'])) {
+        $id = (int) htmlspecialchars($_POST['id']);
 
-        /* $time = strtotime($rates_data[0]['finishing_date']);
-        $now = date_create('now');
-        $errors = [];*/
-        $rates_data = select_data_by_lot_id ($link, RATES_DATA, $lot_id);
+        $errors = [];
+        $history_data = select_data_by_lot_id ($link, HISTORY_DATA, $id);
+        $rates_data = select_data_by_lot_id ($link, RATES_DATA, $id);
         if ($rates_data) {
             $starting_price = $rates_data[0]['starting_price'];
             $amount = ($rates_data[0]['rate_amount'] === 0 ) ? $starting_price : $rates_data[0]['rate_amount'];
             $min_rate = $rates_data[0]['rate_step'] + $amount;
+        } else {
+            $rates_data = select_data_by_lot_id ($link, STARTING_PRICE, $id);
+            $min_rate = $rates_data[0]['starting_price'] + $amount;
         }
+        $time_end = strtotime($rates_data[0]['finishing_date']);
+        /* $now = time();
+        if($now >= $time_end) {
+            $errors['time'] = 'Время делать ставки закончилось';
+        } */
+
         $session_user_id = (int) $_SESSION['user']['id'];
         $post_cost = (int) $_POST['cost'];
-        $id = (int) $_POST['id'];
-
-
         $data = [$post_cost, $session_user_id, $id];
-        add_new_rate_to_db($link, ADD_NEW_RATE, $data, $id);
-        $history_data = select_data_by_lot_id($link, HISTORY_DATA, $id);
-        header('Location: lot.php?id=' . $id);
-        exit();
+
+        if (empty($post_cost)) {
+            $errors['cost'] = 'Это поле необходимо заполнить';
+            header('Location: lot.php?id=' . $id);
+            exit();
+        } elseif ($post_cost <= 0 || !is_int($post_cost)) {
+            $errors['cost'] = 'Значение должно положительным и целым числом';
+            header('Location: lot.php?id=' . $id);
+            exit();
+        } elseif (($post_cost) < $min_rate) {
+            $errors['cost'] = 'Значение ставки должно быть не меньше минимальной ставки';
+            header('Location: lot.php?id=' . $id);
+            exit();
+        } elseif (empty($errors['cost'])) {
+            $data = [(int) $_POST['cost'], (int) $_SESSION['user']['id'], (int) $id];
+            add_new_rate_to_db($link, ADD_NEW_RATE, $data, $id);
+            exit();
+        }
     }
 }
-$lot_id = (int) $_GET['id'];
+$lot_id = (int) htmlspecialchars($_GET['id']) ?? $id;
 $lot = get_lot_by_id($link, $lot_id);
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET' && (isset($lot_id) && isset($lot))) {
     $history_data = select_data_by_lot_id ($link, HISTORY_DATA, $lot_id);
     if (isset($_SESSION['user'])) {
+
         $rates_data = select_data_by_lot_id ($link, RATES_DATA, $lot_id);
         if ($rates_data) {
             $starting_price = $rates_data[0]['starting_price'];
             $amount = ($rates_data[0]['rate_amount'] === 0 ) ? $starting_price : $rates_data[0]['rate_amount'];
             $min_rate = $rates_data[0]['rate_step'] + $amount;
+        } else {
+            $rates_data = select_data_by_lot_id ($link, STARTING_PRICE, $lot_id);
+            $min_rate = $rates_data[0]['starting_price'] + $amount;
         }
 
         include_template ('lot', 'Лот', $categories, $user_avatar,
@@ -48,7 +72,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && (isset($lot_id) && isset($lot))) {
             'lot_id' => $lot_id,
             'rates_data' => &$rates_data,
             'history_data' => &$history_data,
-            'min_rate' => &$min_rate
+            'min_rate' => &$min_rate,
+            'errors' => &$errors
             ]);
         exit();
     }
@@ -58,7 +83,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && (isset($lot_id) && isset($lot))) {
         'lot_id' => $lot_id,
         'history_data' => $history_data
         ]);
-
     } else {
         http_response_code(404);
         include_template ('404', '404 страница не найдена', $categories, $user_avatar, $p_404);
