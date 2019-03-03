@@ -17,7 +17,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         if (!empty($sign_up[$field]) && $field === "email") {
             if (!filter_var($sign_up['email'], FILTER_VALIDATE_EMAIL)) {
             $errors[$field] = 'E-mail должен быть корректным';
-
             }
         }
     }
@@ -41,14 +40,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $file_type = finfo_file($finfo, $file_tmp_name);
             $file_name_uniq = uniqid('avatar-') . '.' . pathinfo($file_name , PATHINFO_EXTENSION);
             $file_url = UPLOAD_LOCAL_DIR . trim($file_name_uniq);
+
             // Перемещение загруженного файла в папку сайта
             move_uploaded_file($file_tmp_name, UPLOAD_DIR . $file_name_uniq);
         }
     }
     if (empty($errors)) {
-        $email = mysqli_real_escape_string($link, $sign_up['email']);
-        $sql = "SELECT id FROM users WHERE email = '$email'";
-        $res = mysqli_query($link, $sql);
+        $email = [];
+        $email[] = mysqli_real_escape_string($link, $sign_up['email']);
+        $sql = "SELECT id FROM users WHERE email = ?";
+        $stmt = db_get_prepare_stmt($link, $sql, $email);
+        $res = mysqli_stmt_execute($stmt);
+        /* $sql = "SELECT id FROM users WHERE email = '$email'"; */
 
         if (mysqli_num_rows($res) > 0) {
             $errors['email'] = 'Пользователь с этим email уже зарегистрирован';
