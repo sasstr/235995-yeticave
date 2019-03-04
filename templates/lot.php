@@ -27,10 +27,13 @@
             <div class="lot-item__cost-state">
               <div class="lot-item__rate">
                 <span class="lot-item__amount">Текущая цена</span>
-                <span class="lot-item__cost"><?=  isset($rates_data[0]['rate_amount']) ?  $rates_data[0]['rate_amount'] : print '' ?></span><!-- 10 999 -->
+                <span class="lot-item__cost"><?=  isset($rates_data[0]['rate_amount']) ?
+                                                        format_price($rates_data[0]['rate_amount']) :
+                                                        format_price((int) $rates_data[0]['starting_price']); ?>
+                </span>
               </div>
               <div class="lot-item__min-cost">
-                Мин. ставка <span><?= isset($rates_data[0]['rate_step']) ? $min_rate : print '' ?></span><!-- 12 000 р -->
+                Мин. ставка <span><?= isset($rates_data[0]['rate_step']) ? format_price($min_rate) : '' ?></span><!-- 12 000 р -->
               </div>
             </div>
             <form class="lot-item__form" action="lot.php"  method="post" enctype="application/x-www-form-urlencoded"> <!-- lot.php -->
@@ -45,8 +48,9 @@
           </div>
           <?php endif ?>
           <div class="history">
-            <h3>История ставок (<span>10</span>)</h3>
-
+            <h3>История ставок <? $amount_rates = count($history_data) ?? ''; ?>
+                <span>(<? isset($amount_rates) ? print $amount_rates : print ''; ?>)</span><!-- 10 -->
+            </h3>
             <table class="history__list">
             <?php foreach ($history_data as $rate => $val) : ?>
                 <tr class="history__item">

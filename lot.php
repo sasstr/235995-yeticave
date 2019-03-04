@@ -14,11 +14,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $rates_data = select_data_by_lot_id ($link, RATES_DATA1, $id);
         if ($rates_data) {
             $starting_price = $rates_data[0]['starting_price'];
-            $amount = ($rates_data[0]['rate_amount'] === 0 ) ? $starting_price : $rates_data[0]['rate_amount'];
+            $amount = ($rates_data[0]['rate_amount'] <= 0 ) ? $starting_price : $rates_data[0]['rate_amount'];
             $min_rate = $rates_data[0]['rate_step'] + $amount;
         } else {
             $rates_data = select_data_by_lot_id ($link, STARTING_PRICE, $id);
-            $min_rate = $rates_data[0]['starting_price'] + $amount;
+            $min_rate = $rates_data[0]['starting_price'] + $rates_data[0]['rate_step'];
         }
         $end_time = strtotime($rates_data[0]['finishing_date']);
         $now = time();
@@ -59,16 +59,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && (isset($lot_id) && isset($lot))) {
 
         $rates_data = select_data_by_lot_id ($link, RATES_DATA1, $lot_id);
         if ($rates_data) {
-            $starting_price = $rates_data[0]['starting_price'];
-            $amount = ($rates_data[0]['rate_amount'] === 0 ) ? $starting_price : $rates_data[0]['rate_amount'];
+            $amount = ($rates_data[0]['rate_amount'] <= 0 ) ? $starting_price : $rates_data[0]['rate_amount'];
             $min_rate = $rates_data[0]['rate_step'] + $amount;
         } else {
             $rates_data = select_data_by_lot_id ($link, STARTING_PRICE, $lot_id);
-            $min_rate = $rates_data[0]['starting_price'] + $amount;
+            $min_rate = ((int) $rates_data[0]['starting_price']) + ((int) $rates_data[0]['rate_step']);
         }
         $end_time = strtotime($rates_data[0]['finishing_date']);
         $time_to_end_lot = get_end_of_time_lot($rates_data[0]['finishing_date']);
-
 
         include_template ('lot', 'Лот', $categories, $user_avatar,
             ['categories' => $categories,

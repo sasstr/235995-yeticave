@@ -26,7 +26,7 @@ function render ($file_name, $data_array) {
  * @return string возращает отформатированную цену по тысячам со знаком рубля.
  */
 
- function format_price ($price) {
+ function format_price($price) {
     return number_format(ceil($price), 0, ',', ' ') . RUBLE_SYMBOL;
 };
 

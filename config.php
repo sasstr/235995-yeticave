@@ -1,6 +1,6 @@
 <?
 define ('MOSCOW_TIME_ZONE', date_default_timezone_set('europe/moscow'));
-const RUBLE_SYMBOL = '&#x20BD';
+const RUBLE_SYMBOL = '&#8381;';
 const TEMPLATE_PATH = 'templates/';
 const PHP_EXTENSION = '.php';
 const UPLOAD_DIR = __DIR__ . '/upload/';
@@ -66,13 +66,14 @@ const RATES_DATA1 = 'SELECT
                     `lots`.`starting_price`,
                     `rates`.`date`,
                     `lots`.`finishing_date`,
-                    `rates`.`lots_id`
+                    `rates`.`lots_id`,
+                    `lots`.`id`
                     FROM `rates`
-                    JOIN `users` ON `users`.`id` = `rates`.`user_id`
-                    LEFT JOIN `lots` ON `users`.`id` = `lots`.`user_id`
+                    LEFT JOIN `users` ON `users`.`id` = `rates`.`user_id`
+                    JOIN `lots` ON `lots`.`id` = `rates`.`lots_id`
                     WHERE `rates`.`lots_id` = ?
                     ORDER BY `rates`.`rate_amount` DESC
-                    LIMIT 1;';
+                    LIMIT 1';
 
 const STARTING_PRICE = 'SELECT `lots`.`starting_price`,
                         `lots`.`rate_step`,
@@ -85,7 +86,7 @@ const HISTORY_DATA = 'SELECT
                     `rates`.`rate_amount`,
                     `rates`.`date`
                     FROM `rates`
-                    JOIN `users` ON `users`.`id` = `rates`.`user_id`
+                    LEFT JOIN `users` ON `users`.`id` = `rates`.`user_id`
                     WHERE `rates`.`lots_id` = ?
                     ORDER BY `rates`.`date` DESC;';
 
