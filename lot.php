@@ -11,7 +11,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $errors = [];
         $history_data = select_data_by_lot_id ($link, HISTORY_DATA, $id);
-        $rates_data = select_data_by_lot_id ($link, RATES_DATA, $id);
+        $rates_data = select_data_by_lot_id ($link, RATES_DATA1, $id);
         if ($rates_data) {
             $starting_price = $rates_data[0]['starting_price'];
             $amount = ($rates_data[0]['rate_amount'] === 0 ) ? $starting_price : $rates_data[0]['rate_amount'];
@@ -57,7 +57,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && (isset($lot_id) && isset($lot))) {
     $history_data = select_data_by_lot_id ($link, HISTORY_DATA, $lot_id);
     if (isset($_SESSION['user'])) {
 
-        $rates_data = select_data_by_lot_id ($link, RATES_DATA, $lot_id);
+        $rates_data = select_data_by_lot_id ($link, RATES_DATA1, $lot_id);
         if ($rates_data) {
             $starting_price = $rates_data[0]['starting_price'];
             $amount = ($rates_data[0]['rate_amount'] === 0 ) ? $starting_price : $rates_data[0]['rate_amount'];

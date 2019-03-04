@@ -46,14 +46,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
     }
     if (empty($errors)) {
-        $email = [];
-        $email[] = mysqli_real_escape_string($link, $sign_up['email']);
+        $email = mysqli_real_escape_string($link, $sign_up['email']);
         $sql = "SELECT id FROM users WHERE email = ?";
-        $stmt = db_get_prepare_stmt($link, $sql, $email);
-        $res = mysqli_stmt_execute($stmt);
+        $stmt = db_get_prepare_stmt($link, $sql, [$email]);
+        mysqli_stmt_execute($stmt);
+        $res = mysqli_stmt_get_result($stmt);
+        $rows = mysqli_num_rows($res);
+
         /* $sql = "SELECT id FROM users WHERE email = '$email'"; */
 
-        if (mysqli_num_rows($res) > 0) {
+        if ($rows > 0) {
             $errors['email'] = 'Пользователь с этим email уже зарегистрирован';
             $sign_up_tpl = render('sign-up', [
                 'categories' => $categories,

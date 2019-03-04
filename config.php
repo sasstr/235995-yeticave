@@ -46,7 +46,7 @@ const ADD_NEW_LOT = 'INSERT INTO lots ( `title`,
 const MOCK_IMG_LOT = 'http://placehold.it/150x100?text=Лот+на+фотосессии';
 const MOCK_IMG = 'https://joeschmoe.io/api/v1//male/random';
 
-const RATES_DATA = 'SELECT
+/* const RATES_DATA = 'SELECT
                     `users`.`id`,
                     `rates`.`rate_amount`,
                     `lots`.`rate_step`,
@@ -57,7 +57,22 @@ const RATES_DATA = 'SELECT
                     FROM `rates`
                     JOIN `users` ON `users`.`id` = `rates`.`user_id`
                     JOIN `lots` ON `users`.`id` = `lots`.`user_id`
-                    WHERE `rates`.`lots_id` = ?;';
+                    WHERE `rates`.`lots_id` = ?;'; */
+
+const RATES_DATA1 = 'SELECT
+                    `users`.`id`,
+                    `rates`.`rate_amount`,
+                    `lots`.`rate_step`,
+                    `lots`.`starting_price`,
+                    `rates`.`date`,
+                    `lots`.`finishing_date`,
+                    `rates`.`lots_id`
+                    FROM `rates`
+                    JOIN `users` ON `users`.`id` = `rates`.`user_id`
+                    LEFT JOIN `lots` ON `users`.`id` = `lots`.`user_id`
+                    WHERE `rates`.`lots_id` = ?
+                    ORDER BY `rates`.`rate_amount` DESC
+                    LIMIT 1;';
 
 const STARTING_PRICE = 'SELECT `lots`.`starting_price`,
                         `lots`.`rate_step`,
