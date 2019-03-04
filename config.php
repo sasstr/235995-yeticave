@@ -6,8 +6,18 @@ const PHP_EXTENSION = '.php';
 const UPLOAD_DIR = __DIR__ . '/upload/';
 const UPLOAD_LOCAL_DIR = '/upload/';
 const CATEGORY_SELECTOR = '-1';
-const HOURS = ['часов', 'час', 'часа'];
-const MINUTES = ['минут', 'минута', 'минуты'];
+const SECONDS_AMOUNT = [
+    'DAY' => 86400,
+    'HOUR' => 3600,
+    'MINUTE' => 60,
+];
+const WORDS = [
+    'rate' => ['ставка', 'ставки', 'ставок'],
+    'money' => ['рубль', 'рубля', 'рублей'],
+    'minute' => ['минута', 'минуты', 'минут'],
+    'hour' => ['час', 'часа', 'часов'],
+    'day' => ['день', 'дня', 'дней']
+];
 
 // Массив с данными для подключения к базе данных yeticave
 const DB_SETUP = [
@@ -35,19 +45,6 @@ const ADD_NEW_LOT = 'INSERT INTO lots ( `title`,
 
 const MOCK_IMG_LOT = 'http://placehold.it/150x100?text=Лот+на+фотосессии';
 const MOCK_IMG = 'https://joeschmoe.io/api/v1//male/random';
-
-/* const RATES_DATA = 'SELECT
-                    `users`.`id`,
-                    `rates`.`rate_amount`,
-                    `lots`.`rate_step`,
-                    `lots`.`starting_price`,
-                    `rates`.`date`,
-                    `lots`.`finishing_date`,
-                    `rates`.`lots_id`
-                    FROM `rates`
-                    JOIN `users` ON `users`.`id` = `rates`.`user_id`
-                    JOIN `lots` ON `users`.`id` = `lots`.`user_id`
-                    WHERE `lots`.`id` = ?;'; */
 
 const RATES_DATA = 'SELECT
                     `users`.`id`,

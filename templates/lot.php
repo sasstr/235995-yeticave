@@ -21,8 +21,8 @@
         <?php if (isset($_SESSION['user'])) : ?>
           <div class="lot-item__state">
             <div class="lot-item__timer timer">
-            <?php isset($rates_data[0]['finishing_date']) ? ($rates_data[0]['finishing_date']) : print '' ?>
-              10:54
+            <?php isset($time_to_end_lot) ? print $time_to_end_lot : print '' ?>
+              <!-- 10:54 -->
             </div>
             <div class="lot-item__cost-state">
               <div class="lot-item__rate">
@@ -52,10 +52,10 @@
                 <tr class="history__item">
                     <td class="history__name"><?php if(isset($val['name'])): print $val['name'] ?><?php endif;?></td>
                     <td class="history__price"><?php if(isset($val['rate_amount'])): print $val['rate_amount'] ?><?php endif;?></td>
-                    <td class="history__time"><?php if(isset($val['date'])): print $val['date'] ?><?php endif;?><!-- 5 минут назад --></td>
+                    <td class="history__time"><?php if(isset($val['date'])): print get_rate_add_time($val['date']); ?><?php endif;?><!-- 5 минут назад --></td>
                 </tr>
               <?php endforeach ?>
-              <tr class="history__item">
+              <!-- <tr class="history__item">
                 <td class="history__name">Иван</td>
                 <td class="history__price">10 999 р</td>
                 <td class="history__time">5 минут назад</td>
@@ -104,7 +104,7 @@
                 <td class="history__name">Илья</td>
                 <td class="history__price">10 999 р</td>
                 <td class="history__time">19.03.17 в 10:20</td>
-              </tr>
+              </tr> -->
             </table>
           </div>
         </div>

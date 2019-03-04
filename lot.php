@@ -23,7 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $end_time = strtotime($rates_data[0]['finishing_date']);
         $now = time();
         if(check_finished_lot($end_time)) {
-            $errors['time'] = 'Время делать ставки закончилось';
+            $errors['time'] = 'Время делать ставки на этот лот закончилось';
         }
 
         $session_user_id = (int) $_SESSION['user']['id'];
@@ -66,6 +66,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && (isset($lot_id) && isset($lot))) {
             $rates_data = select_data_by_lot_id ($link, STARTING_PRICE, $lot_id);
             $min_rate = $rates_data[0]['starting_price'] + $amount;
         }
+        $end_time = strtotime($rates_data[0]['finishing_date']);
+        $time_to_end_lot = get_end_of_time_lot($rates_data[0]['finishing_date']);
+
 
         include_template ('lot', 'Лот', $categories, $user_avatar,
             ['categories' => $categories,
@@ -74,6 +77,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && (isset($lot_id) && isset($lot))) {
             'rates_data' => &$rates_data,
             'history_data' => &$history_data,
             'min_rate' => &$min_rate,
+            'time_to_end_lot' => &$time_to_end_lot,
             'errors' => &$errors
             ]);
         exit();
@@ -90,45 +94,3 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && (isset($lot_id) && isset($lot))) {
 }
 http_response_code(404);
 include_template ('404', '404 страница не найдена', $categories, $user_avatar, $p_404);
-
-/* if (empty($post_cost)) {
-        $errors['cost'] = 'Это поле необходимо заполнить';
-    }elseif ($post_cost <= 0 || is_int($errors['cost'])) {
-        $errors['cost'] = 'Значение должно положительным целым числом';
-    }elseif (is_int(isset($_POST['cost'])) > 0
-    && ($post_cost) >= $min_rate
-    && empty($errors['cost'])) {
-    $data = [$post_cost, $session_user['id'], $lot_id];
-    add_new_rate_to_db($link, ADD_NEW_RATE, $data, $lot_id);
-<?= isset($lot_id) ? print $lot_id : print ''; ?>
-    include_template ('lot', 'Лот', $categories, $user_avatar,  [
-        'categories' => $categories,
-        'lot' => $lot,
-        'rates_data' => $rates_data,
-        'history_data' => &$history_data,
-        'min_rate' => &$min_rate,
-        'lot_id' => $lot_id
-        ]);
-    if (is_int($_POST['id'])) {
-        header('Location: lot.php?id=' . $_POST['id']);
-        exit();
-    } else {
-        http_response_code(404);
-        include_template ('404', '404 страница не найдена', $categories, $user_avatar, $p_404);
-    }
-}
-         include_template ('lot', 'Лот', $categories, $user_avatar,
-            ['categories' => $categories,
-            'lot' => $lot,
-            'lot_id' => $lot_id,
-            'history_data' => &$history_data,
-            'min_rate' => &$min_rate
-            ]);
-            exit();
-        } else {
-        include_template ('lot', 'Лот', $categories, $user_avatar,
-            ['categories' => $categories,
-            'lot' => $lot,
-            'lot_id' => $lot_id
-            ]);
-        } */
