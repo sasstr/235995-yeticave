@@ -38,7 +38,6 @@
                 <label for="cost">Ваша ставка</label>
                 <input type="hidden" name="id" value='<? isset($lot_id) ? print $lot_id : print ''; ?>'>
                 <input id="cost" type="text" name="cost" placeholder="<?php isset($min_rate) ? print $min_rate : print ''; ?>"><!-- 12 000 -->
-                <!-- <span class="form__error">Введите наименование лота</span> -->
                 <span class="form__error"><?php isset($errors['cost']) ? print $errors['cost'] : print '' ?></span>
               </p>
               <button type="submit" class="button">Сделать ставку</button>

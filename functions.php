@@ -18,6 +18,7 @@ function render ($file_name, $data_array) {
     require_once ($path);
     return ob_get_clean();
 };
+
 /**
  * Функция форматирует цену товара и добавляет знак рубля.
  * @param integer $price
@@ -58,17 +59,17 @@ function show_time() {
     $diff = date_diff($now, $tomorrow);
     return date_interval_format($diff,'%H:%I');
 }
-// TODO Доделать функцию подсчета интервала времени.
-function get_interval ($date_end) {
-    $now = date_create('now');
-    $n_time = time();
-    var_dump($n);
-    if($now < $date_end) {
-        $diff = date_diff($now, $date_end);
-        return date_interval_format($diff,'d.m.Y H:i');
-    }
-    return $errors = 'Ставку делать уже поздно - время вышло!';
-};
+
+/**
+ * Проверяет истекло ли вермя текущего лота
+ *
+ * @param string $end_time время окончания лота
+ * @return bool истина если время вышло и ложь если нет.
+ */
+function check_finished_lot($end_time)
+{
+    return time() >= strtotime($end_time);
+}
 
 /**
  * Добавляет контент переданной страницы к основному шаблону и отрисовывает его

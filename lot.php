@@ -20,31 +20,32 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $rates_data = select_data_by_lot_id ($link, STARTING_PRICE, $id);
             $min_rate = $rates_data[0]['starting_price'] + $amount;
         }
-        $time_end = strtotime($rates_data[0]['finishing_date']);
-        /* $now = time();
-        if($now >= $time_end) {
+        $end_time = strtotime($rates_data[0]['finishing_date']);
+        $now = time();
+        if(check_finished_lot($end_time)) {
             $errors['time'] = 'Время делать ставки закончилось';
-        } */
+        }
 
         $session_user_id = (int) $_SESSION['user']['id'];
-        $post_cost = (int) $_POST['cost'];
+        $post_cost = (int) trim($_POST['cost']);
         $data = [$post_cost, $session_user_id, $id];
 
-        if (empty($post_cost)) {
+        if (isset($post_cost) && empty($post_cost)) {
             $errors['cost'] = 'Это поле необходимо заполнить';
             header('Location: lot.php?id=' . $id);
             exit();
-        } elseif ($post_cost <= 0 || !is_int($post_cost)) {
+        } elseif ($post_cost <= 0 || !ctype_digit($post_cost)) {
             $errors['cost'] = 'Значение должно положительным и целым числом';
             header('Location: lot.php?id=' . $id);
             exit();
         } elseif (($post_cost) < $min_rate) {
-            $errors['cost'] = 'Значение ставки должно быть не меньше минимальной ставки';
+            $errors['cost'] = 'Значение ставки должно быть не меньше минимальной';
             header('Location: lot.php?id=' . $id);
             exit();
         } elseif (empty($errors['cost'])) {
             $data = [(int) $_POST['cost'], (int) $_SESSION['user']['id'], (int) $id];
             add_new_rate_to_db($link, ADD_NEW_RATE, $data, $id);
+            header('Location: lot.php?id=' . $id);
             exit();
         }
     }
