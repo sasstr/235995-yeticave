@@ -26,7 +26,7 @@ function get_categories($link) {
         $categories = mysqli_fetch_all($result, MYSQLI_ASSOC);
     }
     return $categories;
-}
+};
 /**
  * Возращеает список лотов - карточек товара
  * лимит 9 шт.
@@ -43,7 +43,7 @@ function get_lots($link) {
     if ($result !== false) {
         return mysqli_fetch_all($result , MYSQLI_ASSOC);
     }
-}
+};
 
 /**
  * @param resource $link ресурс соединения
@@ -51,9 +51,7 @@ function get_lots($link) {
  *
  * @return string Возращает лот по id из БД
  */
-
  function get_lot_by_id ($link, $lot_id) {
-
     $sql = 'SELECT lots.`title`
             AS `lots_title`,
             lots.`description`,
@@ -67,11 +65,11 @@ function get_lots($link) {
     if ($result !== false) {
         return mysqli_fetch_assoc($result);
     }
-}
+};
 /**
  * Функция добавляет новый лот в БД и в случае успеха перенаправляет пользователя на страницу нового лота.
  *
- * @param resource $link
+ * @param resource $link рескрс соединения
  * @param string $sql подготовленное выражение
  * @param array $data
  * @return void
@@ -84,18 +82,20 @@ function add_new_lot_to_db($link, $sql, $data = []) {
         header('Location: lot.php?id=' . $lot_id); // Вынести в сценарий !
         exit();
     }
-}
-
-function add_new_rate_to_db($link, $sql, $data = [], $lot_id) {
+};
+/**
+ * Функция добавляет новую ставку
+ *
+ * @param resource $link  рескрс соединения
+ * @param string $sql  подготовленное выражение
+ * @param array $data массив данных
+ * @return void
+ */
+function add_new_rate_to_db($link, $sql, $data = []) {
     $stmt = db_get_prepare_stmt($link, $sql, $data);
     $res = mysqli_stmt_execute($stmt);
     return $res;
-    /* if ($res) {
-        $lot_id = mysqli_insert_id($link);
-        header('Location: lot.php?id=' . $lot_id);
-        exit();
-    } */
-}
+};
 /**
  * Функция возращает результат запроса по выборке из базы данных
  *
@@ -105,11 +105,13 @@ function add_new_rate_to_db($link, $sql, $data = [], $lot_id) {
  * @return Возращает результат запроса по выборке из базы данных
  */
 function select_data_by_lot_id ($link, $sql, $lot_id) {
+    /* $stmt = db_get_prepare_stmt($link, $sql, ['lot_id' => $lot_id]);
+    mysqli_stmt_execute($stmt); */
     $stmt = mysqli_prepare($link, $sql);
     mysqli_stmt_bind_param($stmt, 'i', $lot_id);
     mysqli_stmt_execute($stmt);
     return mysqli_fetch_all(mysqli_stmt_get_result($stmt), MYSQLI_ASSOC);
-}
+};
 
 function select_id_by_email ($link, $email) {
     $email = mysqli_real_escape_string($link, $sign_up['email']);
@@ -120,7 +122,7 @@ function select_id_by_email ($link, $email) {
     return mysqli_fetch_assoc(mysqli_stmt_execute($stmt));
 };
 
-function add_new_rate ($session_user, $link, $lot_id, $post_cost, $sql_select_data, $sql_add_data) {
+/* function add_new_rate ($session_user, $link, $lot_id, $post_cost, $sql_select_data, $sql_add_data) {
     if (isset($_SESSION['user'])){
         $rates_data = select_data_by_lot_id ($link, $sql_select_data, $lot_id);
 // user_id lots_id starting_price rate_step rate_amount rates.date finishing_date rates_lots_id
@@ -153,4 +155,4 @@ function add_new_rate ($session_user, $link, $lot_id, $post_cost, $sql_select_da
                 ]);
             exit();
         }
-};
+}; */

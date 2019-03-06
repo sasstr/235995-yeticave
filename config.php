@@ -59,7 +59,7 @@ const MOCK_IMG = 'https://joeschmoe.io/api/v1//male/random';
                     JOIN `lots` ON `users`.`id` = `lots`.`user_id`
                     WHERE `rates`.`lots_id` = ?;'; */
 
-const RATES_DATA1 = 'SELECT
+const RATES_DATA = 'SELECT
                     `users`.`id`,
                     `rates`.`rate_amount`,
                     `lots`.`rate_step`,
@@ -67,24 +67,31 @@ const RATES_DATA1 = 'SELECT
                     `rates`.`date`,
                     `lots`.`finishing_date`,
                     `rates`.`lots_id`,
-                    `lots`.`id`
+                    `lots`.`id`,
+                    `lots`.`user_id` AS lots_user_id,
+                    `rates`.`user_id` AS rates_user_id
                     FROM `rates`
                     LEFT JOIN `users` ON `users`.`id` = `rates`.`user_id`
                     JOIN `lots` ON `lots`.`id` = `rates`.`lots_id`
                     WHERE `rates`.`lots_id` = ?
                     ORDER BY `rates`.`rate_amount` DESC
-                    LIMIT 1';
+                    LIMIT 1;';
 
 const STARTING_PRICE = 'SELECT `lots`.`starting_price`,
                         `lots`.`rate_step`,
+                        `lots`.`user_id` AS lots_user_id,
+                        `rates`.`user_id` AS rates_user_id,
                         `lots`.`finishing_date`
                         FROM `lots`
-                        WHERE `lots`.`id` = ?';
+                        JOIN `rates` ON `lots`.`user_id` = `rates`.`user_id`
+                        WHERE `lots`.`id` = ?;';
 
 const HISTORY_DATA = 'SELECT
                     `users`.`name`,
                     `rates`.`rate_amount`,
-                    `rates`.`date`
+                    `rates`.`date`,
+                    `users`.`id`,
+                    `rates`.`user_id`
                     FROM `rates`
                     LEFT JOIN `users` ON `users`.`id` = `rates`.`user_id`
                     WHERE `rates`.`lots_id` = ?
@@ -95,3 +102,11 @@ const ADD_NEW_RATE = 'INSERT INTO rates ( `rate_amount`,
                                         `lots_id`
                                         )
                     VALUES (?, ?, ?);';
+
+/* // получить все лоты
+const SELECT_LOT_BY_CATEGORY ='SELECT categories.name,
+                                      lots.category_id
+                                FROM categories
+                                JOIN lots ON lots.category_id = categories.id
+                                JOIN rates ON rates.lots_id = lots.id
+                                ORDER BY `rates`.`date` DESC;'; */

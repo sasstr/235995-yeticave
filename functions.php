@@ -5,11 +5,12 @@ MOSCOW_TIME_ZONE;
  * Проверяет наличие файла шаблона и возращает его.
  * @param string $file_name название файла шаблона
  * @param array $data_array массив переменных
+ * @param integer $id ID лота для get параметра
  *
  * @return string возращает разметку шаблона
  */
-function render ($file_name, $data_array) {
-    $path = TEMPLATE_PATH . $file_name . PHP_EXTENSION;
+function render ($file_name, $data_array, $id = '') {
+    (isset($id) && (int) $id) ? $path = TEMPLATE_PATH . $file_name . PHP_EXTENSION ."?id=$id" : $path = TEMPLATE_PATH . $file_name . PHP_EXTENSION;
     if(!file_exists($path)) {
         return '';
     }
@@ -130,6 +131,12 @@ function get_end_of_time_lot ($end_time) {
 function get_rate_add_time($current_time) {
     $add_time = strtotime($current_time);
     $passed_time = time_array($add_time);
+    if ($add_time >= strtotime('today')) {
+        return  sprintf('Сегодня в %s', date('H:i', $add_time));
+    }
+    if ($add_time >= strtotime('yesterday')) {
+        return  sprintf('Вчера в %s', date('H:i', $add_time));
+    }
     if ($passed_time['days'] === 0) {
         if ($passed_time['hours'] === 0 && $passed_time['minutes'] === 0) {
             return  $passed_time['seconds'] <= 30 ? 'Только что' : 'Минута назад';
@@ -139,12 +146,7 @@ function get_rate_add_time($current_time) {
             return  $passed_time['hours'] === 1 ? 'Час назад' : sprintf('%d %s назад', $passed_time['hours'], num_format($passed_time['hours'], 'hour'));
         }
     }
-    if ($add_time >= strtotime('today')) {
-        return  sprintf('Сегодня в %s', date('H:i', $add_time));
-    }
-    if ($add_time >= strtotime('yesterday')) {
-        return  sprintf('Вчера в %s', date('H:i', $add_time));
-    }
+
     return date('d.m.y в H:i', strtotime($current_time));
 };
 
@@ -156,16 +158,17 @@ function get_rate_add_time($current_time) {
  * @param array $categories массив категорий
  * @param string $user_avatar ссылка на аватар пользователя
  * @param array $data массив данных для отрисовки шаблона локальной страницы
+ * @param integer $id ID лота для get параметра
  * @return void
  */
-function include_template ($page_name, $page_title, $categories, $user_avatar, $data = []) {
-    $page_content = render($page_name, $data);
+function include_template ($page_name, $page_title, $categories, $user_avatar, $data = [], $id = '') {
+    $page_content = render($page_name, $data, $id = '');
         print render('layout', [
             'content' => $page_content,
             'title' => $page_title,
             'categories' => $categories,
             'user_avatar' => $user_avatar
-        ]);
+        ], $id);
         exit();
 };
 

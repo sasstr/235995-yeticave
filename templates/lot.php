@@ -18,7 +18,7 @@
           <p class="lot-item__description"><?= htmlspecialchars($lot['description']); ?></p>
         </div>
         <div class="lot-item__right">
-        <?php if (isset($_SESSION['user'])) : ?>
+        <?php if (isset($_SESSION['user']) && $rate_limit) : ?>
           <div class="lot-item__state">
             <div class="lot-item__timer timer">
             <?php isset($time_to_end_lot) ? print $time_to_end_lot : print '' ?>
