@@ -28,10 +28,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     foreach($new_lot as $key => $value) {
         if($key === 'lot-rate' || $key === 'lot-step') {
             if(!filter_var($value, FILTER_VALIDATE_INT)) {
-                $errors[$key] = 'Введите в это поле положительное, целое число.';
+                $errors[$key] = 'Введите в это поле положительное и целое число.';
             } else {
                 if($value <= 0) {
-                    $errors[$key] = 'Введите в это поле положительное, целое число.';
+                    $errors[$key] = 'Введите в это поле положительное и целое число.';
                 }
             }
         }
@@ -86,7 +86,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $user_id,
                 $new_lot['category']
                 ];
-        add_new_lot_to_db($link, ADD_NEW_LOT, $lot_data);
+        $res_add_new_lot = db_insert($link, ADD_NEW_LOT, $lot_data);
+        if ($res_add_new_lot) {
+            $lot_id = mysqli_insert_id($link);
+            header('Location: lot.php?id=' . $lot_id); //@TODO Вынести в сценарий !
+            exit();
+        }
         if(count($errors)){
             $errors['form'] = 'Пожалуйста, исправьте ошибки в форме.';
         $add_lot = render('add', [

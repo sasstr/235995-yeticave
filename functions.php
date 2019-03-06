@@ -118,7 +118,7 @@ function get_end_of_time_lot ($end_time) {
     } elseif ($to_end['days'] === 0) {
         return  sprintf('%02d:%02d', $to_end['hours'], $to_end['minutes']);
     } elseif ($to_end['days'] <= 3) {
-        return sprintf('%d %s', $to_end['days'], get_correct_word($to_end['days'], 'day'));
+        return sprintf('%d %s', $to_end['days'], get_correct_word($to_end['days'], WORDS['day'], 'day'));
     }
     return date('d.m.Y', strtotime($end_time));
 };

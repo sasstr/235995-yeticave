@@ -4,7 +4,6 @@ require_once('functions.php');
 require_once('init.php');
 require_once('data.php');
 
-
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_SESSION['user'])) {
         $id = (int) htmlspecialchars($_POST['id']);
@@ -30,7 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $post_cost = (int) trim($_POST['cost']);
         $data = [$post_cost, $session_user_id, $id];
 
-        if (isset($post_cost) && empty($post_cost)) {
+        if (!isset($post_cost) && empty($post_cost)) {
             $_SESSION['post_cost_error'] = 'Это поле необходимо заполнить';
             header('Location: lot.php?id=' . $id);
             exit();
@@ -54,7 +53,7 @@ $lot_id = (int) htmlspecialchars($_GET['id']) ?? $id;
 $lot = get_lot_by_id($link, $lot_id);
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET' && (isset($lot_id) && isset($lot))) {
-    $rate_limit = true;  // флаг ограничения на добавления ставки на лот
+    $rate_limit = false;  // флаг ограничения на добавления ставки на лот
     $history_data = select_data_by_lot_id ($link, HISTORY_DATA, $lot_id);
     $rates_data = select_data_by_lot_id ($link, RATES_DATA, $lot_id);
 
@@ -66,8 +65,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && (isset($lot_id) && isset($lot))) {
             $rates_data = select_data_by_lot_id ($link, STARTING_PRICE, $lot_id);
             $min_rate = ((int) $rates_data[0]['starting_price']) + ((int) $rates_data[0]['rate_step']);
         }
+    $time_to_end_lot = get_end_of_time_lot($rates_data[0]['finishing_date']);
+    $end_time = strtotime($rates_data[0]['finishing_date']);
+    if (isset($rates_data[0]['lots_user_id']) && isset($rates_data[0]['rates_user_id'])) {
+        if ($rates_data[0]['rates_user_id'] !== $_SESSION['user']['id']) { //TODO $history_data надо проверять все ставки из истории ставок!!!
+                $rate_limit = true;
+            } elseif ($rates_data[0]['lots_user_id'] !== $_SESSION['user']['id']) { // не проверяет ! ToDO
+                $rate_limit = true;
+            } elseif ($end_time <= time() ) {
+                $rate_limit = true;
+            }
+    }
     if (isset($_SESSION['post_cost_error'])) {
-        $error['cost'] = $_SESSION['post_cost_error'];
+        $errors['cost'] = $_SESSION['post_cost_error'];
         include_template ('lot', 'Лот', $categories, $user_avatar, ['categories' => $categories,
             'lot' => $lot,
             'lot_id' => $lot_id,
@@ -77,12 +87,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && (isset($lot_id) && isset($lot))) {
             'time_to_end_lot' => &$time_to_end_lot,
             'rate_limit' => &$rate_limit,
             'errors' => &$errors], $lot_id);
-        $_SESSION['post_cost_error'] = '';
+        unset($errors['cost']);
+        unset($_SESSION['post_cost_error']);
         exit();
     }
-    $end_time = strtotime($rates_data[0]['finishing_date']);
-    $time_to_end_lot = get_end_of_time_lot($rates_data[0]['finishing_date']);
-    if (isset($rates_data[0]['lots_user_id']) && isset($rates_data[0]['rates_user_id'])) {
+    /* if (isset($rates_data[0]['lots_user_id']) && isset($rates_data[0]['rates_user_id'])) {
         if ($end_time <= time()) {
                 $rate_limit = false;
             } elseif ($rates_data[0]['lots_user_id'] === $_SESSION['user']['id']) {
@@ -90,7 +99,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && (isset($lot_id) && isset($lot))) {
             } elseif ($rates_data[0]['rates_user_id'] === $_SESSION['user']['id'] ) {
                 $rate_limit = false;
             }
-    }
+    } */
     $tmpl_data = ['categories' => $categories,
             'lot' => $lot,
             'lot_id' => $lot_id,
@@ -105,13 +114,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && (isset($lot_id) && isset($lot))) {
         exit();
     }
 
-    /*
-                Ограничения
-            Блок добавления ставки не показывается если:
-            1. срок размещения лота истёк;
-            2. лот создан текущим пользователем;
-            3. пользователь уже добавлял ставку для этого лота;
-*/
     include_template ('lot', 'Лот', $categories, $user_avatar,
         ['categories' => $categories,
         'lot' => $lot,
