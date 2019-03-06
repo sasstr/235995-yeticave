@@ -53,8 +53,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $res = mysqli_stmt_get_result($stmt);
         $rows = mysqli_num_rows($res);
 
-        /* $sql = "SELECT id FROM users WHERE email = '$email'"; */
-
         if ($rows > 0) {
             $errors['email'] = 'Пользователь с этим email уже зарегистрирован';
             $sign_up_tpl = render('sign-up', [

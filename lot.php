@@ -31,53 +31,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $data = [$post_cost, $session_user_id, $id];
 
         if (isset($post_cost) && empty($post_cost)) {
-            $errors['cost'] = 'Это поле необходимо заполнить';
-            include_template ('lot', 'Лот', $categories, $user_avatar, ['categories' => $categories,
-            'lot' => $lot,
-            'lot_id' => $id,
-            'rates_data' => &$rates_data,
-            'history_data' => &$history_data,
-            'min_rate' => &$min_rate,
-            'time_to_end_lot' => &$time_to_end_lot,
-            'rate_limit' => &$rate_limit,
-            'errors' => &$errors], $id);
+            $_SESSION['post_cost_error'] = 'Это поле необходимо заполнить';
+            header('Location: lot.php?id=' . $id);
             exit();
         } elseif ($post_cost <= 0 || !ctype_digit($post_cost)) {
-            $errors['cost'] = 'Значение должно положительным и целым числом';
-            include_template ('lot', 'Лот', $categories, $user_avatar, ['categories' => $categories,
-            'lot' => $lot,
-            'lot_id' => $id,
-            'rates_data' => &$rates_data,
-            'history_data' => &$history_data,
-            'min_rate' => &$min_rate,
-            'time_to_end_lot' => &$time_to_end_lot,
-            'rate_limit' => &$rate_limit,
-            'errors' => $errors], $id);
+            $_SESSION['post_cost_error'] = 'Значение должно положительным и целым числом';
+            header('Location: lot.php?id=' . $id);
             exit();
         } elseif (($post_cost) < $min_rate) {
-            $errors['cost'] = 'Значение ставки должно быть не меньше минимальной';
-            include_template ('lot', 'Лот', $categories, $user_avatar, ['categories' => $categories,
-            'lot' => $lot,
-            'lot_id' => $id,
-            'rates_data' => &$rates_data,
-            'history_data' => &$history_data,
-            'min_rate' => &$min_rate,
-            'time_to_end_lot' => &$time_to_end_lot,
-            'rate_limit' => &$rate_limit,
-            'errors' => $errors], $id);
+            $_SESSION['post_cost_error'] = 'Значение ставки должно быть не меньше минимальной';
+            header('Location: lot.php?id=' . $id);
             exit();
         } elseif (empty($errors['cost'])) {
             $data = [(int) $_POST['cost'], (int) $_SESSION['user']['id'], (int) $id];
             add_new_rate_to_db($link, ADD_NEW_RATE, $data);
-            include_template ('lot', 'Лот', $categories, $user_avatar, ['categories' => $categories,
-            'lot' => $lot,
-            'lot_id' => $id,
-            'rates_data' => &$rates_data,
-            'history_data' => &$history_data,
-            'min_rate' => &$min_rate,
-            'time_to_end_lot' => &$time_to_end_lot,
-            'rate_limit' => &$rate_limit,
-            'errors' => $errors], $id);
+            header('Location: lot.php?id=' . $id);
             exit();
         }
     }
@@ -89,6 +57,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && (isset($lot_id) && isset($lot))) {
     $rate_limit = true;  // флаг ограничения на добавления ставки на лот
     $history_data = select_data_by_lot_id ($link, HISTORY_DATA, $lot_id);
     $rates_data = select_data_by_lot_id ($link, RATES_DATA, $lot_id);
+
     if (isset($_SESSION['user'])) {
         if ($rates_data) {
             $amount = ($rates_data[0]['rate_amount'] <= 0 ) ? $starting_price : $rates_data[0]['rate_amount'];
@@ -97,6 +66,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && (isset($lot_id) && isset($lot))) {
             $rates_data = select_data_by_lot_id ($link, STARTING_PRICE, $lot_id);
             $min_rate = ((int) $rates_data[0]['starting_price']) + ((int) $rates_data[0]['rate_step']);
         }
+    if (isset($_SESSION['post_cost_error'])) {
+        $error['cost'] = $_SESSION['post_cost_error'];
+        include_template ('lot', 'Лот', $categories, $user_avatar, ['categories' => $categories,
+            'lot' => $lot,
+            'lot_id' => $lot_id,
+            'rates_data' => &$rates_data,
+            'history_data' => &$history_data,
+            'min_rate' => &$min_rate,
+            'time_to_end_lot' => &$time_to_end_lot,
+            'rate_limit' => &$rate_limit,
+            'errors' => &$errors], $lot_id);
+        $_SESSION['post_cost_error'] = '';
+        exit();
+    }
     $end_time = strtotime($rates_data[0]['finishing_date']);
     $time_to_end_lot = get_end_of_time_lot($rates_data[0]['finishing_date']);
     if (isset($rates_data[0]['lots_user_id']) && isset($rates_data[0]['rates_user_id'])) {
