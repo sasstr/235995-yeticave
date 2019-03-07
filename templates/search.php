@@ -29,7 +29,7 @@
               </div>
             </div>
           </li>
-          <li class="lots__item lot">
+          <!-- <li class="lots__item lot">
             <div class="lot__image">
               <img src="img/lot-2.jpg" width="350" height="260" alt="Сноуборд">
             </div>
@@ -175,7 +175,7 @@
                 </div>
               </div>
             </div>
-          </li>
+          </li> -->
         </ul>
       </section>
       <ul class="pagination-list">
