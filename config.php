@@ -56,6 +56,7 @@ const RATES_DATA = 'SELECT
                     `rates`.`lots_id`,
                     `lots`.`id`,
                     `lots`.`user_id` AS lots_user_id,
+                    `lots`.`finishing_date` -`lots`.`starting_date` AS diff_date,
                     `rates`.`user_id` AS rates_user_id
                     FROM `rates`
                     LEFT JOIN `users` ON `users`.`id` = `rates`.`user_id`

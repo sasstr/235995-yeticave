@@ -21,7 +21,11 @@
         <?php if (isset($_SESSION['user']) && $rate_limit) : ?>
           <div class="lot-item__state">
             <div class="lot-item__timer timer">
-            <?php isset($time_to_end_lot) ? print $time_to_end_lot : print '' ?>
+            <?php $now = date_create('now');
+            $finishing_date = date_create($rates_data[0]['finishing_date']);
+            $diff = date_diff($now, $finishing_date);
+            $time_diff = date_interval_format($diff,'%D:%H:%I');
+                print isset($time_diff) ? $time_diff : '' ?>
               <!-- 10:54 -->
             </div>
             <div class="lot-item__cost-state">
@@ -36,11 +40,11 @@
                 Мин. ставка <span><?= isset($rates_data[0]['rate_step']) ? format_price($min_rate) : '' ?></span><!-- 12 000 р -->
               </div>
             </div>
-            <form class="lot-item__form" action="lot.php"  method="post" enctype="application/x-www-form-urlencoded"> <!-- lot.php -->
+            <form class="lot-item__form" action=""  method="post" enctype="application/x-www-form-urlencoded"> <!-- lot.php -->
               <p class="lot-item__form-item form__item <?php if(isset($errors['cost'])): ?>form__item--invalid<?php endif;?>">
                 <label for="cost">Ваша ставка</label>
                 <input type="hidden" name="id" value='<? isset($lot_id) ? print $lot_id : print ''; ?>'>
-                <input id="cost" type="text" name="cost" placeholder="<?php isset($min_rate) ? print $min_rate : print ''; ?>"><!-- 12 000 -->
+                <input id="cost" type="text" name="cost" placeholder="<?php isset($min_rate) ? print $min_rate : print ''; ?>">
                 <span class="form__error"><?php isset($errors['cost']) ? print $errors['cost'] : print '' ?></span>
               </p>
               <button type="submit" class="button">Сделать ставку</button>

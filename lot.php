@@ -3,6 +3,7 @@ require_once('config.php');
 require_once('functions.php');
 require_once('init.php');
 require_once('data.php');
+unset($_SESSION['post_cost_error']);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_SESSION['user'])) {
@@ -30,29 +31,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $data = [$post_cost, $session_user_id, $id];
 
         if (!isset($post_cost) && empty($post_cost)) {
-            $_SESSION['post_cost_error'] = 'Это поле необходимо заполнить';
-            header('Location: lot.php?id=' . $id);
-            exit();
+            $_POST['post_cost_error'] = 'Это поле необходимо заполнить';
         } elseif ($post_cost <= 0 || !ctype_digit($post_cost)) {
-            $_SESSION['post_cost_error'] = 'Значение должно положительным и целым числом';
-            header('Location: lot.php?id=' . $id);
-            exit();
+            $_POST['post_cost_error'] = 'Значение должно положительным и целым числом';
         } elseif (($post_cost) < $min_rate) {
-            $_SESSION['post_cost_error'] = 'Значение ставки должно быть не меньше минимальной';
-            header('Location: lot.php?id=' . $id);
-            exit();
+            $_POST['post_cost_error'] = 'Значение ставки должно быть не меньше минимальной';
         } elseif (empty($errors['cost'])) {
             $data = [(int) $_POST['cost'], (int) $_SESSION['user']['id'], (int) $id];
             add_new_rate_to_db($link, ADD_NEW_RATE, $data);
-            header('Location: lot.php?id=' . $id);
-            exit();
         }
     }
 }
 $lot_id = (int) htmlspecialchars($_GET['id']) ?? $id;
 $lot = get_lot_by_id($link, $lot_id);
 
-if ($_SERVER['REQUEST_METHOD'] === 'GET' && (isset($lot_id) && isset($lot))) {
+/*if ($ _SERVER['REQUEST_METHOD'] === 'GET' &&  (isset($lot_id) && isset($lot))) */
+if ($lot){
     $rate_limit = false;  // флаг ограничения на добавления ставки на лот
     $history_data = select_data_by_lot_id ($link, HISTORY_DATA, $lot_id);
     $rates_data = select_data_by_lot_id ($link, RATES_DATA, $lot_id);
@@ -76,8 +70,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && (isset($lot_id) && isset($lot))) {
                 $rate_limit = true;
             }
     }
-    if (isset($_SESSION['post_cost_error'])) {
-        $errors['cost'] = $_SESSION['post_cost_error'];
+    foreach ($history_data as $value) {
+        if ($value['user_id'] === (int) $_SESSION['user']['id']) {
+            $rate_limit = false;
+        }
+    }
+    if (isset($_POST['post_cost_error'])) {
+        $errors['cost'] = $_POST['post_cost_error'];
         include_template ('lot', 'Лот', $categories, $user_avatar, ['categories' => $categories,
             'lot' => $lot,
             'lot_id' => $lot_id,
@@ -87,19 +86,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && (isset($lot_id) && isset($lot))) {
             'time_to_end_lot' => &$time_to_end_lot,
             'rate_limit' => &$rate_limit,
             'errors' => &$errors], $lot_id);
-        unset($errors['cost']);
-        unset($_SESSION['post_cost_error']);
         exit();
     }
-    /* if (isset($rates_data[0]['lots_user_id']) && isset($rates_data[0]['rates_user_id'])) {
-        if ($end_time <= time()) {
-                $rate_limit = false;
-            } elseif ($rates_data[0]['lots_user_id'] === $_SESSION['user']['id']) {
-                $rate_limit = false;
-            } elseif ($rates_data[0]['rates_user_id'] === $_SESSION['user']['id'] ) {
-                $rate_limit = false;
-            }
-    } */
+
     $tmpl_data = ['categories' => $categories,
             'lot' => $lot,
             'lot_id' => $lot_id,
