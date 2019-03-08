@@ -1,37 +1,33 @@
 <nav class="nav">
       <ul class="nav__list container">
-      <?php foreach ($categories as $val): ?>
-            <li class="nav__item">
-                <a href="all-lots.html"><?= htmlspecialchars($val['name']); ?></a>
-            </li>
-        <?php endforeach ?>
+        <?= $page_categories ?>
       </ul>
     </nav>
     <div class="container">
       <section class="lots">
-        <h2>Результаты поиска по запросу «<span><?= $search_ft_to_db ?></span>»</h2><!-- Union -->
+        <h2>Результаты поиска по запросу «<span><?= $search_ft_to_db['0'] ?></span>»</h2><!-- Union -->
         <ul class="lots__list">
-        <?php foreach($res_search as $val): ?>
+        <? foreach($res_search as $val): ?>
           <li class="lots__item lot">
             <div class="lot__image">
-              <img src="<? isset($val['img_path']) ? print $val['img_path'] : print ''; ?>" width="350" height="260" alt="Сноуборд"><!-- img/lot-1.jpg -->
+              <img src="<?= isset($val['img_path']) ? htmlspecialchars($val['img_path']) : ''; ?>" width="350" height="260" alt="Сноуборд"><!-- img/lot-1.jpg -->
             </div>
             <div class="lot__info">
-              <span class="lot__category"><? isset($val['name']) ? print $val['name'] : print ''; ?></span>
-              <h3 class="lot__title"><a class="text-link" href="<? isset($val['id']) ? print 'lot.php?id=' . $val['id'] : print ''; ?>"><? isset($val['title']) ? print $val['title'] : print ''; ?></a></h3><!-- 2014 Rossignol District Snowboard --><!-- lot.html -->
+              <span class="lot__category"><?= isset($val['name']) ? htmlspecialchars($val['name']) : ''; ?></span>
+              <h3 class="lot__title"><a class="text-link" href="<?= isset($val['id']) ? 'lot.php?id=' . htmlspecialchars($val['id']) : ''; ?>"><? isset($val['title']) ? print $val['title'] : print ''; ?></a></h3><!-- 2014 Rossignol District Snowboard --><!-- lot.html -->
               <div class="lot__state">
                 <div class="lot__rate">
                   <span class="lot__amount">Стартовая цена</span>
-                  <span class="lot__cost"><? isset($val['starting_price']) ? print $val['starting_price'] : print ''; ?><b class="rub"><?= RUBLE_SYMBOL ?></b></span><!-- р --><!-- 10 999 -->
+                  <span class="lot__cost"><?= isset($val['starting_price']) ? htmlspecialchars($val['starting_price']) : ''; ?><b class="rub"><?= RUBLE_SYMBOL ?></b></span><!-- р --><!-- 10 999 -->
                 </div>
                 <div class="lot__timer timer">
-                <?php if(isset($val['finishing_date'])): print format_time_rate($val['finishing_date']); ?><?php endif?>
+                <?= isset($val['finishing_date']) ? format_time_rate($val['finishing_date']) : ''; ?>
                   16:54:12
                 </div>
               </div>
             </div>
           </li>
-          <?php endforeach ?>
+          <? endforeach ?>
           <!-- <li class="lots__item lot">
             <div class="lot__image">
               <img src="img/lot-2.jpg" width="350" height="260" alt="Сноуборд">
@@ -46,135 +42,6 @@
                 </div>
                 <div class="lot__timer timer timer--finishing">
                   00:54:12
-                </div>
-              </div>
-            </div>
-          </li>
-          <li class="lots__item lot">
-            <div class="lot__image">
-              <img src="img/lot-3.jpg" width="350" height="260" alt="Крепления">
-            </div>
-            <div class="lot__info">
-              <span class="lot__category">Крепления</span>
-              <h3 class="lot__title"><a class="text-link" href="lot.html">Крепления Union Contact Pro 2015 года размер
-                L/XL</a></h3>
-              <div class="lot__state">
-                <div class="lot__rate">
-                  <span class="lot__amount">7 ставок</span>
-                  <span class="lot__cost">8 000<b class="rub">р</b></span>
-                </div>
-                <div class="lot__timer timer">
-                  10:54:12
-                </div>
-              </div>
-            </div>
-          </li>
-          <li class="lots__item lot">
-            <div class="lot__image">
-              <img src="img/lot-4.jpg" width="350" height="260" alt="Ботинки">
-            </div>
-            <div class="lot__info">
-              <span class="lot__category">Ботинки</span>
-              <h3 class="lot__title"><a class="text-link" href="lot.html">Ботинки для сноуборда DC Mutiny Charocal</a>
-              </h3>
-              <div class="lot__state">
-                <div class="lot__rate">
-                  <span class="lot__amount">12 ставок</span>
-                  <span class="lot__cost">10 999<b class="rub">р</b></span>
-                </div>
-                <div class="lot__timer timer timer--finishing">
-                  00:12:03
-                </div>
-              </div>
-            </div>
-          </li>
-          <li class="lots__item lot">
-            <div class="lot__image">
-              <img src="img/lot-5.jpg" width="350" height="260" alt="Куртка">
-            </div>
-            <div class="lot__info">
-              <span class="lot__category">Одежда</span>
-              <h3 class="lot__title"><a class="text-link" href="lot.html">Куртка для сноуборда DC Mutiny Charocal</a></h3>
-              <div class="lot__state">
-                <div class="lot__rate">
-                  <span class="lot__amount">12 ставок</span>
-                  <span class="lot__cost">10 999<b class="rub">р</b></span>
-                </div>
-                <div class="lot__timer timer">
-                  00:12:03
-                </div>
-              </div>
-            </div>
-          </li>
-          <li class="lots__item lot">
-            <div class="lot__image">
-              <img src="img/lot-6.jpg" width="350" height="260" alt="Маска">
-            </div>
-            <div class="lot__info">
-              <span class="lot__category">Разное</span>
-              <h3 class="lot__title"><a class="text-link" href="lot.html">Маска Oakley Canopy</a></h3>
-              <div class="lot__state">
-                <div class="lot__rate">
-                  <span class="lot__amount">Стартовая цена</span>
-                  <span class="lot__cost">5 500<b class="rub">р</b></span>
-                </div>
-                <div class="lot__timer timer">
-                  07:13:34
-                </div>
-              </div>
-            </div>
-          </li>
-          <li class="lots__item lot">
-            <div class="lot__image">
-              <img src="img/lot-4.jpg" width="350" height="260" alt="Ботинки">
-            </div>
-            <div class="lot__info">
-              <span class="lot__category">Ботинки</span>
-              <h3 class="lot__title"><a class="text-link" href="lot.html">Ботинки для сноуборда DC Mutiny Charocal</a>
-              </h3>
-              <div class="lot__state">
-                <div class="lot__rate">
-                  <span class="lot__amount">12 ставок</span>
-                  <span class="lot__cost">10 999<b class="rub">р</b></span>
-                </div>
-                <div class="lot__timer timer timer--finishing">
-                  00:12:03
-                </div>
-              </div>
-            </div>
-          </li>
-          <li class="lots__item lot">
-            <div class="lot__image">
-              <img src="img/lot-5.jpg" width="350" height="260" alt="Куртка">
-            </div>
-            <div class="lot__info">
-              <span class="lot__category">Одежда</span>
-              <h3 class="lot__title"><a class="text-link" href="lot.html">Куртка для сноуборда DC Mutiny Charocal</a></h3>
-              <div class="lot__state">
-                <div class="lot__rate">
-                  <span class="lot__amount">12 ставок</span>
-                  <span class="lot__cost">10 999<b class="rub">р</b></span>
-                </div>
-                <div class="lot__timer timer">
-                  00:12:03
-                </div>
-              </div>
-            </div>
-          </li>
-          <li class="lots__item lot">
-            <div class="lot__image">
-              <img src="img/lot-6.jpg" width="350" height="260" alt="Маска">
-            </div>
-            <div class="lot__info">
-              <span class="lot__category">Разное</span>
-              <h3 class="lot__title"><a class="text-link" href="lot.html">Маска Oakley Canopy</a></h3>
-              <div class="lot__state">
-                <div class="lot__rate">
-                  <span class="lot__amount">Стартовая цена</span>
-                  <span class="lot__cost">5 500<b class="rub">р</b></span>
-                </div>
-                <div class="lot__timer timer">
-                  07:13:34
                 </div>
               </div>
             </div>

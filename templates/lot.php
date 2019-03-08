@@ -1,10 +1,10 @@
 <nav class="nav">
       <ul class="nav__list container">
-        <?php foreach ($categories as $val): ?>
+        <? foreach ($categories as $val): ?>
             <li class="nav__item">
-                <a href="all-lots.html"><?= htmlspecialchars($val['name']); ?></a>
+                <a href="all-lots.php?id=<?= htmlspecialchars($val['id']) ?>"><?= htmlspecialchars($val['name']); ?></a>
             </li>
-        <?php endforeach ?>
+        <? endforeach ?>
       </ul>
     </nav>
     <section class="lot-item container">
@@ -18,15 +18,15 @@
           <p class="lot-item__description"><?= htmlspecialchars($lot['description']); ?></p>
         </div>
         <div class="lot-item__right">
-        <?php if (isset($_SESSION['user']) && $rate_limit) : ?>
+        <? if (isset($_SESSION['user']) && $rate_limit) : ?>
           <div class="lot-item__state">
             <div class="lot-item__timer timer">
-            <?php $now = date_create('now');
-            $finishing_date = date_create($rates_data[0]['finishing_date']);
-            $diff = date_diff($now, $finishing_date);
-            $time_diff = date_interval_format($diff,'%D:%H:%I');
-                print isset($time_diff) ? $time_diff : '' ?>
-              <!-- 10:54 -->
+           
+            
+            
+            
+                
+              <!-- 10:54 --> <?= show_diff_time($rates_data[0]['finishing_date']); ?>
             </div>
             <div class="lot-item__cost-state">
               <div class="lot-item__rate">
@@ -41,28 +41,29 @@
               </div>
             </div>
             <form class="lot-item__form" action=""  method="post" enctype="application/x-www-form-urlencoded"> <!-- lot.php -->
-              <p class="lot-item__form-item form__item <?php if(isset($errors['cost'])): ?>form__item--invalid<?php endif;?>">
+              <p class="lot-item__form-item form__item <?= isset($errors['cost']) ? 'form__item--invalid' : '' ?>">
                 <label for="cost">Ваша ставка</label>
-                <input type="hidden" name="id" value='<? isset($lot_id) ? print $lot_id : print ''; ?>'>
-                <input id="cost" type="text" name="cost" placeholder="<?php isset($min_rate) ? print $min_rate : print ''; ?>">
-                <span class="form__error"><?php isset($errors['cost']) ? print $errors['cost'] : print '' ?></span>
+                <input type="hidden" name="id" value='<?= isset($lot_id) ? htmlspecialchars($lot_id) : ''; ?>'>
+                <input id="cost" type="text" name="cost" placeholder="<?= isset($min_rate) ? htmlspecialchars($min_rate) : ''; ?>">
+                <span class="form__error"><?= isset($errors['cost']) ? htmlspecialchars($errors['cost']) : '' ?></span>
               </p>
               <button type="submit" class="button">Сделать ставку</button>
             </form>
           </div>
-          <?php endif ?>
+          <? endif ?>
           <div class="history">
             <h3>История ставок <? $amount_rates = count($history_data) ?? ''; ?>
-                <span>(<? isset($amount_rates) ? print $amount_rates : print ''; ?>)</span><!-- 10 -->
+                <span>(<?= isset($amount_rates) ? htmlspecialchars($amount_rates) :''; ?>)</span><!-- 10 -->
             </h3>
             <table class="history__list">
-            <?php foreach ($history_data as $rate => $val) : ?>
+            <? foreach ($history_data as $rate => $val) : ?>
                 <tr class="history__item">
-                    <td class="history__name"><?php if(isset($val['name'])): print $val['name'] ?><?php endif;?></td>
-                    <td class="history__price"><?php if(isset($val['rate_amount'])): print $val['rate_amount'] ?><?php endif;?></td>
-                    <td class="history__time"><?php if(isset($val['date'])): print format_time_rate($val['date']); ?><?php endif;?><!-- 5 минут назад --></td>
+                    <td class="history__name"><?= isset($val['name']) ? $val['name'] : '' ?></td>
+                    <td class="history__price"><?= isset($val['rate_amount']) ? format_price($val['rate_amount']) : '' ?></td>
+                    <? $t_diff = format_time_rate($val['date']); ?>
+                    <td class="history__time"><?= isset($val['date']) ? $t_diff : '' ?></td>
                 </tr>
-              <?php endforeach ?>
+              <? endforeach ?>
             </table>
           </div>
         </div>

@@ -1,10 +1,12 @@
 <?php
+require_once('constants.php');
 require_once('config.php');
 require_once('functions.php');
 require_once('init.php');
 require_once('data.php');
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $message_up = $_POST['message'] ?? '';
     $sign_up = $_POST;
     $errors = [];
 
@@ -84,7 +86,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $sign_up_tpl = render('sign-up', [
                 'categories' => $categories,
                 'errors' => &$errors,
-                'sign_up' => $sign_up
+                'sign_up' => $sign_up,
+                'message_up' => $message_up
             ]);
         print render('layout', [
             'content' => $sign_up_tpl,

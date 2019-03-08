@@ -1,4 +1,5 @@
 <?php
+require_once('constants.php');
 require_once('config.php');
 require_once('functions.php');
 require_once('init.php');
@@ -11,6 +12,12 @@ if (!isset($_SESSION['user'])) {
 
 // Получаем данные из формы создания нового лота и валидируем все поля
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $message = $_POST['message'] ?? '';
+    $lot_name = $_POST['lot-name'] ?? '';
+    $value = $_POST['category'] ?? '';
+    $lot_rate = $_POST['lot-rate'] ?? '';
+    $lot_step = $_POST['lot-step'] ?? '';
+    $lot_date = $_POST['lot-date'] ?? '';
     $new_lot = $_POST;
     $required_fields = ['lot-name', 'category', 'message', 'lot-rate', 'lot-step', 'lot-date'];
     $errors = [];
@@ -27,13 +34,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 // Валидация на заполнение числовых значений цены и мин ставки
     foreach($new_lot as $key => $value) {
         if($key === 'lot-rate' || $key === 'lot-step') {
-            if(!filter_var($value, FILTER_VALIDATE_INT)) {
+            if(!filter_var($value, FILTER_VALIDATE_INT) || $value <= 0) {
                 $errors[$key] = 'Введите в это поле положительное и целое число.';
-            } else {
-                if($value <= 0) {
-                    $errors[$key] = 'Введите в это поле положительное и целое число.';
-                }
-            }
+            } 
+                
+                    
+                
+            
         }
     }
 // Валидация на заполнение верной даты
@@ -41,13 +48,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $errors['lot-date'] = 'Введите корректную дату завершения торгов, которая позже текущей даты хотя бы на один день';
     }
     $file_url = MOCK_IMG_LOT;
+    move_file_to_upload('lot-', 
+                        $_FILES['img-file']['name'], 
+                        $_FILES['img-file']['tmp_name'],
+                        UPLOAD_DIR,
+                        UPLOAD_LOCAL_DIR,
+                        IMG_FILE_TYPES
+                        );
 // Валидация на загрузку файла с картинкой лота
     // Проверяем есть ли каталог для загрузки картинок на сервере
-    if(!file_exists(UPLOAD_LOCAL_DIR)) {
+    /* if(!file_exists(UPLOAD_LOCAL_DIR)) {
         mkdir(UPLOAD_LOCAL_DIR);
         if (!file_exists(UPLOAD_LOCAL_DIR)) {
             $errors['img-file'] = 'Не удалось найти или создать папку для загрузки файла';
-            // exit(); @TODO Надо ли тут остановить скрипт????
+
         }
     }
 
@@ -68,7 +82,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Перемещение загруженного файла в папку сайта
             move_uploaded_file($file_tmp_name, UPLOAD_DIR . $file_name_uniq);
         }
-    }
+    } */
     if (!$link) {
         printf("Не удалось подключиться: %s\n", mysqli_connect_error());
         exit();
@@ -97,7 +111,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $add_lot = render('add', [
             'categories' => $categories,
             'errors' => $errors,
-            'file_url' => $file_url
+            'file_url' => $file_url,
+            'message' => $message,
+            'lot_name' => $lot_name,
+            'category_value' => $category_value,
+            'lot_rate' => $lot_rate,
+            'lot_step' => $lot_step,
+            'lot_date' => $lot_date
             ]);
         print render('layout', [
             'content' => $add_lot,
@@ -110,9 +130,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit();
     }
 
-}else {
+} else {
     $add_lot = render('add', [
-        'categories' => $categories
+        'categories' => $categories,
+        'message' => &$message,
+        'lot_name' => &$lot_name,
+        'category_value' => &$category_value,
+        'lot_rate' => &$lot_rate,
+        'lot_step' => &$lot_step,
+        'lot_date' => &$lot_date
     ]);
     print render('layout', [
         'content' => $add_lot,

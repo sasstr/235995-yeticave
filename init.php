@@ -6,8 +6,8 @@
 function db_connect() {
     $link = mysqli_connect(DB_SETUP['HOST'], DB_SETUP['LOGIN'], DB_SETUP['PASSWORD'], DB_SETUP['NAME']);
         if ($link == false) {
-            print("Ошибка подключения: " . mysqli_connect_error());
-            die();
+
+            die("Ошибка подключения: " . mysqli_connect_error());
     };
     mysqli_set_charset($link, 'utf8');
     return $link;
@@ -38,7 +38,7 @@ function  db_select ($link, $sql, $data = []) {
         $res = mysqli_stmt_get_result($stmt);
     return mysqli_fetch_all($res, MYSQLI_ASSOC);
     }
-    return -1;
+    return [];
     // return mysqli_fetch_assoc($result);
 };
 /**
@@ -70,7 +70,7 @@ function get_lots($link) {
     $result = mysqli_query($link, $sql);
     if ($result !== false) {
         return mysqli_fetch_all($result , MYSQLI_ASSOC);
-    }
+    } else { return []; }
 };
 
 /**
@@ -92,7 +92,7 @@ function get_lots($link) {
     $result = mysqli_query($link, $sql);
     if ($result !== false) {
         return mysqli_fetch_assoc($result);
-    }
+    } else { return []; }
 };
 
 /**
@@ -110,8 +110,8 @@ function add_new_rate_to_db($link, $data = []) {
                                 )
                                 VALUES (?, ?, ?);';
     $stmt = db_get_prepare_stmt($link, $sql, $data);
-    $res = mysqli_stmt_execute($stmt);
-    return $res;
+    return mysqli_stmt_execute($stmt);
+
 };
 /**
  * Функция возращает результат запроса по выборке из базы данных
@@ -122,8 +122,8 @@ function add_new_rate_to_db($link, $data = []) {
  * @return Возращает результат запроса по выборке из базы данных
  */
 function select_data_by_lot_id ($link, $sql, $lot_id) {
-    /* $stmt = db_get_prepare_stmt($link, $sql, ['lot_id' => $lot_id]);
-    mysqli_stmt_execute($stmt); */
+
+
     $stmt = mysqli_prepare($link, $sql);
     mysqli_stmt_bind_param($stmt, 'i', $lot_id);
     mysqli_stmt_execute($stmt);

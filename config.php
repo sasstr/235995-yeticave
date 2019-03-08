@@ -1,23 +1,8 @@
-<?
-define ('MOSCOW_TIME_ZONE', date_default_timezone_set('europe/moscow'));
-const RUBLE_SYMBOL = '&#8381;';
+<?php
 const TEMPLATE_PATH = 'templates/';
 const PHP_EXTENSION = '.php';
 const UPLOAD_DIR = __DIR__ . '/upload/';
 const UPLOAD_LOCAL_DIR = '/upload/';
-const CATEGORY_SELECTOR = '-1';
-const SECONDS_AMOUNT = [
-    'DAY' => 86400,
-    'HOUR' => 3600,
-    'MINUTE' => 60,
-];
-const WORDS = [
-    'rate' => ['ставка', 'ставки', 'ставок'],
-    'money' => ['рубль', 'рубля', 'рублей'],
-    'minute' => ['минута', 'минуты', 'минут'],
-    'hour' => ['час', 'часа', 'часов'],
-    'day' => ['день', 'дня', 'дней']
-];
 
 // Массив с данными для подключения к базе данных yeticave
 const DB_SETUP = [
@@ -26,10 +11,6 @@ const DB_SETUP = [
     'PASSWORD' => '',
     'NAME' => 'yeticave'
 ];
-
-const IMG_FILE_TYPES = ['jpg' =>'image/jpeg',
-                          'jpeg' => 'image/pjpeg',
-                          'png' =>'image/png'];
 
 const ADD_NEW_LOT = 'INSERT INTO lots ( `title`,
                                         `description`,
@@ -43,13 +24,4 @@ const ADD_NEW_LOT = 'INSERT INTO lots ( `title`,
                                         )
                     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);';
 
-const MOCK_IMG_LOT = 'http://placehold.it/150x100?text=Лот+на+фотосессии';
-const MOCK_IMG = 'https://joeschmoe.io/api/v1//male/random';
-
-
-/* const ADD_NEW_RATE = 'INSERT INTO rates ( `rate_amount`,
-                                        `user_id`,
-                                        `lots_id`
-                                        )
-                    VALUES (?, ?, ?);'; */
-
+session_start();

@@ -71,8 +71,8 @@ function show_time() {
  * @param string $end_time время окончания лота
  * @return bool истина если время вышло и ложь если нет.
  */
-function check_finished_lot($end_time)
-{
+function check_finished_lot($end_time) {
+
     return time() >= strtotime($end_time);
 };
 
@@ -87,11 +87,11 @@ function time_to_end_array ($end_time) {
     $days = (int) floor($seconds / SECONDS_AMOUNT['DAY']);
     $hours = (int) floor(($seconds % SECONDS_AMOUNT['DAY']) / SECONDS_AMOUNT['HOUR']);
     $minutes = (int) floor(($seconds % SECONDS_AMOUNT['DAY']) / SECONDS_AMOUNT['MINUTE']);
-    return $to_end = ['seconds' => $seconds,
-                        'days' => $days,
-                        'hours' => $hours,
-                        'minutes' => $minutes
-                    ];
+    return ['seconds' => $seconds,
+            'days' => $days,
+            'hours' => $hours,
+            'minutes' => $minutes
+            ];
 };
 
 function time_array ($start_time) {
@@ -99,11 +99,11 @@ function time_array ($start_time) {
     $days = (int) floor($seconds / SECONDS_AMOUNT['DAY']);
     $hours = (int) floor(($seconds % SECONDS_AMOUNT['DAY']) / SECONDS_AMOUNT['HOUR']);
     $minutes = (int) floor(($seconds % SECONDS_AMOUNT['DAY']) / SECONDS_AMOUNT['MINUTE']);
-    return $to_end = ['seconds' => $seconds,
-                        'days' => $days,
-                        'hours' => $hours,
-                        'minutes' => $minutes
-                    ];
+    return ['seconds' => $seconds,
+            'days' => $days,
+            'hours' => $hours,
+            'minutes' => $minutes
+            ];
 };
 /**
  * Возращает дату окончания аукциона по лоту
@@ -163,10 +163,11 @@ function get_end_of_time_lot ($end_time) {
  */
 function include_template ($page_name, $page_title, $categories, $user_avatar, $data = [], $id = '') {
     $page_content = render($page_name, $data, $id = '');
+    $page_categories = render('menu_categories', ['categories' => $categories]);
         print render('layout', [
             'content' => $page_content,
             'title' => $page_title,
-            'categories' => $categories,
+            'categories' => $page_categories,
             'user_avatar' => $user_avatar
         ], $id);
         exit();
@@ -189,4 +190,57 @@ function format_time_rate($value) {
     }
     return $add_time;
 }
-session_start();
+
+/**
+ * Функция рассчитывает разницу от текущего времни до конца суток
+ * @param $end_date 
+ * @return string возращает время которое осталось до конца суток от текущего.
+ */
+function show_diff_time($end_date) {
+    $now = date_create('now');
+    $diff_date = date_create($end_date);
+    $diff = date_diff($now, $diff_date);
+    $time_diff = date_interval_format($diff,'%H:%I');
+    return isset($time_diff) ? $time_diff : '';
+};
+/** Функция перемещает файл на сервере в указаную папку из временной и  
+ * добавляет префикс к названию файласоздавая уникальное название файла
+ * @param string $pre_name
+ * @param string $img_file_name
+ * @param string $img_file_tmp_name
+ * @param string $upload_dir
+ * @param string $upload_local_dir
+ * @param array $img_file_types
+ */
+function move_file_to_upload ($pre_name, $img_file_name, $img_file_tmp_name, $upload_dir, $upload_local_dir, $img_file_types) {
+    $errors = [];
+    // Валидация на загрузку файла с картинкой лота
+    // Проверяем есть ли каталог для загрузки картинок на сервере
+    if(!file_exists($upload_local_dir)) {
+        mkdir($upload_local_dir);
+        if (!file_exists($upload_local_dir)) {
+            $errors['img-file'] = 'Не удалось найти или создать папку для загрузки файла';
+
+        }
+    }
+
+    if (isset($img_file_name) && !empty($img_file_name)) {
+
+        $finfo = finfo_open(FILEINFO_MIME_TYPE);
+        $file_type = finfo_file($finfo, $img_file_tmp_name);
+
+        if(!array_search($file_type, $img_file_types)) {
+            $errors['img-file'] = 'Необходимо загрузить фото с расширением JPEG, JPG или PNG';
+        } else {
+            $file_tmp_name = $img_file_tmp_name;
+            $file_name = $img_file_name;
+            $finfo = finfo_open(FILEINFO_MIME_TYPE);
+            $file_type = finfo_file($finfo, $file_tmp_name);
+            $file_name_uniq = uniqid($pre_name) . '.' . pathinfo($file_name , PATHINFO_EXTENSION);
+            $file_url = $upload_local_dir . trim($file_name_uniq);
+            // Перемещение загруженного файла в папку сайта
+            move_uploaded_file($file_tmp_name, $upload_dir . $file_name_uniq);
+        }
+    }
+};
+

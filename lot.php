@@ -1,4 +1,5 @@
 <?php
+require_once('constants.php');
 require_once('config.php');
 require_once('functions.php');
 require_once('init.php');
@@ -7,7 +8,7 @@ unset($_SESSION['post_cost_error']);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_SESSION['user'])) {
-        $id = (int) htmlspecialchars($_POST['id']);
+        $id = (int) $_POST['id'];
         $lot = get_lot_by_id($link, $id);
         $errors = [];
         $history_data = select_history_data_by_id ($link, $id);
@@ -42,7 +43,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 }
-$lot_id = (int) htmlspecialchars($_GET['id']) ?? $id;
+$lot_id = (int) $_GET['id'] ?? $id;
 $lot = get_lot_by_id($link, $lot_id);
 
 if ($lot){
@@ -54,13 +55,13 @@ if ($lot){
     if (isset($_SESSION['user'])) {
         if ($rates_data) {
             $time_to_end_lot = get_end_of_time_lot($rates_data[0]['finishing_date']);
-            $end_time = strtotime($rates_data[0]['finishing_date']);
+            $end_time = $rates_data[0]['finishing_date'];
             $amount = ($rates_data[0]['rate_amount'] <= 0 ) ? $starting_price : $rates_data[0]['rate_amount'];
             $min_rate = $rates_data[0]['rate_step'] + $amount;
         } else {
-            /* $rates_data = select_rates_data_by_id ($link, $lot_id); */
+
             $time_to_end_lot = get_end_of_time_lot($starting_price[0]['finishing_date']);
-            $end_time = strtotime($starting_price[0]['finishing_date']);
+            $end_time = $starting_price[0]['finishing_date'];
             $min_rate = ((int) $starting_price[0]['starting_price']) + ((int) $starting_price[0]['rate_step']);
         }
     if (isset($rates_data[0]['lots_user_id']) && isset($rates_data[0]['rates_user_id'])) {

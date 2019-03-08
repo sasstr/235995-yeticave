@@ -1,7 +1,13 @@
 <?php
+require_once('constants.php');
 require_once('config.php');
 require_once('functions.php');
+require_once('init.php');
 require_once('data.php');
+
+$my_lots_page = [
+    'categories' => $categories,
+];
 
 $my_lots = render('my-lots', $my_lots_page);
 print render('layout', [
