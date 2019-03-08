@@ -89,7 +89,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $res_add_new_lot = db_insert($link, ADD_NEW_LOT, $lot_data);
         if ($res_add_new_lot) {
             $lot_id = mysqli_insert_id($link);
-            header('Location: lot.php?id=' . $lot_id); //@TODO Вынести в сценарий !
+            header('Location: lot.php?id=' . $lot_id);
             exit();
         }
         if(count($errors)){

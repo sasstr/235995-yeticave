@@ -34,6 +34,7 @@ CREATE TABLE lots (
   `category_id` INT NOT NULL
 ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8;
 
+CREATE FULLTEXT INDEX lots_ft_search ON `lots`(`title`, `description`);
 
 CREATE TABLE rates (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,

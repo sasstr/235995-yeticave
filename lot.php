@@ -10,14 +10,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $id = (int) htmlspecialchars($_POST['id']);
         $lot = get_lot_by_id($link, $id);
         $errors = [];
-        $history_data = select_data_by_lot_id ($link, HISTORY_DATA, $id);
-        $rates_data = select_data_by_lot_id ($link, RATES_DATA, $id);
+        $history_data = select_history_data_by_id ($link, $id);
+        $rates_data = select_rates_data_by_id ($link, $id);
         if ($rates_data) {
             $starting_price = $rates_data[0]['starting_price'];
             $amount = ($rates_data[0]['rate_amount'] <= 0 ) ? $starting_price : $rates_data[0]['rate_amount'];
             $min_rate = $rates_data[0]['rate_step'] + $amount;
         } else {
-            $rates_data = select_data_by_lot_id ($link, STARTING_PRICE, $id);
+            $rates_data = select_starting_price_data_by_id ($link, $id);
             $min_rate = $rates_data[0]['starting_price'] + $rates_data[0]['rate_step'];
         }
         $end_time = strtotime($rates_data[0]['finishing_date']);
@@ -38,38 +38,44 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_POST['post_cost_error'] = 'Значение ставки должно быть не меньше минимальной';
         } elseif (empty($errors['cost'])) {
             $data = [(int) $_POST['cost'], (int) $_SESSION['user']['id'], (int) $id];
-            add_new_rate_to_db($link, ADD_NEW_RATE, $data);
+            add_new_rate_to_db($link, $data);
         }
     }
 }
 $lot_id = (int) htmlspecialchars($_GET['id']) ?? $id;
 $lot = get_lot_by_id($link, $lot_id);
 
-/*if ($ _SERVER['REQUEST_METHOD'] === 'GET' &&  (isset($lot_id) && isset($lot))) */
 if ($lot){
     $rate_limit = false;  // флаг ограничения на добавления ставки на лот
-    $history_data = select_data_by_lot_id ($link, HISTORY_DATA, $lot_id);
-    $rates_data = select_data_by_lot_id ($link, RATES_DATA, $lot_id);
+    $history_data = select_history_data_by_id ($link, $lot_id);
+    $rates_data = select_rates_data_by_id ($link, $lot_id);
+    $starting_price = select_starting_price_data_by_id ($link, $lot_id);
 
     if (isset($_SESSION['user'])) {
         if ($rates_data) {
+            $time_to_end_lot = get_end_of_time_lot($rates_data[0]['finishing_date']);
+            $end_time = strtotime($rates_data[0]['finishing_date']);
             $amount = ($rates_data[0]['rate_amount'] <= 0 ) ? $starting_price : $rates_data[0]['rate_amount'];
             $min_rate = $rates_data[0]['rate_step'] + $amount;
         } else {
-            $rates_data = select_data_by_lot_id ($link, STARTING_PRICE, $lot_id);
-            $min_rate = ((int) $rates_data[0]['starting_price']) + ((int) $rates_data[0]['rate_step']);
+            /* $rates_data = select_rates_data_by_id ($link, $lot_id); */
+            $time_to_end_lot = get_end_of_time_lot($starting_price[0]['finishing_date']);
+            $end_time = strtotime($starting_price[0]['finishing_date']);
+            $min_rate = ((int) $starting_price[0]['starting_price']) + ((int) $starting_price[0]['rate_step']);
         }
-    $time_to_end_lot = get_end_of_time_lot($rates_data[0]['finishing_date']);
-    $end_time = strtotime($rates_data[0]['finishing_date']);
     if (isset($rates_data[0]['lots_user_id']) && isset($rates_data[0]['rates_user_id'])) {
-        if ($rates_data[0]['rates_user_id'] !== $_SESSION['user']['id']) { //TODO $history_data надо проверять все ставки из истории ставок!!!
+        // если пользователь уже сделал ставку не показывать блок добавления ставки
+        if ($rates_data[0]['rates_user_id'] !== $_SESSION['user']['id']) {
                 $rate_limit = true;
-            } elseif ($rates_data[0]['lots_user_id'] !== $_SESSION['user']['id']) { // не проверяет ! ToDO
+        // если пользователь создал этот лот не показывать блок добавления ставки
+            } elseif ($rates_data[0]['lots_user_id'] !== $_SESSION['user']['id']) {
                 $rate_limit = true;
+        // если время вышло делать ставки по этому лоту
             } elseif ($end_time <= time() ) {
                 $rate_limit = true;
             }
     }
+    // если пользователь уже сделал ставку не показывать блок добавления ставки
     foreach ($history_data as $value) {
         if ($value['user_id'] === (int) $_SESSION['user']['id']) {
             $rate_limit = false;

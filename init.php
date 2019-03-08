@@ -16,14 +16,14 @@ function db_connect() {
  * @param resource $link принимает ресурс соединения
  * @param string $sql подготовленное выражение
  * @param array $data массив данных для вставки в бд
- * @return
+ * @return bool $res или false
  */
 function  db_insert($link, $sql, $data = []) {
     if (!empty($data)) {
         $stmt = db_get_prepare_stmt($link, $sql, $data);
         return  mysqli_stmt_execute($stmt);
     }
-    return false;
+    return -1;
 };
 /** Функция возращает результат выборки из базы данных
  * @param resource $link принимает ресурс соединения
@@ -38,7 +38,7 @@ function  db_select ($link, $sql, $data = []) {
         $res = mysqli_stmt_get_result($stmt);
     return mysqli_fetch_all($res, MYSQLI_ASSOC);
     }
-    return false;
+    return -1;
     // return mysqli_fetch_assoc($result);
 };
 /**
@@ -103,7 +103,12 @@ function get_lots($link) {
  * @param array $data массив данных
  * @return void
  */
-function add_new_rate_to_db($link, $sql, $data = []) {
+function add_new_rate_to_db($link, $data = []) {
+    $sql = 'INSERT INTO rates ( `rate_amount`,
+                                `user_id`,
+                                `lots_id`
+                                )
+                                VALUES (?, ?, ?);';
     $stmt = db_get_prepare_stmt($link, $sql, $data);
     $res = mysqli_stmt_execute($stmt);
     return $res;
@@ -125,6 +130,90 @@ function select_data_by_lot_id ($link, $sql, $lot_id) {
     return mysqli_fetch_all(mysqli_stmt_get_result($stmt), MYSQLI_ASSOC);
 };
 
+/**
+ * Функция возращает результат запроса по выборке из базы данных
+ *
+ * @param resource $link
+ * @param string $sql подготовленное выражение
+ * @param integer $lot_id номер id по которому надо получить
+ * @return Возращает результат запроса по выборке из базы данных
+ */
+function select_starting_price_data_by_id ($link, $lot_id) {
+    $sql = 'SELECT `lots`.`starting_price`,
+                        `lots`.`rate_step`,
+                        `lots`.`user_id` AS lots_user_id,
+                        `rates`.`user_id` AS rates_user_id,
+                        `lots`.`finishing_date`
+                        FROM `lots`
+                        JOIN `rates` ON `lots`.`user_id` = `rates`.`user_id`
+                        WHERE `lots`.`id` = ?;';
+    $stmt = mysqli_prepare($link, $sql);
+    mysqli_stmt_bind_param($stmt, 'i', $lot_id);
+    mysqli_stmt_execute($stmt);
+    return mysqli_fetch_all(mysqli_stmt_get_result($stmt), MYSQLI_ASSOC);
+};
+
+/**
+ * Функция возращает результат запроса по выборке из базы данных
+ *
+ * @param resource $link
+ * @param string $sql подготовленное выражение
+ * @param integer $lot_id номер id по которому надо получить
+ * @return Возращает результат запроса по выборке из базы данных
+ */
+function select_history_data_by_id ($link, $lot_id) {
+    $sql = 'SELECT `users`.`name`,
+            `rates`.`rate_amount`,
+            `rates`.`date`,
+            `users`.`id`,
+            `rates`.`user_id`
+            FROM `rates`
+            LEFT JOIN `users` ON `users`.`id` = `rates`.`user_id`
+            WHERE `rates`.`lots_id` = ?
+            ORDER BY `rates`.`date` DESC;';
+    $stmt = mysqli_prepare($link, $sql);
+    mysqli_stmt_bind_param($stmt, 'i', $lot_id);
+    mysqli_stmt_execute($stmt);
+    return mysqli_fetch_all(mysqli_stmt_get_result($stmt), MYSQLI_ASSOC);
+};
+
+/**
+ * Функция возращает результат запроса по выборке из базы данных
+ *
+ * @param resource $link
+ * @param string $sql подготовленное выражение
+ * @param integer $lot_id номер id по которому надо получить
+ * @return Возращает результат запроса по выборке из базы данных
+ */
+function select_rates_data_by_id ($link, $lot_id) {
+    $sql = 'SELECT  `users`.`id`,
+                    `rates`.`rate_amount`,
+                    `lots`.`rate_step`,
+                    `lots`.`starting_price`,
+                    `rates`.`date`,
+                    `lots`.`finishing_date`,
+                    `rates`.`lots_id`,
+                    `lots`.`id`,
+                    `lots`.`user_id` AS lots_user_id,
+                    `rates`.`user_id` AS rates_user_id
+                    FROM `rates`
+                    LEFT JOIN `users` ON `users`.`id` = `rates`.`user_id`
+                    JOIN `lots` ON `lots`.`id` = `rates`.`lots_id`
+                    WHERE `rates`.`lots_id` = ?
+                    ORDER BY `rates`.`rate_amount` DESC
+                    LIMIT 1;';
+    $stmt = mysqli_prepare($link, $sql);
+    mysqli_stmt_bind_param($stmt, 'i', $lot_id);
+    mysqli_stmt_execute($stmt);
+    return mysqli_fetch_all(mysqli_stmt_get_result($stmt), MYSQLI_ASSOC);
+};
+/**
+ * Функция возращает ID пользователя по email
+ *
+ * @param resource $link
+ * @param string $email
+ * @return array
+ */
 function select_id_by_email ($link, $email) {
     $email = mysqli_real_escape_string($link, $sign_up['email']);
     $sql = "SELECT id FROM users WHERE email = ?";

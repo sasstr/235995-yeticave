@@ -128,7 +128,7 @@ function get_end_of_time_lot ($end_time) {
  * @param string $current_time время добавления ставки на торги
  * @return string Время добавления ставки в правильном формате.
  */
-function get_rate_add_time($current_time) {
+/* function get_rate_add_time($current_time) {
     $add_time = strtotime($current_time);
     $passed_time = time_array($add_time);
     if ($add_time >= strtotime('today')) {
@@ -148,7 +148,7 @@ function get_rate_add_time($current_time) {
     }
 
     return date('d.m.y в H:i', strtotime($current_time));
-};
+}; */
 
 /**
  * Добавляет контент переданной страницы к основному шаблону и отрисовывает его
@@ -172,4 +172,21 @@ function include_template ($page_name, $page_title, $categories, $user_avatar, $
         exit();
 };
 
+function format_time_rate($value) {
+    $time = strtotime('now');
+    $interval = $time - strtotime($value);
+    if ($interval > SECONDS_AMOUNT['DAY']) {
+        $add_time = date('d.m.Y в H:i', strtotime($value));
+    }
+    elseif ($interval > SECONDS_AMOUNT['HOUR'] && $interval < SECONDS_AMOUNT['DAY']) {
+        $add_time = floor($interval / SECONDS_AMOUNT['HOUR']) . ' часов назад';
+    }
+    elseif ($interval > SECONDS_AMOUNT['MINUTE'] && $interval < SECONDS_AMOUNT['HOUR']) {
+        $add_time = floor($interval / SECONDS_AMOUNT['MINUTE']) . ' минут назад';
+    }
+    else {
+        $add_time = 'меньше минуты назад';
+    }
+    return $add_time;
+}
 session_start();
