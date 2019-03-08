@@ -4,8 +4,8 @@ require_once('functions.php');
 require_once('init.php');
 require_once('data.php');
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $search_query = trim($_POST['search']);
+if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+    $search_query = trim($_GET['search']);
     if (!empty($search_query)) {
         $sql = 'SELECT  `lots`.`id`,
                         `lots`.`img_path`,
@@ -21,16 +21,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 AND (`lots`.`finishing_date` > NOW())
                 ORDER BY `lots`.`starting_date` DESC;';
     }
-    $search_ft_to_db = [$_POST['search']];
+    $search_ft_to_db = [$_GET['search']];
     $res_search = db_select ($link, $sql, $search_ft_to_db);
-    $search = render('search', $search_page);
+    $id = $_GET['id'];
+    $data = [$res_search, $search_ft_to_db];
+
+    include_template('search', 'Страница поиска', $categories, $user_avatar, $data, $id);
+    /* $search = render('search', $search_page);
     print render('layout', [
         'content' => $search,
         'title' => 'Страница поиска',
         'categories' => $categories,
         'user_avatar' => $user_avatar,
-        'res_search' => $res_search
-    ]);
+        'res_search' => &$res_search,
+        'search_ft_to_db' => &$search_ft_to_db,
+    ]); */
     exit();
 }
 $search = render('search', $search_page);

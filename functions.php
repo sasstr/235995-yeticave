@@ -153,7 +153,7 @@ function get_end_of_time_lot ($end_time) {
 /**
  * Добавляет контент переданной страницы к основному шаблону и отрисовывает его
  *
- * @param string $page_name Название страницы
+ * @param string $page_name имя файла страницы (без расширения php)
  * @param string $page_title Тайтл страницы
  * @param array $categories массив категорий
  * @param string $user_avatar ссылка на аватар пользователя

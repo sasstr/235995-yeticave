@@ -9,26 +9,29 @@
     </nav>
     <div class="container">
       <section class="lots">
-        <h2>Результаты поиска по запросу «<span>Union</span>»</h2>
+        <h2>Результаты поиска по запросу «<span><?= $search_ft_to_db ?></span>»</h2><!-- Union -->
         <ul class="lots__list">
+        <?php foreach($res_search as $val): ?>
           <li class="lots__item lot">
             <div class="lot__image">
-              <img src="img/lot-1.jpg" width="350" height="260" alt="Сноуборд">
+              <img src="<? isset($val['img_path']) ? print $val['img_path'] : print ''; ?>" width="350" height="260" alt="Сноуборд"><!-- img/lot-1.jpg -->
             </div>
             <div class="lot__info">
-              <span class="lot__category">Доски и лыжи</span>
-              <h3 class="lot__title"><a class="text-link" href="lot.html">2014 Rossignol District Snowboard</a></h3>
+              <span class="lot__category"><? isset($val['name']) ? print $val['name'] : print ''; ?></span>
+              <h3 class="lot__title"><a class="text-link" href="<? isset($val['id']) ? print 'lot.php?id=' . $val['id'] : print ''; ?>"><? isset($val['title']) ? print $val['title'] : print ''; ?></a></h3><!-- 2014 Rossignol District Snowboard --><!-- lot.html -->
               <div class="lot__state">
                 <div class="lot__rate">
                   <span class="lot__amount">Стартовая цена</span>
-                  <span class="lot__cost">10 999<b class="rub">р</b></span>
+                  <span class="lot__cost"><? isset($val['starting_price']) ? print $val['starting_price'] : print ''; ?><b class="rub"><?= RUBLE_SYMBOL ?></b></span><!-- р --><!-- 10 999 -->
                 </div>
                 <div class="lot__timer timer">
+                <?php if(isset($val['finishing_date'])): print format_time_rate($val['finishing_date']); ?><?php endif?>
                   16:54:12
                 </div>
               </div>
             </div>
           </li>
+          <?php endforeach ?>
           <!-- <li class="lots__item lot">
             <div class="lot__image">
               <img src="img/lot-2.jpg" width="350" height="260" alt="Сноуборд">
