@@ -84,7 +84,8 @@ if ($lot){
     }
     if (isset($_POST['post_cost_error'])) {
         $errors['cost'] = $_POST['post_cost_error'];
-        include_template ('lot', 'Лот', $categories, $user_avatar, ['categories' => $categories,
+        include_template ('lot', 'Лот', $categories, $user_avatar, [
+            'categories' => $categories,
             'lot' => $lot,
             'lot_id' => $lot_id,
             'rates_data' => &$rates_data,

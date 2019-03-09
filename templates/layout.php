@@ -51,11 +51,12 @@
     <nav class="nav">
         <ul class="nav__list container">
             <!--заполните этот список из массива категорий-->
-            <? foreach ($categories as $val): ?>
-            <li class="nav__item">
-                <a href="pages/all-lots.php?id=<?= htmlspecialchars($val['id']) ?>"><?= htmlspecialchars($val['name']) ?></a>
-            </li>
-            <? endforeach ?>
+            <?= $categories ?>
+
+
+                
+
+
         </ul>
     </nav>
     <div class="main-footer__bottom container">

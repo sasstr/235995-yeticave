@@ -39,7 +39,7 @@ function render ($file_name, $data_array, $id = '') {
  * @param string $word ключ двумерного массива $words
  * @return string возращает правилный вариант склонения слова в русском языке
  */
-function get_correct_word ($time, $words, $word) {
+function get_correct_word($time, $words, $word) {
     if (!isset($words[$word])) {
         return '';
     }
@@ -122,7 +122,7 @@ function get_end_of_time_lot ($end_time) {
     }
     return date('d.m.Y', strtotime($end_time));
 };
-/**
+/*
  * Возращает правильное написание времени с момента размещения ставки на аукционе
  *
  * @param string $current_time время добавления ставки на торги
@@ -143,7 +143,7 @@ function get_end_of_time_lot ($end_time) {
         } elseif ($passed_time['hours'] === 0) {
             return  $passed_time['minutes'] === 1 ? 'Минута назад' : sprintf('%d %s назад', $passed_time['minutes'], get_correct_word($passed_time['minutes'], 'minute'));
         } elseif ($passed_time['hours'] > 0 && $passed_time['hours'] <= 10) {
-            return  $passed_time['hours'] === 1 ? 'Час назад' : sprintf('%d %s назад', $passed_time['hours'], num_format($passed_time['hours'], 'hour'));
+            return  $passed_time['hours'] === 1 ? 'Час назад' : sprintf('%d %s назад', $passed_time['hours'], get_correct_word($passed_time['hours'], 'hour'));
         }
     }
 
@@ -172,12 +172,17 @@ function include_template ($page_name, $page_title, $categories, $user_avatar, $
         ], $id);
         exit();
 };
-
-function format_time_rate($value) {
+/**
+ * Возращает правильное написание времени с момента размещения ставки на аукционе
+ *
+ * @param string $current_time время добавления ставки на торги
+ * @return string Время добавления ставки в правильном формате.
+ */
+function format_time_rate($current_time) {
     $time = strtotime('now');
-    $interval = $time - strtotime($value);
+    $interval = $time - strtotime($current_time);
     if ($interval > SECONDS_AMOUNT['DAY']) {
-        $add_time = date('d.m.Y в H:i', strtotime($value));
+        $add_time = date('d.m.Y в H:i', strtotime($current_time));
     }
     elseif ($interval > SECONDS_AMOUNT['HOUR'] && $interval < SECONDS_AMOUNT['DAY']) {
         $add_time = floor($interval / SECONDS_AMOUNT['HOUR']) . ' часов назад';
@@ -193,7 +198,7 @@ function format_time_rate($value) {
 
 /**
  * Функция рассчитывает разницу от текущего времни до конца суток
- * @param $end_date 
+ * @param $end_date
  * @return string возращает время которое осталось до конца суток от текущего.
  */
 function show_diff_time($end_date) {
@@ -203,7 +208,7 @@ function show_diff_time($end_date) {
     $time_diff = date_interval_format($diff,'%H:%I');
     return isset($time_diff) ? $time_diff : '';
 };
-/** Функция перемещает файл на сервере в указаную папку из временной и  
+/** Функция перемещает файл на сервере в указаную папку из временной и
  * добавляет префикс к названию файласоздавая уникальное название файла
  * @param string $pre_name
  * @param string $img_file_name
