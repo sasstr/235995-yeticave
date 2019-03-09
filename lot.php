@@ -27,7 +27,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $errors['time'] = 'Время делать ставки на этот лот закончилось';
         }
 
-        $session_user_id = (int) $_SESSION['user']['id'];
+        $session_user_id = (int) $_SESSION['user']['0']['id'];
         $post_cost = (int) trim($_POST['cost']);
         $data = [$post_cost, $session_user_id, $id];
 
@@ -38,7 +38,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } elseif (($post_cost) < $min_rate) {
             $_POST['post_cost_error'] = 'Значение ставки должно быть не меньше минимальной';
         } elseif (empty($errors['cost'])) {
-            $data = [(int) $_POST['cost'], (int) $_SESSION['user']['id'], (int) $id];
+            $data = [(int) $_POST['cost'], (int) $_SESSION['user']['0']['id'], (int) $id];
             add_new_rate_to_db($link, $data);
         }
     }
@@ -66,10 +66,10 @@ if ($lot){
         }
     if (isset($rates_data[0]['lots_user_id']) && isset($rates_data[0]['rates_user_id'])) {
         // если пользователь уже сделал ставку не показывать блок добавления ставки
-        if ($rates_data[0]['rates_user_id'] !== $_SESSION['user']['id']) {
+        if ($rates_data[0]['rates_user_id'] !== $_SESSION['user']['0']['id']) {
                 $rate_limit = true;
         // если пользователь создал этот лот не показывать блок добавления ставки
-            } elseif ($rates_data[0]['lots_user_id'] !== $_SESSION['user']['id']) {
+            } elseif ($rates_data[0]['lots_user_id'] !== $_SESSION['user']['0']['id']) {
                 $rate_limit = true;
         // если время вышло делать ставки по этому лоту
             } elseif ($end_time <= time() ) {
@@ -78,7 +78,7 @@ if ($lot){
     }
     // если пользователь уже сделал ставку не показывать блок добавления ставки
     foreach ($history_data as $value) {
-        if ($value['user_id'] === (int) $_SESSION['user']['id']) {
+        if ($value['user_id'] === (int) $_SESSION['user']['0']['id']) {
             $rate_limit = false;
         }
     }
@@ -107,7 +107,7 @@ if ($lot){
             'time_to_end_lot' => $time_to_end_lot,
             'rate_limit' => $rate_limit,
             'page_categories' => $page_categories,
-            'errors' => $errors
+            'errors' => &$errors
             ];
         include_template ('lot', 'Лот', $categories, $user_avatar, $tmpl_data , $page_categories);
         exit();

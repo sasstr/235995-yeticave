@@ -7,6 +7,7 @@ require_once('data.php');
 
 $login_page = [
     'categories' => $categories,
+    'page_categories' => $page_categories
 ];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -39,7 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         include_template ('login', 'Вход на сайт под своим логином и паролем', $categories, $user_avatar, [
             'categories' => $categories,
             'errors' => $errors,
-            'page_categories' => &$page_categories,
+            'page_categories' => $page_categories,
             'login' => $login,
         ], $page_categories);
     }

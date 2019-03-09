@@ -36,11 +36,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if($key === 'lot-rate' || $key === 'lot-step') {
             if(!filter_var($value, FILTER_VALIDATE_INT) || $value <= 0) {
                 $errors[$key] = 'Введите в это поле положительное и целое число.';
-            } 
-                
-                    
-                
-            
+            }
+
+
+
+
         }
     }
 // Валидация на заполнение верной даты
@@ -48,8 +48,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $errors['lot-date'] = 'Введите корректную дату завершения торгов, которая позже текущей даты хотя бы на один день';
     }
     $file_url = MOCK_IMG_LOT;
-    move_file_to_upload('lot-', 
-                        $_FILES['img-file']['name'], 
+    move_file_to_upload('lot-',
+                        $_FILES['img-file']['name'],
                         $_FILES['img-file']['tmp_name'],
                         UPLOAD_DIR,
                         UPLOAD_LOCAL_DIR,
@@ -108,8 +108,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
         if(count($errors)){
             $errors['form'] = 'Пожалуйста, исправьте ошибки в форме.';
-        $add_lot = render('add', [
+
+        include_template ('add', 'Добавить новый лот', $categories, $user_avatar, [
             'categories' => $categories,
+            'page_categories' => $page_categories,
             'errors' => $errors,
             'file_url' => $file_url,
             'message' => $message,
@@ -118,42 +120,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'lot_rate' => $lot_rate,
             'lot_step' => $lot_step,
             'lot_date' => $lot_date
-            ]);
-        print render('layout', [
-            'content' => $add_lot,
-            'title' => 'Добавить новый лот',
-            'categories' => $categories,
-            'is_auth' => $is_auth,
-            'user_name' => $user_name,
-            'user_avatar' => $user_avatar
-        ]);
+            ], $page_categories);
         exit();
     }
 
 } else {
-    $add_lot = render('add', [
+    include_template ('add', 'Добавить новый лот', $categories, $user_avatar, [
         'categories' => $categories,
+        'page_categories' => $page_categories,
         'message' => &$message,
         'lot_name' => &$lot_name,
         'category_value' => &$category_value,
         'lot_rate' => &$lot_rate,
         'lot_step' => &$lot_step,
         'lot_date' => &$lot_date
-    ]);
-    print render('layout', [
-        'content' => $add_lot,
-        'title' => 'Добавить новый лот',
-        'categories' => $categories,
-        'user_avatar' => $user_avatar
-    ]);
+        ], $page_categories);
     exit();
 }
-$add_lot = render('add', [
-    'categories' => $categories
-]);
-print render('layout', [
-    'content' => $add_lot,
-    'title' => 'Добавить новый лот',
+
+include_template ('add', 'Добавить новый лот', $categories, $user_avatar, [
     'categories' => $categories,
-    'user_avatar' => $user_avatar
-]);
+    'page_categories' => $page_categories
+    ], $page_categories);
