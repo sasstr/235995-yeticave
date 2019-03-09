@@ -249,3 +249,24 @@ function move_file_to_upload ($pre_name, $img_file_name, $img_file_tmp_name, $up
     }
 };
 
+function is_show_rate_form($lots_user_id, $rates_user_id, $history_data, $session_user_id, $end_time) {
+    if (isset($lots_user_id) && isset($rates_user_id)) {
+        // если пользователь уже сделал ставку не показывать блок добавления ставки
+        if ($rates_user_id !== $session_user_id) {
+                $rate_limit = true;
+        // если пользователь создал этот лот не показывать блок добавления ставки
+            } elseif ($lots_user_id !== $session_user_id) {
+                $rate_limit = true;
+        // если время вышло делать ставки по этому лоту
+            } elseif ($end_time <= time() ) {
+                $rate_limit = true;
+            }
+    }
+    // если пользователь уже сделал ставку не показывать блок добавления ставки
+    foreach ($history_data as $value) {
+        if ($value['user_id'] === (int) $session_user_id) {
+            $rate_limit = false;
+        }
+    }
+    return $rate_limit;
+};

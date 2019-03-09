@@ -243,3 +243,9 @@ function search_ft_to_db ($link, $search_text) {
     }
     return 'Надо набрать поисковый запрос';
 };
+
+function select_email_from_db ($link, $email) {
+    $sql = 'SELECT * FROM users WHERE email = ?';
+    $res = db_select ($link, $sql, [$email]);
+    return ($res) ? $res : null;
+};

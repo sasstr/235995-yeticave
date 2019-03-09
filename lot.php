@@ -59,29 +59,13 @@ if ($lot){
             $amount = ($rates_data[0]['rate_amount'] <= 0 ) ? $starting_price : $rates_data[0]['rate_amount'];
             $min_rate = $rates_data[0]['rate_step'] + $amount;
         } else {
-
             $time_to_end_lot = get_end_of_time_lot($starting_price[0]['finishing_date']);
             $end_time = $starting_price[0]['finishing_date'];
             $min_rate = ((int) $starting_price[0]['starting_price']) + ((int) $starting_price[0]['rate_step']);
         }
-    if (isset($rates_data[0]['lots_user_id']) && isset($rates_data[0]['rates_user_id'])) {
-        // если пользователь уже сделал ставку не показывать блок добавления ставки
-        if ($rates_data[0]['rates_user_id'] !== $_SESSION['user']['0']['id']) {
-                $rate_limit = true;
-        // если пользователь создал этот лот не показывать блок добавления ставки
-            } elseif ($rates_data[0]['lots_user_id'] !== $_SESSION['user']['0']['id']) {
-                $rate_limit = true;
-        // если время вышло делать ставки по этому лоту
-            } elseif ($end_time <= time() ) {
-                $rate_limit = true;
-            }
-    }
-    // если пользователь уже сделал ставку не показывать блок добавления ставки
-    foreach ($history_data as $value) {
-        if ($value['user_id'] === (int) $_SESSION['user']['0']['id']) {
-            $rate_limit = false;
-        }
-    }
+
+    $rate_limit = is_show_rate_form($rates_data[0]['lots_user_id'], $rates_data[0]['rates_user_id'], $history_data, $_SESSION['user']['0']['id'], $end_time);
+
     if (isset($_POST['post_cost_error'])) {
         $errors['cost'] = $_POST['post_cost_error'];
         include_template ('lot', 'Лот', $categories, $user_avatar, [
