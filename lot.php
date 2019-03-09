@@ -122,7 +122,11 @@ if ($lot){
 ], $page_categories);
     } else {
         http_response_code(404);
-        include_template ('404', '404 страница не найдена', $categories, $user_avatar, $p_404, $page_categories);
+        include_template ('404', '404 страница не найдена', $categories, $user_avatar, ['categories' => $categories,
+        'page_categories' => $page_categories
+        ], $page_categories);
 }
 http_response_code(404);
-include_template ('404', '404 страница не найдена', $categories, $user_avatar, $p_404, $page_categories);
+include_template ('404', '404 страница не найдена', $categories, $user_avatar, ['categories' => $categories,
+'page_categories' => $page_categories
+], $page_categories);

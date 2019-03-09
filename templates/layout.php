@@ -27,7 +27,7 @@
             <div class="user-menu__logged">
                 <p><?= htmlspecialchars($_SESSION['user']['0']['name']) ?></p>
                 <a href="/logout.php">Выход</a>
-                <img src="<?= htmlspecialchars($user_avatar['0']['avatar']) ?>" width="40" height="40" alt="Пользователь">
+                <img src="<?= htmlspecialchars($user_avatar) ?>" width="40" height="40" alt="Пользователь">
             </div>
         <? else: ?>
             <ul class="user-menu__list">

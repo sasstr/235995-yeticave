@@ -27,9 +27,7 @@
             <div class="lot-item__cost-state">
               <div class="lot-item__rate">
                 <span class="lot-item__amount">Текущая цена</span>
-                <span class="lot-item__cost"><?=  isset($rates_data[0]['rate_amount']) ?
-                                                        format_price($rates_data[0]['rate_amount']) :
-                                                        format_price((int) $rates_data[0]['starting_price']); ?>
+                <span class="lot-item__cost"><?=  $min_rate ?>
                 </span>
               </div>
               <div class="lot-item__min-cost">
