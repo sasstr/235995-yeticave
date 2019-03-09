@@ -9,10 +9,6 @@ $login_page = [
     'categories' => $categories,
 ];
 
-$login_page = [
-    'categories' => $categories,
-];
-
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $login = $_POST;
 
@@ -28,14 +24,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $sql = 'SELECT * FROM users WHERE email = ?';
 
     $res = db_select ($link, $sql, [$email]);
-    $user = $res ? $res : null;
+    $user = $res ?? null;
 
-    if (!count($errors) && $user && password_verify($login['password'], $user['password'])) {
+    if (!count($errors) && $user && password_verify($login['password'], $user['0']['password'])) {
             $_SESSION['user'] = $user;
     } else {
         $errors['password'] = 'Вы ввели неверный пароль';
     }
-    if (!count($errors) && !$user) {
+    if (!count($errors) && $user) {
         $errors['email'] = 'Такой пользователь не найден';
     }
 
@@ -43,12 +39,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $login = render('login', [
             'categories' => $categories,
             'errors' => $errors,
+            'page_categories' => &$page_categories,
             'login' => $login,
         ]);
         print render('layout', [
             'content' => $login,
             'title' => 'Вход на сайт под своим логином и паролем',
             'categories' => $categories,
+            'page_categories' => &$page_categories,
             'user_avatar' => $user_avatar
         ]);
     }
@@ -63,5 +61,6 @@ print render('layout', [
     'content' => $login,
     'title' => 'Вход на сайт под своим логином и паролем',
     'categories' => $categories,
+    'page_categories' => &$page_categories,
     'user_avatar' => $user_avatar
 ]);
