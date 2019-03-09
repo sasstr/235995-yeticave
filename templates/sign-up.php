@@ -30,7 +30,7 @@
       <div class="form__item <?= isset($errors['message']) ? 'form__item--invalid' : '' ?>">
         <label for="message">Контактные данные*</label>
 
-        <textarea id="message" name="message" placeholder="Напишите как с вами связаться" required><?= htmlspecialchars($message_up) ?></textarea>
+        <textarea id="message" name="message" placeholder="Напишите как с вами связаться" required><?= isset($message_up) ? htmlspecialchars($message_up) : ''  ?></textarea>
         <span class="form__error">Напишите как с вами связаться</span>
       </div>
       <div class="form__item form__item--file form__item--last <?= isset($errors['img-avatar']) ? 'form__item--invalid' : '' ?>">

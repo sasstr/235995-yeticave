@@ -1,4 +1,5 @@
 <?
+date_default_timezone_set('europe/moscow');
 /**
  * Функция устанавливает связь с базой данных
  * @return resource возращает ресурс соединения
@@ -66,7 +67,8 @@ function get_lots($link) {
             FROM lots
             JOIN categories ON categories.`id` = lots.`category_id`
             WHERE lots.`winner_id` IS NULL and lots.`finishing_date` > CURRENT_TIMESTAMP
-            ORDER BY lots.`starting_date` LIMIT 9;';
+            ORDER BY lots.`starting_date` DESC
+            LIMIT 9;';
     $result = mysqli_query($link, $sql);
     if ($result !== false) {
         return mysqli_fetch_all($result , MYSQLI_ASSOC);
@@ -249,3 +251,13 @@ function select_email_from_db ($link, $email) {
     $res = db_select ($link, $sql, [$email]);
     return ($res) ? $res : null;
 };
+
+function check_email_in_db ($link, $email) {
+    $sql = "SELECT id FROM users WHERE email = ?";
+    $stmt = db_get_prepare_stmt($link, $sql, [$email]);
+    mysqli_stmt_execute($stmt);
+    $res = mysqli_stmt_get_result($stmt);
+    return mysqli_num_rows($res);
+};
+
+

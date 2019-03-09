@@ -17,21 +17,16 @@
         <? if (isset($_SESSION['user']) && $rate_limit) : ?>
           <div class="lot-item__state">
             <div class="lot-item__timer timer">
-
-
-
-
-
               <!-- 10:54 --> <?= show_diff_time($rates_data[0]['finishing_date']); ?>
             </div>
             <div class="lot-item__cost-state">
               <div class="lot-item__rate">
                 <span class="lot-item__amount">Текущая цена</span>
-                <span class="lot-item__cost"><?=  $min_rate ?>
+                <span class="lot-item__cost"><?=  format_price($amount) ?>
                 </span>
               </div>
               <div class="lot-item__min-cost">
-                Мин. ставка <span><?= isset($rates_data[0]['rate_step']) ? format_price($min_rate) : '' ?></span><!-- 12 000 р -->
+                Мин. ставка <span><?= isset($min_rate) ? format_price($min_rate) : '' ?></span><!-- 12 000 р -->
               </div>
             </div>
             <form class="lot-item__form" action=""  method="post" enctype="application/x-www-form-urlencoded"> <!-- lot.php -->

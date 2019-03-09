@@ -1,6 +1,5 @@
 <?php
 require_once('mysql_helper.php');
-MOSCOW_TIME_ZONE;
 /**
  * Проверяет наличие файла шаблона и возращает его.
  * @param string $file_name название файла шаблона
@@ -122,33 +121,6 @@ function get_end_of_time_lot ($end_time) {
     }
     return date('d.m.Y', strtotime($end_time));
 };
-/*
- * Возращает правильное написание времени с момента размещения ставки на аукционе
- *
- * @param string $current_time время добавления ставки на торги
- * @return string Время добавления ставки в правильном формате.
- */
-/* function get_rate_add_time($current_time) {
-    $add_time = strtotime($current_time);
-    $passed_time = time_array($add_time);
-    if ($add_time >= strtotime('today')) {
-        return  sprintf('Сегодня в %s', date('H:i', $add_time));
-    }
-    if ($add_time >= strtotime('yesterday')) {
-        return  sprintf('Вчера в %s', date('H:i', $add_time));
-    }
-    if ($passed_time['days'] === 0) {
-        if ($passed_time['hours'] === 0 && $passed_time['minutes'] === 0) {
-            return  $passed_time['seconds'] <= 30 ? 'Только что' : 'Минута назад';
-        } elseif ($passed_time['hours'] === 0) {
-            return  $passed_time['minutes'] === 1 ? 'Минута назад' : sprintf('%d %s назад', $passed_time['minutes'], get_correct_word($passed_time['minutes'], 'minute'));
-        } elseif ($passed_time['hours'] > 0 && $passed_time['hours'] <= 10) {
-            return  $passed_time['hours'] === 1 ? 'Час назад' : sprintf('%d %s назад', $passed_time['hours'], get_correct_word($passed_time['hours'], 'hour'));
-        }
-    }
-
-    return date('d.m.y в H:i', strtotime($current_time));
-}; */
 
 /**
  * Добавляет контент переданной страницы к основному шаблону и отрисовывает его
@@ -217,15 +189,14 @@ function show_diff_time($end_date) {
  * @param string $upload_local_dir
  * @param array $img_file_types
  */
-function move_file_to_upload ($pre_name, $img_file_name, $img_file_tmp_name, $upload_dir, $upload_local_dir, $img_file_types) {
+function move_file_to_upload ($prefix, $img_file_name, $img_file_tmp_name, $upload_dir, $upload_local_dir, $img_file_types) {
     $errors = [];
     // Валидация на загрузку файла с картинкой лота
     // Проверяем есть ли каталог для загрузки картинок на сервере
     if(!file_exists($upload_local_dir)) {
         mkdir($upload_local_dir);
         if (!file_exists($upload_local_dir)) {
-            $errors['img-file'] = 'Не удалось найти или создать папку для загрузки файла';
-
+            return $errors['img-file'] = 'Не удалось найти или создать папку для загрузки файла';
         }
     }
 
@@ -241,12 +212,13 @@ function move_file_to_upload ($pre_name, $img_file_name, $img_file_tmp_name, $up
             $file_name = $img_file_name;
             $finfo = finfo_open(FILEINFO_MIME_TYPE);
             $file_type = finfo_file($finfo, $file_tmp_name);
-            $file_name_uniq = uniqid($pre_name) . '.' . pathinfo($file_name , PATHINFO_EXTENSION);
+            $file_name_uniq = uniqid($prefix) . '.' . pathinfo($file_name , PATHINFO_EXTENSION);
             $file_url = $upload_local_dir . trim($file_name_uniq);
             // Перемещение загруженного файла в папку сайта
             move_uploaded_file($file_tmp_name, $upload_dir . $file_name_uniq);
         }
     }
+    return isset($file_url) ? $file_url : MOCK_IMG_LOT ;
 };
 
 function is_show_rate_form($lots_user_id, $rates_user_id, $history_data, $session_user_id, $end_time) {

@@ -61,10 +61,14 @@ if ($lot){
         } else {
             $time_to_end_lot = get_end_of_time_lot($starting_price[0]['finishing_date']);
             $end_time = $starting_price[0]['finishing_date'];
+            $amount = ((int) $starting_price[0]['starting_price']);
             $min_rate = ((int) $starting_price[0]['starting_price']) + ((int) $starting_price[0]['rate_step']);
         }
-
-    $rate_limit = is_show_rate_form($rates_data[0]['lots_user_id'], $rates_data[0]['rates_user_id'], $history_data, $_SESSION['user']['0']['id'], $end_time);
+        if(count($rates_data) > 0 && count($history_data) > 0) {
+            $rate_limit = is_show_rate_form($rates_data[0]['lots_user_id'], $rates_data[0]['rates_user_id'], $history_data, $_SESSION['user']['0']['id'], $end_time);
+        } else {
+            $rate_limit = true;
+        }
 
     if (isset($_POST['post_cost_error'])) {
         $errors['cost'] = $_POST['post_cost_error'];
@@ -73,8 +77,9 @@ if ($lot){
             'lot' => $lot,
             'lot_id' => $lot_id,
             'rates_data' => $rates_data,
+            'amount' => &$amount,
             'history_data' => $history_data,
-            'min_rate' => $min_rate,
+            'min_rate' => &$min_rate,
             'time_to_end_lot' => $time_to_end_lot,
             'rate_limit' => $rate_limit,
             'page_categories' => $page_categories,
@@ -86,8 +91,9 @@ if ($lot){
             'lot' => $lot,
             'lot_id' => $lot_id,
             'rates_data' => $rates_data,
+            'amount' => &$amount,
             'history_data' => $history_data,
-            'min_rate' => $min_rate,
+            'min_rate' => &$min_rate,
             'time_to_end_lot' => $time_to_end_lot,
             'rate_limit' => $rate_limit,
             'page_categories' => $page_categories,
@@ -100,6 +106,7 @@ if ($lot){
     include_template ('lot', 'Лот', $categories, $user_avatar,
         ['categories' => $categories,
         'page_categories' => $page_categories,
+        'amount' => &$amount,
         'lot' => $lot,
         'lot_id' => $lot_id,
         'history_data' => $history_data

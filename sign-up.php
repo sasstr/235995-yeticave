@@ -22,22 +22,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         }
     }
-    $file_url = MOCK_IMG;
-    move_file_to_upload ('avatar-',
+    $file_url = move_file_to_upload ('avatar-',
                         $_FILES['img-avatar']['name'],
                         $_FILES['img-avatar']['tmp_name'],
                         UPLOAD_DIR,
                         UPLOAD_LOCAL_DIR,
                         IMG_FILE_TYPES
                         );
+
     if (empty($errors)) {
-        // 62. sign-up.php. Стр 50. Запрос выносим в функцию.
         $email = mysqli_real_escape_string($link, $sign_up['email']);
-        $sql = "SELECT id FROM users WHERE email = ?";
-        $stmt = db_get_prepare_stmt($link, $sql, [$email]);
-        mysqli_stmt_execute($stmt);
-        $res = mysqli_stmt_get_result($stmt);
-        $rows = mysqli_num_rows($res);
+        $rows = check_email_in_db ($link, $email);
 
         if ($rows > 0) {
             $errors['email'] = 'Пользователь с этим email уже зарегистрирован';

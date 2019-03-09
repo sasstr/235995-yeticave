@@ -11,7 +11,6 @@ const WORDS = [
   'hour' => ['час', 'часа', 'часов'],
   'day' => ['день', 'дня', 'дней']
 ];
-define ('MOSCOW_TIME_ZONE', date_default_timezone_set('europe/moscow'));
 
 const CATEGORY_SELECTOR = '-1';
 const RUBLE_SYMBOL = '&#8381;';
