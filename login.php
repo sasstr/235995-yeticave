@@ -31,36 +31,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else {
         $errors['password'] = 'Вы ввели неверный пароль';
     }
-    if (!count($errors) && $user) {
+    if (!count($errors) && !$user) {
         $errors['email'] = 'Такой пользователь не найден';
     }
 
     if (count($errors)) {
-        $login = render('login', [
+        include_template ('login', 'Вход на сайт под своим логином и паролем', $categories, $user_avatar, [
             'categories' => $categories,
             'errors' => $errors,
             'page_categories' => &$page_categories,
             'login' => $login,
-        ]);
-        print render('layout', [
-            'content' => $login,
-            'title' => 'Вход на сайт под своим логином и паролем',
-            'categories' => $categories,
-            'page_categories' => &$page_categories,
-            'user_avatar' => $user_avatar
-        ]);
+        ], $page_categories);
     }
     else {
         header("Location: /index.php");
         exit();
     }
 }
-
-$login = render('login', $login_page);
-print render('layout', [
-    'content' => $login,
-    'title' => 'Вход на сайт под своим логином и паролем',
-    'categories' => $categories,
-    'page_categories' => &$page_categories,
-    'user_avatar' => $user_avatar
-]);
+include_template ('login', 'Вход на сайт под своим логином и паролем', $categories, $user_avatar, $login_page, $page_categories);

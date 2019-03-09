@@ -5,6 +5,7 @@
     <title><?= htmlspecialchars($title) ?></title>
     <link href="css/normalize.min.css" rel="stylesheet">
     <link href="css/style.css" rel="stylesheet">
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
 </head>
 <body>
 <div class="page-wrapper">
@@ -24,7 +25,7 @@
         <nav class="user-menu">
         <? if (isset($_SESSION['user'])): ?>
             <div class="user-menu__logged">
-                <p><?= htmlspecialchars($_SESSION['user']['name']) ?></p>
+                <p><?= htmlspecialchars($_SESSION['user']['0']['name']) ?></p>
                 <a href="/logout.php">Выход</a>
                 <img src="<?= htmlspecialchars($user_avatar['0']['avatar']) ?>" width="40" height="40" alt="Пользователь">
             </div>

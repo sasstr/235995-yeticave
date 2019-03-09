@@ -9,8 +9,8 @@ MOSCOW_TIME_ZONE;
  *
  * @return string возращает разметку шаблона
  */
-function render ($file_name, $data_array, $id = '') {
-    (isset($id) && (int) $id) ? $path = TEMPLATE_PATH . $file_name . PHP_EXTENSION ."?id=$id" : $path = TEMPLATE_PATH . $file_name . PHP_EXTENSION;
+function render ($file_name, $data_array) {
+    $path = TEMPLATE_PATH . $file_name . PHP_EXTENSION;
     if(!file_exists($path)) {
         return '';
     }
@@ -158,18 +158,18 @@ function get_end_of_time_lot ($end_time) {
  * @param array $categories массив категорий
  * @param string $user_avatar ссылка на аватар пользователя
  * @param array $data массив данных для отрисовки шаблона локальной страницы
- * @param integer $id ID лота для get параметра
+ * @param string $page_categories Шаблон категорий
  * @return void
  */
-function include_template ($page_name, $page_title, $categories, $user_avatar, $data = [], $id = '') {
-    $page_content = render($page_name, $data, $id = '');
+function include_template ($page_name, $page_title, $categories, $user_avatar, $data = [], $page_categories) {
+    $page_content = render($page_name, $data);
         print render('layout', [
             'content' => $page_content,
             'title' => $page_title,
             'categories' => $categories,
-            'page_categories' => &$page_categories,
+            'page_categories' => $page_categories,
             'user_avatar' => $user_avatar
-        ], $id);
+        ]);
         exit();
 };
 /**

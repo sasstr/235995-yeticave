@@ -12,4 +12,4 @@ $major_indexes = [
   'time_until_midnight' => $time_until_midnight
 ];
 
-include_template('index', 'Главная страница', $categories, $user_avatar, $major_indexes);
+include_template('index', 'Главная страница', $categories, $user_avatar, $major_indexes, $page_categories);

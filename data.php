@@ -9,5 +9,5 @@ $user_avatar = MOCK_IMG;
 define ('PAGE_CATEGORIES', render ('menu_categories', ['categories' => $categories]));
 
 if (isset($_SESSION['user'])){
-    $user_avatar = $_SESSION['user']['avatar'];
+    $user_avatar = $_SESSION['user']['0']['avatar'];
     };

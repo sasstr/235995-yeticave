@@ -88,41 +88,41 @@ if ($lot){
             'categories' => $categories,
             'lot' => $lot,
             'lot_id' => $lot_id,
-            'rates_data' => &$rates_data,
-            'history_data' => &$history_data,
-            'min_rate' => &$min_rate,
-            'time_to_end_lot' => &$time_to_end_lot,
-            'rate_limit' => &$rate_limit,
+            'rates_data' => $rates_data,
+            'history_data' => $history_data,
+            'min_rate' => $min_rate,
+            'time_to_end_lot' => $time_to_end_lot,
+            'rate_limit' => $rate_limit,
             'page_categories' => $page_categories,
-            'errors' => &$errors], $lot_id);
+            'errors' => $errors], $page_categories);
         exit();
     }
 
     $tmpl_data = ['categories' => $categories,
             'lot' => $lot,
             'lot_id' => $lot_id,
-            'rates_data' => &$rates_data,
-            'history_data' => &$history_data,
-            'min_rate' => &$min_rate,
-            'time_to_end_lot' => &$time_to_end_lot,
-            'rate_limit' => &$rate_limit,
+            'rates_data' => $rates_data,
+            'history_data' => $history_data,
+            'min_rate' => $min_rate,
+            'time_to_end_lot' => $time_to_end_lot,
+            'rate_limit' => $rate_limit,
             'page_categories' => $page_categories,
-            'errors' => &$errors
+            'errors' => $errors
             ];
-        include_template ('lot', 'Лот', $categories, $user_avatar, $tmpl_data , $lot_id);
+        include_template ('lot', 'Лот', $categories, $user_avatar, $tmpl_data , $page_categories);
         exit();
     }
 
     include_template ('lot', 'Лот', $categories, $user_avatar,
         ['categories' => $categories,
-        'page_categories' => &$page_categories,
+        'page_categories' => $page_categories,
         'lot' => $lot,
         'lot_id' => $lot_id,
         'history_data' => $history_data
-], $lot_id);
+], $page_categories);
     } else {
         http_response_code(404);
-        include_template ('404', '404 страница не найдена', $categories, $user_avatar, $p_404);
+        include_template ('404', '404 страница не найдена', $categories, $user_avatar, $p_404, $page_categories);
 }
 http_response_code(404);
-include_template ('404', '404 страница не найдена', $categories, $user_avatar, $p_404);
+include_template ('404', '404 страница не найдена', $categories, $user_avatar, $p_404, $page_categories);
