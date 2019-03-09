@@ -163,11 +163,11 @@ function get_end_of_time_lot ($end_time) {
  */
 function include_template ($page_name, $page_title, $categories, $user_avatar, $data = [], $id = '') {
     $page_content = render($page_name, $data, $id = '');
-    $page_categories = render('menu_categories', ['categories' => $categories]);
         print render('layout', [
             'content' => $page_content,
             'title' => $page_title,
-            'categories' => $page_categories,
+            'categories' => $categories,
+            'page_categories' => &$page_categories,
             'user_avatar' => $user_avatar
         ], $id);
         exit();

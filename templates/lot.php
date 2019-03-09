@@ -1,10 +1,6 @@
 <nav class="nav">
       <ul class="nav__list container">
-        <? foreach ($categories as $val): ?>
-            <li class="nav__item">
-                <a href="all-lots.php?id=<?= htmlspecialchars($val['id']) ?>"><?= htmlspecialchars($val['name']); ?></a>
-            </li>
-        <? endforeach ?>
+       <?= $page_categories ?>
       </ul>
     </nav>
     <section class="lot-item container">
@@ -21,11 +17,11 @@
         <? if (isset($_SESSION['user']) && $rate_limit) : ?>
           <div class="lot-item__state">
             <div class="lot-item__timer timer">
-           
-            
-            
-            
-                
+
+
+
+
+
               <!-- 10:54 --> <?= show_diff_time($rates_data[0]['finishing_date']); ?>
             </div>
             <div class="lot-item__cost-state">

@@ -93,6 +93,7 @@ if ($lot){
             'min_rate' => &$min_rate,
             'time_to_end_lot' => &$time_to_end_lot,
             'rate_limit' => &$rate_limit,
+            'page_categories' => $page_categories,
             'errors' => &$errors], $lot_id);
         exit();
     }
@@ -105,6 +106,7 @@ if ($lot){
             'min_rate' => &$min_rate,
             'time_to_end_lot' => &$time_to_end_lot,
             'rate_limit' => &$rate_limit,
+            'page_categories' => $page_categories,
             'errors' => &$errors
             ];
         include_template ('lot', 'Лот', $categories, $user_avatar, $tmpl_data , $lot_id);
@@ -113,6 +115,7 @@ if ($lot){
 
     include_template ('lot', 'Лот', $categories, $user_avatar,
         ['categories' => $categories,
+        'page_categories' => &$page_categories,
         'lot' => $lot,
         'lot_id' => $lot_id,
         'history_data' => $history_data

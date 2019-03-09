@@ -29,8 +29,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     $search_ft_to_db = [$_GET['search']]; */
     $res_search = search_ft_to_db ($link, $_GET['search']);
     $data = [   'res_search' => $res_search,
-                'search_ft_to_db' => $search_ft_to_db,
-                'categories' => $categories
+                'search_ft_to_db' => $_GET['search'],
+                'categories' => $categories,
+                'page_categories' => $page_categories,
             ];
 
     include_template('search', 'Страница поиска', $categories, $user_avatar, $data);
@@ -41,5 +42,6 @@ print render('layout', [
     'content' => $search,
     'title' => 'Страница поиска',
     'categories' => $categories,
+    'page_categories' => $page_categories,
     'user_avatar' => $user_avatar
 ]);

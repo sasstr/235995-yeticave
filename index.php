@@ -7,6 +7,7 @@ require_once('data.php');
 
 $major_indexes = [
   'categories' => $categories,
+  'page_categories' => $page_categories,
   'lots' => $lots,
   'time_until_midnight' => $time_until_midnight
 ];

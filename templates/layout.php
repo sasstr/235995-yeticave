@@ -51,12 +51,7 @@
     <nav class="nav">
         <ul class="nav__list container">
             <!--заполните этот список из массива категорий-->
-            <?= $categories ?>
-
-
-                
-
-
+            <?= $page_categories ?>
         </ul>
     </nav>
     <div class="main-footer__bottom container">

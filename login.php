@@ -14,35 +14,32 @@ $login_page = [
 ];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-	$login = $_POST;
+    $login = $_POST;
 
-	$required = ['email', 'password'];
-	$errors = [];
-	foreach ($required as $field) {
-	    if (empty($login[$field])) {
-	        $errors[$field] = 'Это поле надо заполнить';
+    $required = ['email', 'password'];
+    $errors = [];
+    foreach ($required as $field) {
+        if (empty($login[$field])) {
+            $errors[$field] = 'Это поле надо заполнить';
         }
     }
 
-	$email = $login['email'];
-	$sql = 'SELECT * FROM users WHERE email = ?';
-	
-	$res = db_select ($link, $sql, [$email]);
-	$user = $res ? $res : null;
+    $email = $login['email'];
+    $sql = 'SELECT * FROM users WHERE email = ?';
 
-	if (!count($errors) && $user) {
-		if (password_verify($login['password'], $user['password'])) {
-			$_SESSION['user'] = $user;
-		}
-		else {
-			$errors['password'] = 'Вы ввели неверный пароль';
-		}
-	}
-	else {
-		$errors['email'] = 'Такой пользователь не найден';
-	}
+    $res = db_select ($link, $sql, [$email]);
+    $user = $res ? $res : null;
 
-	if (count($errors)) {
+    if (!count($errors) && $user && password_verify($login['password'], $user['password'])) {
+            $_SESSION['user'] = $user;
+    } else {
+        $errors['password'] = 'Вы ввели неверный пароль';
+    }
+    if (!count($errors) && !$user) {
+        $errors['email'] = 'Такой пользователь не найден';
+    }
+
+    if (count($errors)) {
         $login = render('login', [
             'categories' => $categories,
             'errors' => $errors,
@@ -54,11 +51,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'categories' => $categories,
             'user_avatar' => $user_avatar
         ]);
-	}
-	else {
-		header("Location: /index.php");
-		exit();
-	}
+    }
+    else {
+        header("Location: /index.php");
+        exit();
+    }
 }
 
 $login = render('login', $login_page);
