@@ -6,42 +6,32 @@ require_once('init.php');
 require_once('data.php');
 unset($_SESSION['post_cost_error']);
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if (isset($_SESSION['user'])) {
-        $id = (int) $_POST['id'];
-        $lot = get_lot_by_id($link, $id);
-        $errors = [];
-        $history_data = select_history_data_by_id ($link, $id);
-        $rates_data = select_rates_data_by_id ($link, $id);
-        if ($rates_data) {
-            $starting_price = $rates_data[0]['starting_price'];
-            $amount = ($rates_data[0]['rate_amount'] <= 0 ) ? $starting_price : $rates_data[0]['rate_amount'];
-            $min_rate = $rates_data[0]['rate_step'] + $amount;
-        } else {
-            $rates_data = select_starting_price_data_by_id ($link, $id);
-            $min_rate = $rates_data[0]['starting_price'] + $rates_data[0]['rate_step'];
-        }
-        $end_time = strtotime($rates_data[0]['finishing_date']);
-        $now = time();
-        if($end_time <= $now) {
-            $errors['time'] = 'Время делать ставки на этот лот закончилось';
-        }
-
-        $session_user_id = (int) $_SESSION['user']['0']['id'];
-        $post_cost = (int) trim($_POST['cost']);
-        $data = [$post_cost, $session_user_id, $id];
-
-        if (!isset($post_cost) && empty($post_cost)) {
-            $_POST['post_cost_error'] = 'Это поле необходимо заполнить';
-        } elseif ($post_cost <= 0 || !ctype_digit($post_cost)) {
-            $_POST['post_cost_error'] = 'Значение должно положительным и целым числом';
-        } elseif (($post_cost) < $min_rate) {
-            $_POST['post_cost_error'] = 'Значение ставки должно быть не меньше минимальной';
-        } elseif (empty($errors['cost'])) {
-            $data = [(int) $_POST['cost'], (int) $_SESSION['user']['0']['id'], (int) $id];
-            add_new_rate_to_db($link, $data);
-        }
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_SESSION['user'])) {
+    $id = (int) $_POST['id'];
+    $lot = get_lot_by_id($link, $id);
+    $errors = [];
+    $history_data = select_history_data_by_id ($link, $id);
+    $rates_data = select_rates_data_by_id ($link, $id);
+    if ($rates_data) {
+        $starting_price = $rates_data[0]['starting_price'];
+        $amount = ($rates_data[0]['rate_amount'] <= 0 ) ? $starting_price : $rates_data[0]['rate_amount'];
+        $min_rate = $rates_data[0]['rate_step'] + $amount;
+        $diff_time = show_diff_time($rates_data[0]['finishing_date']);
+    } else {
+        $rates_data = select_starting_price_data_by_id ($link, $id);
+        $min_rate = $rates_data[0]['starting_price'] + $rates_data[0]['rate_step'];
     }
+    $end_time = strtotime($rates_data[0]['finishing_date']);
+    $now = time();
+    if($end_time <= $now) {
+        $errors['time'] = 'Время делать ставки на этот лот закончилось';
+    }
+
+    $session_user_id = (int) $_SESSION['user']['0']['id'];
+    $post_cost = (int) trim($_POST['cost']);
+    $data = [$post_cost, $session_user_id, $id];
+
+    $errors['cost'] = validate_rate_cost ($post_cost, $min_rate, $data, $link);
 }
 $lot_id = (int) $_GET['id'] ?? $id;
 $lot = get_lot_by_id($link, $lot_id);
@@ -70,13 +60,13 @@ if ($lot){
             $rate_limit = true;
         }
 
-    if (isset($_POST['post_cost_error'])) {
-        $errors['cost'] = $_POST['post_cost_error'];
+    if (isset($errors['cost'])) {
         include_template ('lot', 'Лот', $categories, $user_avatar, [
             'categories' => $categories,
             'lot' => $lot,
             'lot_id' => $lot_id,
             'rates_data' => $rates_data,
+            'diff_time' => &$diff_time,
             'amount' => &$amount,
             'history_data' => $history_data,
             'min_rate' => &$min_rate,
@@ -91,6 +81,7 @@ if ($lot){
             'lot' => $lot,
             'lot_id' => $lot_id,
             'rates_data' => $rates_data,
+            'diff_time' => &$diff_time,
             'amount' => &$amount,
             'history_data' => $history_data,
             'min_rate' => &$min_rate,
@@ -102,11 +93,11 @@ if ($lot){
         include_template ('lot', 'Лот', $categories, $user_avatar, $tmpl_data , $page_categories);
         exit();
     }
-
     include_template ('lot', 'Лот', $categories, $user_avatar,
         ['categories' => $categories,
         'page_categories' => $page_categories,
         'amount' => &$amount,
+        'diff_time' => &$diff_time,
         'lot' => $lot,
         'lot_id' => $lot_id,
         'history_data' => $history_data

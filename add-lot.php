@@ -65,7 +65,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         UPLOAD_DIR,
                         UPLOAD_LOCAL_DIR,
                         IMG_FILE_TYPES
-                        );
+                        ) ?? MOCK_IMG_LOT;
 
         if (!$link) {
             printf("Не удалось подключиться: %s\n", mysqli_connect_error());

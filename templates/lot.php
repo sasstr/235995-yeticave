@@ -17,7 +17,7 @@
         <? if (isset($_SESSION['user']) && $rate_limit) : ?>
           <div class="lot-item__state">
             <div class="lot-item__timer timer">
-              <!-- 10:54 --> <?= show_diff_time($rates_data[0]['finishing_date']); ?>
+              <!-- 10:54 --> <?= isset($diff_time) ? $diff_time : ''; ?>
             </div>
             <div class="lot-item__cost-state">
               <div class="lot-item__rate">

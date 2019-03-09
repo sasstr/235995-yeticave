@@ -218,7 +218,7 @@ function move_file_to_upload ($prefix, $img_file_name, $img_file_tmp_name, $uplo
             move_uploaded_file($file_tmp_name, $upload_dir . $file_name_uniq);
         }
     }
-    return isset($file_url) ? $file_url : MOCK_IMG_LOT ;
+    return $file_url;
 };
 
 function is_show_rate_form($lots_user_id, $rates_user_id, $history_data, $session_user_id, $end_time) {
@@ -241,4 +241,30 @@ function is_show_rate_form($lots_user_id, $rates_user_id, $history_data, $sessio
         }
     }
     return $rate_limit;
+};
+/**
+ * Функция проверяет правильность введенного значения стоимости ставки лота
+ * и в случае верного добавляет его в базу данных
+ *
+ * @param integer $post_cost
+ * @param integer $min_rate
+ * @param array $data
+ * @param resource $link
+ * @return array или ничего
+ */
+function validate_rate_cost ($post_cost, $min_rate, $data, $link) {
+    if (empty($post_cost)) {
+        return $_POST['post_cost_error'] = 'Это поле необходимо заполнить';
+    } else {
+        /* if (!ctype_digit($post_cost)) {
+         return $_POST['post_cost_error'] = 'Значение должно целым числом';
+    } */
+        if ($post_cost <= 0) {
+            return $_POST['post_cost_error'] = 'Значение должно положительным числом';
+        } elseif (($post_cost) < $min_rate && $post_cost > 0) {
+            return $_POST['post_cost_error'] = 'Значение ставки должно быть не меньше минимальной';
+        } elseif (!$_POST['post_cost_error']) {
+            add_new_rate_to_db($link, $data);
+        }
+    }
 };

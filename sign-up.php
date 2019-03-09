@@ -28,7 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         UPLOAD_DIR,
                         UPLOAD_LOCAL_DIR,
                         IMG_FILE_TYPES
-                        );
+                        ) ?? MOCK_IMG;
 
     if (empty($errors)) {
         $email = mysqli_real_escape_string($link, $sign_up['email']);
