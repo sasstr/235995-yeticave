@@ -23,9 +23,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
     $file_url = MOCK_IMG;
+    move_file_to_upload ('avatar-', 
+                        $_FILES['img-avatar']['name'],
+                        $_FILES['img-avatar']['tmp_name'], 
+                        UPLOAD_DIR, 
+                        UPLOAD_LOCAL_DIR, 
+                        IMG_FILE_TYPES
+                        );
     // Валидация на загрузку файла с картинкой лота
     // Проверяем есть ли каталог для загрузки картинок на сервере
-    if(!file_exists(UPLOAD_LOCAL_DIR)){
+    /* if(!file_exists(UPLOAD_LOCAL_DIR)){
         mkdir(UPLOAD_LOCAL_DIR);
     }
     if (isset($_FILES['img-avatar']['name']) && !empty($_FILES['img-avatar']['name'])) {
@@ -46,7 +53,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Перемещение загруженного файла в папку сайта
             move_uploaded_file($file_tmp_name, UPLOAD_DIR . $file_name_uniq);
         }
-    }
+    } */
     if (empty($errors)) {
         $email = mysqli_real_escape_string($link, $sign_up['email']);
         $sql = "SELECT id FROM users WHERE email = ?";
