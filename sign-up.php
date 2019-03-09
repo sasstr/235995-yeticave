@@ -31,6 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         IMG_FILE_TYPES
                         );
     if (empty($errors)) {
+        // 62. sign-up.php. Стр 50. Запрос выносим в функцию.
         $email = mysqli_real_escape_string($link, $sign_up['email']);
         $sql = "SELECT id FROM users WHERE email = ?";
         $stmt = db_get_prepare_stmt($link, $sql, [$email]);
@@ -50,7 +51,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
         else {
             $password = password_hash($sign_up['password'], PASSWORD_DEFAULT);
-
+            // 62. sign-up.php. Стр 50. Запрос выносим в функцию.
             $sql = 'INSERT INTO users (registration_date, email, name, password, contacts, avatar) VALUES (NOW(), ?, ?, ?, ?, ?)';
             $stmt = db_get_prepare_stmt($link, $sql, [$sign_up['email'], $sign_up['name'], $password, $sign_up['message'], $file_url]);
             $res = mysqli_stmt_execute($stmt);
