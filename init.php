@@ -28,8 +28,8 @@ function  db_insert($link, $sql, $data = []) {
 /** Функция возращает результат выборки из базы данных
  * @param resource $link принимает ресурс соединения
  * @param string $sql подготовленное выражение
- * @param array $data массив данных для вставки в бд
- * @return
+ * @param array $data массив полей для выборки из базы данных
+ * @return array двумерный массив или пустой
  */
 function  db_select ($link, $sql, $data = []) {
     if (!empty($data)) {
@@ -221,4 +221,25 @@ function select_id_by_email ($link, $email) {
     mysqli_stmt_bind_param($stmt, 's', $email);
     mysqli_stmt_execute($stmt);
     return mysqli_fetch_assoc(mysqli_stmt_execute($stmt));
+};
+
+function search_ft_to_db ($link, $search_text) {
+    $search_query = trim($search_text);
+    if (!empty($search_query)) {
+    $sql = 'SELECT  `lots`.`id`,
+                        `lots`.`img_path`,
+                        `lots`.`title`,
+                        `lots`.`starting_price`,
+                        `lots`.`description`,
+                        `categories`.`name`
+                FROM `lots`
+                JOIN `categories` ON `categories`.`id` = `lots`.`category_id`
+                JOIN users ON `lots`.`user_id` = `users`.`id`
+                WHERE MATCH(`lots`.`title`, `lots`.`description` ) AGAINST(? IN BOOLEAN MODE)
+                AND (`lots`.`winner_id` IS NULL)
+                AND (`lots`.`finishing_date` > NOW())
+                ORDER BY `lots`.`starting_date` DESC;';
+                return db_select ($link, $sql, [$search_query]);
+    }
+    return 'Надо набрать поисковый запрос';
 };

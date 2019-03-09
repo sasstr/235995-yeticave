@@ -10,7 +10,7 @@ $search_page = [
 ];
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-    $search_query = trim($_GET['search']);
+    /* $search_query = trim($_GET['search']);
     if (!empty($search_query)) {
         $sql = 'SELECT  `lots`.`id`,
                         `lots`.`img_path`,
@@ -26,8 +26,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                 AND (`lots`.`finishing_date` > NOW())
                 ORDER BY `lots`.`starting_date` DESC;';
     }
-    $search_ft_to_db = [$_GET['search']];
-    $res_search = db_select ($link, $sql, $search_ft_to_db);
+    $search_ft_to_db = [$_GET['search']]; */
+    $res_search = search_ft_to_db ($link, $_GET['search']);
     $data = [   'res_search' => $res_search,
                 'search_ft_to_db' => $search_ft_to_db,
                 'categories' => $categories
