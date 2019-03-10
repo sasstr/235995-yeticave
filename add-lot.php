@@ -30,8 +30,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $errors[$field] = 'Выберите категорию из списка';
         }
     }
+    $errors['category'] = check_category_value ($categories, $_POST['category']);
 
-    $errors['category'] = check_category_value ($categories, $_POST['category']) ?? 'Выбирите одну из существующих в списке категорий';
 
     /* foreach ($categories as $val) {
         if ($val['id'] === $_POST['category']) {
@@ -51,7 +51,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if( ($new_lot['lot-date']) !== date('Y-m-d' , strtotime($new_lot['lot-date'])) || strtotime($new_lot['lot-date']) < strtotime('tomorrow')) {
         $errors['lot-date'] = 'Введите корректную дату завершения торгов, которая позже текущей даты хотя бы на один день';
     }
-    if (count($errors)) {
+    $file_url = move_file_to_upload('lot-',
+                        $_FILES['img-file']['name'],
+                        $_FILES['img-file']['tmp_name'],
+                        UPLOAD_DIR,
+                        UPLOAD_LOCAL_DIR,
+                        IMG_FILE_TYPES
+                        ) ?? MOCK_IMG_LOT;
+    if (count($errors) && $errors['category'] !== null) {
         $errors['form'] = 'Пожалуйста, исправьте ошибки в форме.';
 
         include_template('add', 'Добавить новый лот', $categories, $user_avatar, [
@@ -68,14 +75,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         ], $page_categories);
         exit();
     } else {
-        $file_url = move_file_to_upload('lot-',
-                        $_FILES['img-file']['name'],
-                        $_FILES['img-file']['tmp_name'],
-                        UPLOAD_DIR,
-                        UPLOAD_LOCAL_DIR,
-                        IMG_FILE_TYPES
-                        ) ?? MOCK_IMG_LOT;
-
         if (!$link) {
             printf("Не удалось подключиться: %s\n", mysqli_connect_error());
             exit();

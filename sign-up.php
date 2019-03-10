@@ -46,10 +46,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
         else {
             $password = password_hash($sign_up['password'], PASSWORD_DEFAULT);
-            // 62. sign-up.php. Стр 50. Запрос выносим в функцию.
-            $sql = 'INSERT INTO users (registration_date, email, name, password, contacts, avatar) VALUES (NOW(), ?, ?, ?, ?, ?)';
-            $stmt = db_get_prepare_stmt($link, $sql, [$sign_up['email'], $sign_up['name'], $password, $sign_up['message'], $file_url]);
-            $res = mysqli_stmt_execute($stmt);
+            $data_new_user = [$sign_up['email'], $sign_up['name'], $password, $sign_up['message'], $file_url];
+            $res = insert_new_user_to_db ($link, $data_new_user);
 
             if ($res && empty($errors)) {
                 header("Location: /login.php");

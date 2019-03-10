@@ -260,4 +260,8 @@ function check_email_in_db ($link, $email) {
     return mysqli_num_rows($res);
 };
 
-
+function insert_new_user_to_db ($link, $data_new_user) {
+    $sql = 'INSERT INTO users (registration_date, email, name, password, contacts, avatar) VALUES (NOW(), ?, ?, ?, ?, ?)';
+            $stmt = db_get_prepare_stmt($link, $sql, $data_new_user);
+            return mysqli_stmt_execute($stmt);
+};

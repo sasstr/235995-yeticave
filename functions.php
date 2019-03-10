@@ -218,7 +218,7 @@ function move_file_to_upload ($prefix, $img_file_name, $img_file_tmp_name, $uplo
             move_uploaded_file($file_tmp_name, $upload_dir . $file_name_uniq);
         }
     }
-    return $file_url;
+    return isset($file_url) ? $file_url : MOCK_IMG_LOT ;
 };
 
 function is_show_rate_form($lots_user_id, $rates_user_id, $history_data, $session_user_id, $end_time) {
@@ -289,11 +289,18 @@ function show_left_time($val) {
 
     return $hours . ':' . $minutes;
 }
-
-function check_category_value ($categories, $new_lot_categiry) {
+/**
+ * Undocumented function
+ *
+ * @param array $categories
+ * @param string $new_lot_category
+ * @return string
+ */
+function check_category_value ($categories, $new_lot_category) {
     foreach ($categories as $val) {
-        if ((int) $val['id'] === (int) $new_lot_categiry) {
-            return '';
+        if ((int) $val['id'] === (int) $new_lot_category) {
+            return ;
         }
     }
+    return 'Выбирите одну из существующих в списке категорий';
 };
