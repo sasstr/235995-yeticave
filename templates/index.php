@@ -26,11 +26,11 @@
                     <h3 class="lot__title"><a class="text-link" <?= 'href="lot.php?id=' . htmlspecialchars($val['id']) .'"'; ?> ><?= htmlspecialchars($val['lots_title']); ?></a></h3>
                     <div class="lot__state">
                         <div class="lot__rate">
-                            <span class="lot__amount"><?= htmlspecialchars($val['starting_price']); ?></span>
+                            <span class="lot__amount"><?= format_price($val['starting_price']); ?></span>
                             <span class="lot__cost"><?= format_price($val['starting_price']) ?><!-- <b class="rub">р</b> --></span>
                         </div>
                         <div class="lot__timer timer">
-                            <?= show_diff_time($val['finishing_date']); ?>
+                            <?= show_left_time($val['finishing_date']); ?>
                         </div>
                     </div>
                 </div>

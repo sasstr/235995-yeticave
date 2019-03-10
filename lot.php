@@ -7,6 +7,8 @@ require_once('data.php');
 
 unset($_SESSION['post_cost_error']);
 
+
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_SESSION['user'])) {
     $id = (int) $_POST['id'];
     $lot = get_lot_by_id($link, $id);
@@ -17,10 +19,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_SESSION['user'])) {
         $starting_price = $rates_data[0]['starting_price'];
         $amount = ($rates_data[0]['rate_amount'] <= 0 ) ? $starting_price : $rates_data[0]['rate_amount'];
         $min_rate = $rates_data[0]['rate_step'] + $amount;
-        $diff_time = show_diff_time($rates_data[0]['finishing_date']);
+        $diff_time = $rates_data[0]['finishing_date'];
     } else {
         $rates_data = select_starting_price_data_by_id ($link, $id);
         $min_rate = $rates_data[0]['starting_price'] + $rates_data[0]['rate_step'];
+        $diff_time = $rates_data[0]['finishing_date'];
     }
     $end_time = strtotime($rates_data[0]['finishing_date']);
     $now = time();
@@ -49,11 +52,13 @@ if ($lot){
             $end_time = $rates_data[0]['finishing_date'];
             $amount = ($rates_data[0]['rate_amount'] <= 0 ) ? $starting_price : $rates_data[0]['rate_amount'];
             $min_rate = $rates_data[0]['rate_step'] + $amount;
+            $diff_time = $end_time;
         } else {
             $time_to_end_lot = get_end_of_time_lot($starting_price[0]['finishing_date']);
             $end_time = $starting_price[0]['finishing_date'];
             $amount = ((int) $starting_price[0]['starting_price']);
             $min_rate = ((int) $starting_price[0]['starting_price']) + ((int) $starting_price[0]['rate_step']);
+            $diff_time = $end_time;
         }
         if(count($rates_data) > 0 && count($history_data) > 0) {
             $rate_limit = is_show_rate_form($rates_data[0]['lots_user_id'], $rates_data[0]['rates_user_id'], $history_data, $_SESSION['user']['0']['id'], $end_time);
@@ -109,7 +114,3 @@ if ($lot){
     'page_categories' => $page_categories
     ], $page_categories);
 }
-/* http_response_code(404);
-include_template ('404', '404 страница не найдена', $categories, $user_avatar, ['categories' => $categories,
-'page_categories' => $page_categories
-], $page_categories); */

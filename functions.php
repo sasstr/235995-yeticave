@@ -268,3 +268,32 @@ function validate_rate_cost ($post_cost, $min_rate, $data, $link) {
         }
     }
 };
+/**
+ * Функция возращает время до конца лота в формате ЧЧ:ММ
+ *
+ * @param string время окончания ставки
+ * @return string Время до окончания ставки в нужном формате.
+ */
+function show_left_time($val) {
+    $time_left = strtotime($val) - time();
+    $hours = floor($time_left / 3600);
+    $minutes = floor(($time_left % 3600) / 60);
+
+    if ($minutes < 10) {
+        $minutes = 0 . $minutes;
+    }
+
+    if ($hours < 10) {
+        $hours = 0 . $hours;
+    }
+
+    return $hours . ':' . $minutes;
+}
+
+function check_category_value ($categories, $new_lot_categiry) {
+    foreach ($categories as $val) {
+        if ((int) $val['id'] === (int) $new_lot_categiry) {
+            return '';
+        }
+    }
+};

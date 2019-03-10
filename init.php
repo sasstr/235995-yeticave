@@ -147,7 +147,7 @@ function select_starting_price_data_by_id ($link, $lot_id) {
                         `rates`.`user_id` AS rates_user_id,
                         `lots`.`finishing_date`
                         FROM `lots`
-                        JOIN `rates` ON `lots`.`user_id` = `rates`.`user_id`
+                        LEFT JOIN `rates` ON `lots`.`user_id` = `rates`.`user_id`
                         WHERE `lots`.`id` = ?;';
     $stmt = mysqli_prepare($link, $sql);
     mysqli_stmt_bind_param($stmt, 'i', $lot_id);
