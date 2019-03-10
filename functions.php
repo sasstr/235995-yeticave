@@ -206,7 +206,7 @@ function move_file_to_upload ($prefix, $img_file_name, $img_file_tmp_name, $uplo
         $file_type = finfo_file($finfo, $img_file_tmp_name);
 
         if(!array_search($file_type, $img_file_types)) {
-            $errors['img-file'] = 'Необходимо загрузить фото с расширением JPEG, JPG или PNG';
+            return /* $errors['img-file'] = */ 'Необходимо загрузить фото с расширением JPEG, JPG или PNG';
         } else {
             $file_tmp_name = $img_file_tmp_name;
             $file_name = $img_file_name;
@@ -216,9 +216,11 @@ function move_file_to_upload ($prefix, $img_file_name, $img_file_tmp_name, $uplo
             $file_url = $upload_local_dir . trim($file_name_uniq);
             // Перемещение загруженного файла в папку сайта
             move_uploaded_file($file_tmp_name, $upload_dir . $file_name_uniq);
+            return isset($file_url) ? $file_url : MOCK_IMG_LOT ;
         }
+    } else {
+        return 'Файл не загружен, необходимо загрузить фото';
     }
-    return isset($file_url) ? $file_url : MOCK_IMG_LOT ;
 };
 
 function is_show_rate_form($lots_user_id, $rates_user_id, $history_data, $session_user_id, $end_time) {

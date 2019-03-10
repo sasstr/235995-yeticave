@@ -51,14 +51,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if( ($new_lot['lot-date']) !== date('Y-m-d' , strtotime($new_lot['lot-date'])) || strtotime($new_lot['lot-date']) < strtotime('tomorrow')) {
         $errors['lot-date'] = 'Введите корректную дату завершения торгов, которая позже текущей даты хотя бы на один день';
     }
-    $file_url = move_file_to_upload('lot-',
+    // $file_url = MOCK_IMG_LOT;
+    $file_to_upload = move_file_to_upload('lot-',
                         $_FILES['img-file']['name'],
                         $_FILES['img-file']['tmp_name'],
                         UPLOAD_DIR,
                         UPLOAD_LOCAL_DIR,
                         IMG_FILE_TYPES
-                        ) ?? MOCK_IMG_LOT;
-    if (count($errors) && $errors['category'] !== null) {
+                        );
+
+    if ($file_to_upload === 'Файл не загружен, необходимо загрузить фото' || $file_to_upload === 'Необходимо загрузить фото с расширением JPEG, JPG или PNG') {
+        $errors['img-file'] = $file_to_upload;
+    } else {
+        $file_url = $file_to_upload;
+    }
+
+    if (count($errors) >1 || $errors['category'] !== null /* && $errors['img-file'] !== null */) {
         $errors['form'] = 'Пожалуйста, исправьте ошибки в форме.';
 
         include_template('add', 'Добавить новый лот', $categories, $user_avatar, [
@@ -66,12 +74,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         'page_categories' => $page_categories,
         'errors' => $errors,
         'file_url' => &$file_url,
-        'message' => $message,
-        'lot_name' => $lot_name,
+        'message' => &$message,
+        'lot_name' => &$lot_name,
         'category_value' => $category_value,
-        'lot_rate' => $lot_rate,
-        'lot_step' => $lot_step,
-        'lot_date' => $lot_date
+        'lot_rate' => &$lot_rate,
+        'lot_step' => &$lot_step,
+        'lot_date' => &$lot_date
         ], $page_categories);
         exit();
     } else {
