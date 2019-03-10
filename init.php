@@ -298,3 +298,21 @@ function get_lots_by_category_id($link, $categ_id) {
     }
     return [];
 };
+
+function add_new_lot($link, $lot_data) {
+    $sql = 'INSERT INTO lots ( `title`,
+    `description`,
+    `img_path`,
+    `starting_price`,
+    `starting_date`,
+    `rate_step`,
+    `finishing_date`,
+    `user_id`,
+    `category_id`
+    )
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);';
+    $res_add_new_lot = db_insert($link, $sql, $lot_data);
+    if ($res_add_new_lot) {
+        return mysqli_insert_id($link);
+    };
+}

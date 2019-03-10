@@ -12,16 +12,4 @@ const DB_SETUP = [
     'NAME' => 'yeticave'
 ];
 
-const ADD_NEW_LOT = 'INSERT INTO lots ( `title`,
-                                        `description`,
-                                        `img_path`,
-                                        `starting_price`,
-                                        `starting_date`,
-                                        `rate_step`,
-                                        `finishing_date`,
-                                        `user_id`,
-                                        `category_id`
-                                        )
-                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);';
-
 session_start();
