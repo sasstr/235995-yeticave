@@ -30,7 +30,7 @@
                             <span class="lot__cost"><?= format_price($val['starting_price']) ?><!-- <b class="rub">р</b> --></span>
                         </div>
                         <div class="lot__timer timer">
-                            <?= $time_until_midnight ?>
+                            <?= show_diff_time($val['finishing_date']); ?>
                         </div>
                     </div>
                 </div>
