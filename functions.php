@@ -254,9 +254,9 @@ function is_show_rate_form($lots_user_id, $rates_user_id, $history_data, $sessio
  */
 function validate_rate_cost ($post_cost, $min_rate, $data, $link) {
     if (empty($post_cost)) {
-        return $_POST['post_cost_error'] = 'Это поле необходимо заполнить';
+        return $_POST['post_cost_error'] = 'Это поле необходимо заполнить целочисленным значением';
     } else {
-        /* if (!ctype_digit($post_cost)) {
+        /* if (!ctype_digit($post_cost)) {  // Куда его пихать не знаю он все перебивает или не правильно работает
          return $_POST['post_cost_error'] = 'Значение должно целым числом';
     } */
         if ($post_cost <= 0) {

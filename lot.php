@@ -4,6 +4,7 @@ require_once('config.php');
 require_once('functions.php');
 require_once('init.php');
 require_once('data.php');
+
 unset($_SESSION['post_cost_error']);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_SESSION['user'])) {
@@ -101,14 +102,14 @@ if ($lot){
         'lot' => $lot,
         'lot_id' => $lot_id,
         'history_data' => $history_data
-], $page_categories);
-    } else {
-        http_response_code(404);
-        include_template ('404', '404 страница не найдена', $categories, $user_avatar, ['categories' => $categories,
-        'page_categories' => $page_categories
         ], $page_categories);
+} else {
+    http_response_code(404);
+    include_template ('404', '404 страница не найдена', $categories, $user_avatar, ['categories' => $categories,
+    'page_categories' => $page_categories
+    ], $page_categories);
 }
-http_response_code(404);
+/* http_response_code(404);
 include_template ('404', '404 страница не найдена', $categories, $user_avatar, ['categories' => $categories,
 'page_categories' => $page_categories
-], $page_categories);
+], $page_categories); */
