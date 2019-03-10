@@ -88,7 +88,8 @@ function get_lots($link) {
     $result = mysqli_query($link, $sql);
     if ($result !== false) {
         return mysqli_fetch_all($result , MYSQLI_ASSOC);
-    } else { return []; }
+    }
+    return [];
 };
 
 /**
@@ -110,7 +111,8 @@ function get_lots($link) {
     $result = mysqli_query($link, $sql);
     if ($result !== false) {
         return mysqli_fetch_assoc($result);
-    } else { return []; }
+    }
+    return [];
 };
 
 /**
@@ -293,5 +295,6 @@ function get_lots_by_category_id($link, $categ_id) {
     $result = mysqli_query($link, $sql);
     if ($result !== false) {
         return mysqli_fetch_all($result , MYSQLI_ASSOC);
-    } else { return []; }
+    }
+    return [];
 };

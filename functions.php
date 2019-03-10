@@ -92,7 +92,12 @@ function time_to_end_array ($end_time) {
             'minutes' => $minutes
             ];
 };
-
+/**
+ * Undocumented function
+ *
+ * @param string $start_time
+ * @return array
+ */
 function time_array ($start_time) {
     $seconds = time() - strtotime($start_time);
     $days = (int) floor($seconds / SECONDS_AMOUNT['DAY']);
@@ -199,30 +204,35 @@ function move_file_to_upload ($prefix, $img_file_name, $img_file_tmp_name, $uplo
             return $errors['img-file'] = 'Не удалось найти или создать папку для загрузки файла';
         }
     }
-
     if (isset($img_file_name) && !empty($img_file_name)) {
-
         $finfo = finfo_open(FILEINFO_MIME_TYPE);
         $file_type = finfo_file($finfo, $img_file_tmp_name);
-
         if(!array_search($file_type, $img_file_types)) {
-            return /* $errors['img-file'] = */ 'Необходимо загрузить фото с расширением JPEG, JPG или PNG';
-        } else {
-            $file_tmp_name = $img_file_tmp_name;
-            $file_name = $img_file_name;
-            $finfo = finfo_open(FILEINFO_MIME_TYPE);
-            $file_type = finfo_file($finfo, $file_tmp_name);
-            $file_name_uniq = uniqid($prefix) . '.' . pathinfo($file_name , PATHINFO_EXTENSION);
-            $file_url = $upload_local_dir . trim($file_name_uniq);
-            // Перемещение загруженного файла в папку сайта
-            move_uploaded_file($file_tmp_name, $upload_dir . $file_name_uniq);
-            return isset($file_url) ? $file_url : MOCK_IMG_LOT ;
+            return 'Необходимо загрузить фото с расширением JPEG, JPG или PNG';
         }
-    } else {
-        return 'Файл не загружен, необходимо загрузить фото';
+        $file_tmp_name = $img_file_tmp_name;
+        $file_name = $img_file_name;
+        $finfo = finfo_open(FILEINFO_MIME_TYPE);
+        $file_type = finfo_file($finfo, $file_tmp_name);
+        $file_name_uniq = uniqid($prefix) . '.' . pathinfo($file_name , PATHINFO_EXTENSION);
+        $file_url = $upload_local_dir . trim($file_name_uniq);
+        // Перемещение загруженного файла в папку сайта
+        move_uploaded_file($file_tmp_name, $upload_dir . $file_name_uniq);
+        return isset($file_url) ? $file_url : MOCK_IMG_LOT ;
     }
-};
+    return 'Файл не загружен, необходимо загрузить фото';
 
+};
+/**
+ * Функция проверяет показывать ли блок с добавлением новой ставки
+ *
+ * @param integer $lots_user_id
+ * @param integer $rates_user_id
+ * @param string $history_data
+ * @param integer $session_user_id
+ * @param string $end_time
+ * @return boolean
+ */
 function is_show_rate_form($lots_user_id, $rates_user_id, $history_data, $session_user_id, $end_time) {
     if (isset($lots_user_id) && isset($rates_user_id)) {
         // если пользователь уже сделал ставку не показывать блок добавления ставки
@@ -252,23 +262,20 @@ function is_show_rate_form($lots_user_id, $rates_user_id, $history_data, $sessio
  * @param integer $min_rate
  * @param array $data
  * @param resource $link
- * @return array или ничего
+ * @return array или добавляет запись в базу данных
  */
 function validate_rate_cost ($post_cost, $min_rate, $data, $link) {
     if (empty($post_cost)) {
         return $_POST['post_cost_error'] = 'Это поле необходимо заполнить целочисленным значением';
-    } else {
-        /* if (!ctype_digit($post_cost)) {  // Куда его пихать не знаю он все перебивает или не правильно работает
-         return $_POST['post_cost_error'] = 'Значение должно целым числом';
-    } */
-        if ($post_cost <= 0) {
-            return $_POST['post_cost_error'] = 'Значение должно положительным числом';
-        } elseif (($post_cost) < $min_rate && $post_cost > 0) {
-            return $_POST['post_cost_error'] = 'Значение ставки должно быть не меньше минимальной';
-        } elseif (!isset($_POST['post_cost_error'])) {
-            add_new_rate_to_db($link, $data);
-        }
     }
+    if ($post_cost <= 0) {
+        return $_POST['post_cost_error'] = 'Значение должно положительным числом';
+    } elseif (($post_cost) < $min_rate && $post_cost > 0) {
+        return $_POST['post_cost_error'] = 'Значение ставки должно быть не меньше минимальной';
+    } elseif (!isset($_POST['post_cost_error'])) {
+        add_new_rate_to_db($link, $data);
+    }
+
 };
 /**
  * Функция возращает время до конца лота в формате ЧЧ:ММ
@@ -280,19 +287,16 @@ function show_left_time($val) {
     $time_left = strtotime($val) - time();
     $hours = floor($time_left / 3600);
     $minutes = floor(($time_left % 3600) / 60);
-
     if ($minutes < 10) {
         $minutes = 0 . $minutes;
     }
-
     if ($hours < 10) {
         $hours = 0 . $hours;
     }
-
     return $hours . ':' . $minutes;
 }
 /**
- * Undocumented function
+ * Функция проверяет выбрана ли категория из дропдауна
  *
  * @param array $categories
  * @param string $new_lot_category
