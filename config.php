@@ -1,11 +1,8 @@
-<?
-define ('MOSCOW_TIME_ZONE', date_default_timezone_set('europe/moscow'));
-const RUBLE_SYMBOL = '&#x20BD';
+<?php
 const TEMPLATE_PATH = 'templates/';
 const PHP_EXTENSION = '.php';
 const UPLOAD_DIR = __DIR__ . '/upload/';
 const UPLOAD_LOCAL_DIR = '/upload/';
-const CATEGORY_SELECTOR = '-1';
 
 // Массив с данными для подключения к базе данных yeticave
 const DB_SETUP = [
@@ -14,10 +11,6 @@ const DB_SETUP = [
     'PASSWORD' => '',
     'NAME' => 'yeticave'
 ];
-
-const IMG_FILE_TYPES = ['jpg' =>'image/jpeg',
-                          'jpeg' => 'image/pjpeg',
-                          'png' =>'image/png'];
 
 const ADD_NEW_LOT = 'INSERT INTO lots ( `title`,
                                         `description`,
@@ -29,16 +22,6 @@ const ADD_NEW_LOT = 'INSERT INTO lots ( `title`,
                                         `user_id`,
                                         `category_id`
                                         )
-VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);';
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);';
 
-const MOCK_IMG_LOT = 'http://placehold.it/150x100?text=Лот+на+фотосессии';
-const MOCK_IMG = 'http://placehold.it/150x100?text=Фото+аватарки+на+фотосессии';
-
-const RATES_DATA = 'SELECT
-                    `users`.`name`,
-                    `rates`.`rate_amount`,
-                    `rates`.`date`
-                    FROM `rates`
-                    JOIN `users` ON `users`.`id` = `rates`.`user_id`
-                    WHERE `rates`.`lots_id` = ?
-                    ORDER BY `rates`.`date` DESC;';
+session_start();

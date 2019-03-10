@@ -2,9 +2,10 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title><?= $title ?></title>
+    <title><?= htmlspecialchars($title) ?></title>
     <link href="css/normalize.min.css" rel="stylesheet">
     <link href="css/style.css" rel="stylesheet">
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
 </head>
 <body>
 <div class="page-wrapper">
@@ -12,23 +13,23 @@
 <header class="main-header">
     <div class="main-header__container container">
         <h1 class="visually-hidden">YetiCave</h1>
-        <a class="main-header__logo">
+        <a class="main-header__logo" href="index.php">
             <img src="img/logo.svg" width="160" height="39" alt="Логотип компании YetiCave">
         </a>
-        <form class="main-header__search" method="get" action="search.php">
+        <form class="main-header__search"  method="get" action="search.php">
             <input type="search" name="search" placeholder="Поиск лота">
             <input class="main-header__search-btn" type="submit" name="find" value="Найти">
         </form>
         <a class="main-header__add-lot button" href="add-lot.php">Добавить лот</a>
         <!-- здесь должен быть PHP код для показа имени пользователя -->
         <nav class="user-menu">
-        <?php if (isset($_SESSION['user'])): ?>
+        <? if (isset($_SESSION['user'])): ?>
             <div class="user-menu__logged">
-                <p><?= htmlspecialchars($_SESSION['user']['name']) ?></p>
+                <p><?= htmlspecialchars($_SESSION['user']['0']['name']) ?></p>
                 <a href="/logout.php">Выход</a>
-                <img src="https://joeschmoe.io/api/v1//male/random" width="40" height="40" alt="Пользователь">
+                <img src="<?= htmlspecialchars($user_avatar) ?>" width="40" height="40" alt="Пользователь">
             </div>
-        <?php else: ?>
+        <? else: ?>
             <ul class="user-menu__list">
                 <li class="user-menu__item">
                 <a href="sign-up.php">Регистрация</a>
@@ -37,7 +38,7 @@
                 <a href="login.php">Вход</a>
                 </li>
             </ul>
-        <?php endif ?>
+        <? endif ?>
         </nav>
     </div>
 </header>
@@ -51,11 +52,7 @@
     <nav class="nav">
         <ul class="nav__list container">
             <!--заполните этот список из массива категорий-->
-            <?php foreach ($categories as $val): ?>
-            <li class="nav__item">
-                <a href="pages/all-lots.html"><?= htmlspecialchars($val['name']); ?></a>
-            </li>
-            <?php endforeach ?>
+            <?= $page_categories ?>
         </ul>
     </nav>
     <div class="main-footer__bottom container">

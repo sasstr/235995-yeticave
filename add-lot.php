@@ -1,4 +1,5 @@
 <?php
+require_once('constants.php');
 require_once('config.php');
 require_once('functions.php');
 require_once('init.php');
@@ -6,12 +7,16 @@ require_once('data.php');
 
 if (!isset($_SESSION['user'])) {
     http_response_code(403);
-    /* header("Location: /login.php"); */
     exit();
     }
-
+    $category_value = $_POST['category'] ?? '';
 // Получаем данные из формы создания нового лота и валидируем все поля
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $message = $_POST['message'] ?? '';
+    $lot_name = $_POST['lot-name'] ?? '';
+    $lot_rate = $_POST['lot-rate'] ?? '';
+    $lot_step = $_POST['lot-step'] ?? '';
+    $lot_date = $_POST['lot-date'] ?? '';
     $new_lot = $_POST;
     $required_fields = ['lot-name', 'category', 'message', 'lot-rate', 'lot-step', 'lot-date'];
     $errors = [];
@@ -21,19 +26,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $errors[$field] = 'Заполните это поле оно не может быть пустым.';
         }
 // Валидация на выбор категории
-        if($field === 'category' && $new_lot[$field] === "-1") {
+        if($field === 'category' && $new_lot[$field] === CATEGORY_SELECTOR) {
             $errors[$field] = 'Выберите категорию из списка';
         }
     }
+    $errors['category'] = check_category_value ($categories, $_POST['category']);
+
 // Валидация на заполнение числовых значений цены и мин ставки
     foreach($new_lot as $key => $value) {
         if($key === 'lot-rate' || $key === 'lot-step') {
-            if(!filter_var($value, FILTER_VALIDATE_INT)) {
-                $errors[$key] = 'Введите в это поле положительное, целое число.';
-            } else {
-                if($value <= 0) {
-                    $errors[$key] = 'Введите в это поле положительное, целое число.';
-                }
+            if(!filter_var($value, FILTER_VALIDATE_INT) || $value <= 0) {
+                $errors[$key] = 'Введите в это поле положительное и целое число.';
             }
         }
     }
@@ -41,84 +44,77 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if( ($new_lot['lot-date']) !== date('Y-m-d' , strtotime($new_lot['lot-date'])) || strtotime($new_lot['lot-date']) < strtotime('tomorrow')) {
         $errors['lot-date'] = 'Введите корректную дату завершения торгов, которая позже текущей даты хотя бы на один день';
     }
-    $file_url = MOCK_IMG_LOT;
-// Валидация на загрузку файла с картинкой лота
-    // Проверяем есть ли каталог для загрузки картинок на сервере
-    if(!file_exists('UPLOAD_LOCAL_DIR')){
-        mkdir('UPLOAD_LOCAL_DIR');
+    // $file_url = MOCK_IMG_LOT;
+    $file_to_upload = move_file_to_upload('lot-',
+                        $_FILES['img-file']['name'],
+                        $_FILES['img-file']['tmp_name'],
+                        UPLOAD_DIR,
+                        UPLOAD_LOCAL_DIR,
+                        IMG_FILE_TYPES
+                        );
+
+    if ($file_to_upload === 'Файл не загружен, необходимо загрузить фото' || $file_to_upload === 'Необходимо загрузить фото с расширением JPEG, JPG или PNG') {
+        $errors['img-file'] = $file_to_upload;
+    } else {
+        $file_url = $file_to_upload;
     }
-    if (isset($_FILES['img-file']['name']) && !empty($_FILES['img-file']['name'])) {
 
-        $finfo = finfo_open(FILEINFO_MIME_TYPE);
-        $file_type = finfo_file($finfo, $_FILES['img-file']['tmp_name']);
+    if (count($errors) >1 || $errors['category'] !== null /* && $errors['img-file'] !== null */) {
+        $errors['form'] = 'Пожалуйста, исправьте ошибки в форме.';
 
-        if(!array_search($file_type, IMG_FILE_TYPES)) {
-            $errors['img-file'] = 'Необходимо загрузить фото с расширением JPEG, JPG или PNG';
-        } else {
-            $file_tmp_name = $_FILES['img-file']['tmp_name'];
-            $file_name = $_FILES['img-file']['name'];
-            $finfo = finfo_open(FILEINFO_MIME_TYPE);
-            $file_type = finfo_file($finfo, $file_tmp_name);
-            $file_name_uniq = uniqid('lot-') . '.' . pathinfo($file_name , PATHINFO_EXTENSION);
-            $file_url = 'UPLOAD_LOCAL_DIR' . trim($file_name_uniq);
-            // Перемещение загруженного файла в папку сайта
-            move_uploaded_file($file_tmp_name, UPLOAD_DIR . $file_name_uniq);
+        include_template('add', 'Добавить новый лот', $categories, $user_avatar, [
+        'categories' => $categories,
+        'page_categories' => $page_categories,
+        'errors' => $errors,
+        'file_url' => &$file_url,
+        'message' => &$message,
+        'lot_name' => &$lot_name,
+        'category_value' => $category_value,
+        'lot_rate' => &$lot_rate,
+        'lot_step' => &$lot_step,
+        'lot_date' => &$lot_date
+        ], $page_categories);
+        exit();
+    } else {
+        if (!$link) {
+            printf("Не удалось подключиться: %s\n", mysqli_connect_error());
+            exit();
+        }
+        // Создание подготовленного выражения
+        $user_id = $_SESSION['user']['0']['id'] ?? '';
+        $starting_date = date_format(date_create('now'), 'Y-m-d H:i:s');
+        $lot_data = [$new_lot['lot-name'],
+                    $new_lot['message'],
+                    &$file_url,
+                    $new_lot['lot-rate'],
+                    $starting_date,
+                    $new_lot['lot-step'],
+                    $new_lot['lot-date'],
+                    $user_id,
+                    $new_lot['category']
+                    ];
+        $res_add_new_lot = db_insert($link, ADD_NEW_LOT, $lot_data);
+        if ($res_add_new_lot) {
+            $lot_id = mysqli_insert_id($link);
+            header('Location: lot.php?id=' . $lot_id);
+            exit();
         }
     }
-    if (!$link) {
-        printf("Не удалось подключиться: %s\n", mysqli_connect_error());
-        exit();
-    }
-    // Создание подготовленного выражения
-    $user_id = 4;
-    $starting_date = date_format(date_create('now'), 'Y-m-d H:i:s');
-    $lot_data = [$new_lot['lot-name'],
-                $new_lot['message'],
-                &$file_url,
-                $new_lot['lot-rate'],
-                $starting_date,
-                $new_lot['lot-step'],
-                $new_lot['lot-date'],
-                $user_id,
-                $new_lot['category']
-                ];
-        add_new_lot_to_db($link, ADD_NEW_LOT, $lot_data);
-        if(count($errors)){
-            $errors['form'] = 'Пожалуйста, исправьте ошибки в форме.';
-        $add_lot = render('add', [
-            'categories' => $categories,
-            'errors' => $errors,
-            'file_url' => $file_url
-            ]);
-        print render('layout', [
-            'content' => $add_lot,
-            'title' => 'Добавить новый лот',
-            'categories' => $categories,
-            'is_auth' => $is_auth,
-            'user_name' => $user_name,
-            'user_avatar' => $user_avatar
-        ]);
-        exit();
-    }
-
-}else {
-    $add_lot = render('add', [
-        'categories' => $categories
-    ]);
-    print render('layout', [
-        'content' => $add_lot,
-        'title' => 'Добавить новый лот',
+} else {
+    include_template ('add', 'Добавить новый лот', $categories, $user_avatar, [
         'categories' => $categories,
-        'user_avatar' => $user_avatar
-    ]);
+        'page_categories' => $page_categories,
+        'message' => &$message,
+        'lot_name' => &$lot_name,
+        'category_value' => &$category_value,
+        'lot_rate' => &$lot_rate,
+        'lot_step' => &$lot_step,
+        'lot_date' => &$lot_date
+        ], $page_categories);
     exit();
 }
-$add_lot = render('add', [
-    'categories' => $categories
-]);
-print render('layout', [
-    'content' => $add_lot,
-    'title' => 'Добавить новый лот',
+
+include_template ('add', 'Добавить новый лот', $categories, $user_avatar, [
     'categories' => $categories,
-    'user_avatar' => $user_avatar
-]);
+    'page_categories' => $page_categories
+    ], $page_categories);
