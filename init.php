@@ -63,12 +63,13 @@ function get_categories($link) {
  * @return array Возращает список лотов
  */
 function get_lots($link) {
-    $sql = 'SELECT lots.`title` AS `lots_title`, lots.`id`, lots.`starting_price`, lots.`img_path`, lots.`finishing_date`, categories.`name` AS `categories_name`
-            FROM lots
-            JOIN categories ON categories.`id` = lots.`category_id`
-            WHERE lots.`winner_id` IS NULL and lots.`finishing_date` > CURRENT_TIMESTAMP
-            ORDER BY lots.`starting_date` DESC
-            LIMIT 9;';
+    $sql = 'SELECT lots.`title` AS `lots_title`, lots.`id`, lots.`starting_price`, lots.`img_path`, lots.`finishing_date`, lots.`starting_date`, `rates`.`rate_amount`, categories.`name` AS `categories_name`
+    FROM lots
+    JOIN categories ON categories.`id` = lots.`category_id`
+    LEFT JOIN rates ON rates.`lots_id` = lots.`id`
+    WHERE lots.`winner_id` IS NULL and lots.`finishing_date` > CURRENT_TIMESTAMP
+    ORDER BY lots.`starting_date` DESC
+    LIMIT 9';
     $result = mysqli_query($link, $sql);
     if ($result !== false) {
         return mysqli_fetch_all($result , MYSQLI_ASSOC);

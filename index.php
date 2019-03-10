@@ -5,8 +5,6 @@ require_once('functions.php');
 require_once('init.php');
 require_once('data.php');
 
-
-
 $major_indexes = [
   'categories' => $categories,
   'page_categories' => $page_categories,
