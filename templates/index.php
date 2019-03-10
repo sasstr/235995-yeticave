@@ -26,7 +26,7 @@
                     <h3 class="lot__title"><a class="text-link" <?= 'href="lot.php?id=' . htmlspecialchars($val['id']) .'"'; ?> ><?= htmlspecialchars($val['lots_title']); ?></a></h3>
                     <div class="lot__state">
                         <div class="lot__rate">
-                            <span class="lot__amount"><?= isset($val['rate_amount']) ? htmlspecialchars($val['rate_amount']) : format_price($val['starting_price']); ?></span>
+                            <span class="lot__amount"><?= isset($val['rate_amount']) ? format_price($val['rate_amount']) : format_price($val['starting_price']); ?></span>
                             <span class="lot__cost"><?= format_price($val['starting_price']) ?></span>
                         </div>
                         <div class="lot__timer timer">
