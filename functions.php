@@ -263,7 +263,7 @@ function validate_rate_cost ($post_cost, $min_rate, $data, $link) {
             return $_POST['post_cost_error'] = 'Значение должно положительным числом';
         } elseif (($post_cost) < $min_rate && $post_cost > 0) {
             return $_POST['post_cost_error'] = 'Значение ставки должно быть не меньше минимальной';
-        } elseif (!$_POST['post_cost_error']) {
+        } elseif (!isset($_POST['post_cost_error'])) {
             add_new_rate_to_db($link, $data);
         }
     }
