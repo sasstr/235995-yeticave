@@ -3,11 +3,7 @@
         <p class="promo__text">На нашем интернет-аукционе ты найдёшь самое эксклюзивное сноубордическое и горнолыжное снаряжение.</p>
         <ul class="promo__list">
             <!--заполните этот список из массива категорий-->
-            <? foreach ($categories as $val): ?>
-            <li class="promo__item promo__item--boards">
-                <a class="promo__link" href="pages/all-lots.php&id=<?= htmlspecialchars($val['id']) ?>"><?= htmlspecialchars($val['name']); ?></a>
-            </li>
-            <? endforeach ?>
+            <?= $page_categories ?>
         </ul>
     </section>
     <section class="lots">
@@ -26,8 +22,8 @@
                     <h3 class="lot__title"><a class="text-link" <?= 'href="lot.php?id=' . htmlspecialchars($val['id']) .'"'; ?> ><?= htmlspecialchars($val['lots_title']); ?></a></h3>
                     <div class="lot__state">
                         <div class="lot__rate">
-                            <span class="lot__amount"><?= isset($val['rate_amount']) ? $val['rate_amount'] : format_price($val['starting_price']); ?></span>
-                            <span class="lot__cost"><?= format_price($val['starting_price']) ?><!-- <b class="rub">р</b> --></span>
+                            <span class="lot__amount"><?= isset($val['rate_amount']) ? htmlspecialchars($val['rate_amount']) : format_price($val['starting_price']); ?></span>
+                            <span class="lot__cost"><?= format_price($val['starting_price']) ?></span>
                         </div>
                         <div class="lot__timer timer">
                             <?= show_left_time($val['finishing_date']); ?>

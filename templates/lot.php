@@ -26,10 +26,10 @@
                 </span>
               </div>
               <div class="lot-item__min-cost">
-                Мин. ставка <span><?= isset($min_rate) ? format_price($min_rate) : '' ?></span><!-- 12 000 р -->
+                Мин. ставка <span><?= isset($min_rate) ? format_price($min_rate) : '' ?></span>
               </div>
             </div>
-            <form class="lot-item__form" action=""  method="post" enctype="application/x-www-form-urlencoded"> <!-- lot.php -->
+            <form class="lot-item__form" action=""  method="post" enctype="application/x-www-form-urlencoded">
               <p class="lot-item__form-item form__item <?= isset($errors['cost']) ? 'form__item--invalid' : '' ?>">
                 <label for="cost">Ваша ставка</label>
                 <input type="hidden" name="id" value='<?= isset($lot_id) ? htmlspecialchars($lot_id) : ''; ?>'>
@@ -41,16 +41,15 @@
           </div>
           <? endif ?>
           <div class="history">
-            <h3>История ставок <? $amount_rates = count($history_data) ?? ''; ?>
-                <span>(<?= isset($amount_rates) ? htmlspecialchars($amount_rates) :''; ?>)</span><!-- 10 -->
+            <h3>История ставок
+                <span>(<?= count($history_data) ?>)</span>
             </h3>
             <table class="history__list">
             <? foreach ($history_data as $rate => $val) : ?>
                 <tr class="history__item">
                     <td class="history__name"><?= isset($val['name']) ? $val['name'] : '' ?></td>
                     <td class="history__price"><?= isset($val['rate_amount']) ? format_price($val['rate_amount']) : '' ?></td>
-                    <? $t_diff = format_time_rate($val['date']); ?>
-                    <td class="history__time"><?= isset($val['date']) ? $t_diff : '' ?></td>
+                    <td class="history__time"><?= isset($val['date']) ? format_time_rate($val['date']): '' ?></td>
                 </tr>
               <? endforeach ?>
             </table>

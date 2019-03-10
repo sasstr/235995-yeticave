@@ -1,19 +1,15 @@
 <nav class="nav">
       <ul class="nav__list container">
-      <? foreach ($categories as $val): ?>
-            <li class="nav__item">
-                <a href="all-lots.html"><?= htmlspecialchars($val['name']); ?></a>
-            </li>
-        <? endforeach ?>
+      <?= $page_categories ?>
       </ul>
     </nav>
-    <form class="form container <?= isset($errors) ? 'form--invalid' : '' ?>" action="sign-up.php" method="post" enctype="multipart/form-data"> <!-- form--invalid -->
+    <form class="form container <?= isset($errors) ? 'form--invalid' : '' ?>" action="sign-up.php" method="post" enctype="multipart/form-data">
       <h2>Регистрация нового аккаунта</h2>
-      <div class="form__item <?= isset($errors['email']) ? 'form__item--invalid' : '' ?>"> <!-- form__item--invalid -->
+      <div class="form__item <?= isset($errors['email']) ? 'form__item--invalid' : '' ?>">
         <label for="email">E-mail*</label>
 
         <input id="email" type="text" name="email" placeholder="Введите e-mail" value='<?= isset($sign_up['email']) ? htmlspecialchars($sign_up['email']) : '' ?>' required>
-        <span class="form__error"><?= isset($errors['email']) ? $errors['email'] : '' ?></span><!-- Введите e-mail -->
+        <span class="form__error"><?= isset($errors['email']) ? $errors['email'] : '' ?></span>
       </div>
       <div class="form__item <?= isset($errors['password']) ? 'form__item--invalid' : '' ?>">
         <label for="password">Пароль*</label>

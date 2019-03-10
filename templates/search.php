@@ -14,7 +14,7 @@
             </div>
             <div class="lot__info">
               <span class="lot__category"><?= isset($val['name']) ? htmlspecialchars($val['name']) : ''; ?></span>
-              <h3 class="lot__title"><a class="text-link" href="<?= isset($val['id']) ? 'lot.php?id=' . htmlspecialchars($val['id']) : ''; ?>"><? isset($val['title']) ? print $val['title'] : print ''; ?></a></h3><!-- 2014 Rossignol District Snowboard --><!-- lot.html -->
+              <h3 class="lot__title"><a class="text-link" href="<?= isset($val['id']) ? 'lot.php?id=' . htmlspecialchars($val['id']) : ''; ?>"><?= isset($val['title']) ? $val['title'] : ''; ?></a></h3><!-- 2014 Rossignol District Snowboard --><!-- lot.html -->
               <div class="lot__state">
                 <div class="lot__rate">
                   <span class="lot__amount">Стартовая цена</span>

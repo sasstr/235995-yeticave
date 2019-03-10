@@ -32,13 +32,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
     $errors['category'] = check_category_value ($categories, $_POST['category']);
 
-
-    /* foreach ($categories as $val) {
-        if ($val['id'] === $_POST['category']) {
-            $flag_category = true;
-        }
-        $flag_category = false;
-    }; */
 // Валидация на заполнение числовых значений цены и мин ставки
     foreach($new_lot as $key => $value) {
         if($key === 'lot-rate' || $key === 'lot-step') {
