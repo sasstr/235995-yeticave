@@ -93,12 +93,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $user_id,
                     $new_lot['category']
                     ];
-        $res_add_new_lot = db_insert($link, ADD_NEW_LOT, $lot_data);
-        if ($res_add_new_lot) {
-            $lot_id = mysqli_insert_id($link);
+        $lot_id = add_new_lot($link, $lot_data);
             header('Location: lot.php?id=' . $lot_id);
             exit();
-        }
     }
 } else {
     include_template ('add', 'Добавить новый лот', $categories, $user_avatar, [
