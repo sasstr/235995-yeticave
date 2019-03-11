@@ -2,7 +2,8 @@
 date_default_timezone_set('europe/moscow');
 /**
  * Функция устанавливает связь с базой данных
- * @return resource возращает ресурс соединения
+ *
+ * @return resource возращает ресурс соединения или сообщение о ошибки если соединение не установлено
  */
 function db_connect() {
     $link = mysqli_connect(DB_SETUP['HOST'], DB_SETUP['LOGIN'], DB_SETUP['PASSWORD'], DB_SETUP['NAME']);
@@ -16,8 +17,9 @@ function db_connect() {
 /** Функция возращает результат вставки в базу данных
  * @param resource $link принимает ресурс соединения
  * @param string $sql подготовленное выражение
- * @param array $data массив данных для вставки в бд
- * @return bool $res или false
+ * @param array $data массив данных для вставки в базу данных
+ *
+ * @return bool  $res или false
  */
 function  db_insert($link, $sql, $data = []) {
     if (!empty($data)) {
@@ -30,7 +32,8 @@ function  db_insert($link, $sql, $data = []) {
  * @param resource $link принимает ресурс соединения
  * @param string $sql подготовленное выражение
  * @param array $data массив полей для выборки из базы данных
- * @return array двумерный массив или пустой
+ *
+ * @return array двумерный массив c результатом выборки из базы данных по переданному запросу или пустой
  */
 function  db_select ($link, $sql, $data = []) {
     if (!empty($data)) {
@@ -45,6 +48,7 @@ function  db_select ($link, $sql, $data = []) {
  * Возращеает список категорий для меню на сайте
  *
  * @param resource $link принимает ресурс соединения
+ *
  * @return array Возращает список категорий
  */
 function get_categories($link) {
@@ -59,7 +63,8 @@ function get_categories($link) {
  * Возращеает список лотов - карточек товара
  * лимит 9 шт.
  * @param resource $link принимает ресурс соединения
- * @return array Возращает список лотов
+ *
+ * @return array Возращает список лотов и данные для их отрисовки
  */
 function get_lots($link) {
     $sql = 'SElECT `lots`.`title` AS `lots_title`,
@@ -96,7 +101,7 @@ function get_lots($link) {
  * @param resource $link ресурс соединения
  * @param integer $lot_id номер id по которому надо получить лот
  *
- * @return string Возращает лот по id из БД
+ * @return array Возращает лот по id из базы данных или пустой массив
  */
  function get_lot_by_id ($link, $lot_id) {
     $sql = 'SELECT lots.`title`
@@ -116,11 +121,12 @@ function get_lots($link) {
 };
 
 /**
- * Функция добавляет новую ставку
+ * Функция добавляет новую ставку в базу данных
  *
  * @param resource $link  рескрс соединения
  * @param string $sql  подготовленное выражение
  * @param array $data массив данных
+ *
  * @return void
  */
 function add_new_rate_to_db($link, $data = []) {
@@ -139,11 +145,10 @@ function add_new_rate_to_db($link, $data = []) {
  * @param resource $link
  * @param string $sql подготовленное выражение
  * @param integer $lot_id номер id по которому надо получить
+ *
  * @return Возращает результат запроса по выборке из базы данных
  */
 function select_data_by_lot_id ($link, $sql, $lot_id) {
-
-
     $stmt = mysqli_prepare($link, $sql);
     mysqli_stmt_bind_param($stmt, 'i', $lot_id);
     mysqli_stmt_execute($stmt);
@@ -156,6 +161,7 @@ function select_data_by_lot_id ($link, $sql, $lot_id) {
  * @param resource $link
  * @param string $sql подготовленное выражение
  * @param integer $lot_id номер id по которому надо получить
+ *
  * @return Возращает результат запроса по выборке из базы данных
  */
 function select_starting_price_data_by_id ($link, $lot_id) {
@@ -179,7 +185,8 @@ function select_starting_price_data_by_id ($link, $lot_id) {
  * @param resource $link
  * @param string $sql подготовленное выражение
  * @param integer $lot_id номер id по которому надо получить
- * @return Возращает результат запроса по выборке из базы данных
+ *
+ * @return array Возращает результат запроса по выборке из базы данных
  */
 function select_history_data_by_id ($link, $lot_id) {
     $sql = 'SELECT `users`.`name`,

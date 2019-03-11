@@ -4,7 +4,6 @@ require_once('mysql_helper.php');
  * Проверяет наличие файла шаблона и возращает его.
  * @param string $file_name название файла шаблона
  * @param array $data_array массив переменных
- * @param integer $id ID лота для get параметра
  *
  * @return string возращает разметку шаблона
  */
@@ -21,7 +20,7 @@ function render ($file_name, $data_array) {
 
 /**
  * Функция форматирует цену товара и добавляет знак рубля.
- * @param integer $price
+ * @param integer $price цена лота
  *
  * @return string возращает отформатированную цену по тысячам со знаком рубля.
  */
@@ -36,6 +35,7 @@ function render ($file_name, $data_array) {
  * @param integer $time
  * @param array $words двумерный массив со списками корректных  слов
  * @param string $word ключ двумерного массива $words
+ *
  * @return string возращает правилный вариант склонения слова в русском языке
  */
 function get_correct_word($time, $words, $word) {
@@ -68,6 +68,7 @@ function show_time() {
  * Проверяет истекло ли вермя текущего лота
  *
  * @param string $end_time время окончания лота
+ *
  * @return bool истина если время вышло и ложь если нет.
  */
 function check_finished_lot($end_time) {
@@ -79,6 +80,7 @@ function check_finished_lot($end_time) {
  * Возращает массив секунд, минут, часов и дней до окончания аукциона
  *
  * @param string $end_time  дата окончания аукциона лота
+ *
  * @return array массив секунд, минут, часов и дней до окончания аукциона
  */
 function time_to_end_array ($end_time) {
@@ -93,10 +95,11 @@ function time_to_end_array ($end_time) {
             ];
 };
 /**
- * Undocumented function
+ * Функция возращает массив значений секунд, дней, часов и минут от начальной даты до текущего времени
  *
- * @param string $start_time
- * @return array
+ * @param string $start_time время создания ставки
+ *
+ * @return array ассив секунд, минут, часов и дней с момента создания ставки
  */
 function time_array ($start_time) {
     $seconds = time() - strtotime($start_time);
@@ -136,6 +139,7 @@ function get_end_of_time_lot ($end_time) {
  * @param string $user_avatar ссылка на аватар пользователя
  * @param array $data массив данных для отрисовки шаблона локальной страницы
  * @param string $page_categories Шаблон категорий
+ *
  * @return void
  */
 function include_template ($page_name, $page_title, $categories, $user_avatar, $data = [], $page_categories) {
@@ -174,9 +178,10 @@ function format_time_rate($current_time) {
 }
 
 /**
- * Функция рассчитывает разницу от текущего времни до конца суток
- * @param $end_date
- * @return string возращает время которое осталось до конца суток от текущего.
+ * Функция рассчитывает разницу от текущего времни до даты переданной параметром
+ * @param $end_date дата окончания
+ *
+ * @return string возращает время которое осталось до даты переданной параметром.
  */
 function show_diff_time($end_date) {
     $now = date_create('now');
@@ -187,12 +192,14 @@ function show_diff_time($end_date) {
 };
 /** Функция перемещает файл на сервере в указаную папку из временной и
  * добавляет префикс к названию файласоздавая уникальное название файла
- * @param string $pre_name
+ * @param string $pre_name префикс названия файла
  * @param string $img_file_name
- * @param string $img_file_tmp_name
- * @param string $upload_dir
- * @param string $upload_local_dir
- * @param array $img_file_types
+ * @param string $img_file_tmp_name временное имя файла на сервере
+ * @param string $upload_dir путь к файлу
+ * @param string $upload_local_dir локальный путь к файлу
+ * @param array $img_file_types типы картинок доступные для загрузки
+ *
+ * @return string В случае ошибки возращает сообщение о ней
  */
 function move_file_to_upload ($prefix, $img_file_name, $img_file_tmp_name, $upload_dir, $upload_local_dir, $img_file_types) {
     $errors = [];
@@ -231,7 +238,8 @@ function move_file_to_upload ($prefix, $img_file_name, $img_file_tmp_name, $uplo
  * @param string $history_data
  * @param integer $session_user_id
  * @param string $end_time
- * @return boolean
+ *
+ * @return boolean возращает булево значение флага, который позволит показать форму добавления ставки или нет
  */
 function is_show_rate_form($lots_user_id, $rates_user_id, $history_data, $session_user_id, $end_time) {
     if (isset($lots_user_id) && isset($rates_user_id)) {
@@ -258,11 +266,12 @@ function is_show_rate_form($lots_user_id, $rates_user_id, $history_data, $sessio
  * Функция проверяет правильность введенного значения стоимости ставки лота
  * и в случае верного добавляет его в базу данных
  *
- * @param integer $post_cost
- * @param integer $min_rate
- * @param array $data
- * @param resource $link
- * @return array или добавляет запись в базу данных
+ * @param integer $post_cost сумма ставки
+ * @param integer $min_rate минимальная сумма ставки
+ * @param array $data массив данных для добавления в базу данных новой ставки
+ * @param resource $link ресурс соединения
+ *
+ * @return array возращает массив с ошибкой или добавляет новую запись в базу данных
  */
 function validate_rate_cost ($post_cost, $min_rate, $data, $link) {
     if (empty($post_cost)) {
@@ -281,6 +290,7 @@ function validate_rate_cost ($post_cost, $min_rate, $data, $link) {
  * Функция возращает время до конца лота в формате ЧЧ:ММ
  *
  * @param string время окончания ставки
+ *
  * @return string Время до окончания ставки в нужном формате.
  */
 function show_left_time($val) {
@@ -298,9 +308,10 @@ function show_left_time($val) {
 /**
  * Функция проверяет выбрана ли категория из дропдауна
  *
- * @param array $categories
- * @param string $new_lot_category
- * @return string
+ * @param array $categories массив категорий
+ * @param string $new_lot_category категория товаров выбранная при создании лота
+ *
+ * @return string сообщение о ошибки
  */
 function check_category_value ($categories, $new_lot_category) {
     foreach ($categories as $val) {
