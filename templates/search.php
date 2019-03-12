@@ -5,8 +5,9 @@
     </nav>
     <div class="container">
       <section class="lots">
-        <h2>Результаты поиска по запросу «<span><?= $search_ft_to_db['0'] ?></span>»</h2><!-- Union -->
+        <h2>Результаты поиска по запросу «<span><?= htmlspecialchars($search_ft_to_db) ?></span>»</h2><!-- Union -->
         <ul class="lots__list">
+        <? if (count($res_search) >= 1) : ?>
         <? foreach($res_search as $val): ?>
           <li class="lots__item lot">
             <div class="lot__image">
@@ -28,24 +29,9 @@
             </div>
           </li>
           <? endforeach ?>
-          <!-- <li class="lots__item lot">
-            <div class="lot__image">
-              <img src="img/lot-2.jpg" width="350" height="260" alt="Сноуборд">
-            </div>
-            <div class="lot__info">
-              <span class="lot__category">Доски и лыжи</span>
-              <h3 class="lot__title"><a class="text-link" href="lot.html">DC Ply Mens 2016/2017 Snowboard</a></h3>
-              <div class="lot__state">
-                <div class="lot__rate">
-                  <span class="lot__amount">12 ставок</span>
-                  <span class="lot__cost">15 999<b class="rub">р</b></span>
-                </div>
-                <div class="lot__timer timer timer--finishing">
-                  00:54:12
-                </div>
-              </div>
-            </div>
-          </li> -->
+          <? else : ?>
+          <h2>Ничего не найдено по вашему запросу</h2>
+          <? endif ?>
         </ul>
       </section>
       <ul class="pagination-list">
