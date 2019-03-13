@@ -12,6 +12,7 @@ if ($_GET['id'] && $_GET['name']) {
 
     include_template ('all-lots', 'Все лоты', $categories, $user_avatar,[
         'categories' => $categories,
+        'page_name' => $page_name,
         'category_lots' => $category_lots,
         'page_categories' => $page_categories
         ], $page_categories);

@@ -5,7 +5,8 @@ USE yeticave;
 
 CREATE TABLE categories (
   `id` INT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
-  `name` VARCHAR(25) NOT NULL
+  `name` VARCHAR(25) NOT NULL,
+  `class_name` VARCHAR(256)
 ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8;
 
 CREATE TABLE users (

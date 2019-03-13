@@ -52,7 +52,7 @@ function  db_select ($link, $sql, $data = []) {
  * @return array Возращает список категорий
  */
 function get_categories($link) {
-    $sql = 'SELECT `name`, `id` FROM categories';
+    $sql = 'SELECT `name`, `id`, `class_name` FROM categories';
     $result = mysqli_query($link, $sql);
     if ($result !== false) {
         $categories = mysqli_fetch_all($result, MYSQLI_ASSOC);
@@ -287,23 +287,49 @@ function check_email_in_db ($link, $email) {
 
 function insert_new_user_to_db ($link, $data_new_user) {
     $sql = 'INSERT INTO users (registration_date, email, name, password, contacts, avatar) VALUES (NOW(), ?, ?, ?, ?, ?)';
-            $stmt = db_get_prepare_stmt($link, $sql, $data_new_user);
-            return mysqli_stmt_execute($stmt);
+    $stmt = db_get_prepare_stmt($link, $sql, $data_new_user);
+    return mysqli_stmt_execute($stmt);
 };
 
 function get_lots_by_category_id($link, $categ_id) {
-    $sql = 'SELECT lots.`title` AS `lots_title`, lots.`id`, lots.`starting_price`, lots.`img_path`, lots.`finishing_date`, lots.`starting_date`, `rates`.`rate_amount`, categories.`name` AS `categories_name`
+   /*  $sql = 'SELECT lots.`title` AS `lots_title`, lots.`id`, lots.`starting_price`, lots.`img_path`, lots.`finishing_date`, lots.`starting_date`, `rates`.`rate_amount`, categories.`name` AS `categories_name`
     FROM lots
     JOIN categories ON categories.`id` = lots.`category_id`
     LEFT JOIN rates ON rates.`lots_id` = lots.`id`
     WHERE lots.`winner_id` IS NULL and lots.`finishing_date` > CURRENT_TIMESTAMP and categories.`id` = $categ_id
     ORDER BY lots.`starting_date` DESC
-    LIMIT 9;';
-    $result = mysqli_query($link, $sql);
+    LIMIT 9;'; */
+    $sql = 'SElECT `lots`.`title` AS `lots_title`,
+                        `lots`.`id`,
+                        `lots`.`starting_price`,
+                        `lots`.`img_path`,
+                        `lots`.`finishing_date`,
+                        `lots`.`starting_date`,
+                        `categories`.`name` AS `categories_name`,
+                        count(`rates`.`lots_id`) AS rates_count,
+                        MAX(`rates`.`rate_amount`) AS rate_amount
+                    FROM lots
+                        INNER JOIN categories
+                        ON `lots`.`category_id` = `categories`.`id`
+                        LEFT JOIN `rates`
+                        ON `lots`.`id` = `rates`.`lots_id`
+                    WHERE lots.finishing_date > NOW() and categories.`id` = ?
+                    AND lots.winner_id IS NULL
+                    GROUP BY
+                        lots.id,
+                        lots.title,
+                        lots.starting_price,
+                        lots.img_path,
+                        categories.name
+                    LIMIT 9;';
+    $res = db_select ($link, $sql, [$categ_id]);
+    return ($res) ? $res : [];
+
+    /* $result = mysqli_query($link, $sql);
     if ($result !== false) {
         return mysqli_fetch_all($result , MYSQLI_ASSOC);
     }
-    return [];
+    return []; */
 };
 
 function add_new_lot($link, $lot_data) {

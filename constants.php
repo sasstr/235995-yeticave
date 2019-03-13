@@ -13,6 +13,7 @@ const WORDS = [
 ];
 
 const CATEGORY_SELECTOR = '-1';
+const PAGE_ITEMS_LIMIT = 9;
 const RUBLE_SYMBOL = '&#8381;';
 const MOCK_IMG_LOT = 'http://placehold.it/150x100?text=Лот+на+фотосессии';
 const MOCK_IMG = 'https://joeschmoe.io/api/v1//male/random';
