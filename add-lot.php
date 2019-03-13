@@ -59,7 +59,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $file_url = $file_to_upload;
     }
 
-    if (count($errors) >1 || $errors['category'] !== null /* && $errors['img-file'] !== null */) {
+    if (count($errors) >1 || $errors['category'] !== null) {
         $errors['form'] = 'Пожалуйста, исправьте ошибки в форме.';
 
         include_template('add', 'Добавить новый лот', $categories, $user_avatar, [

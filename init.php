@@ -344,3 +344,29 @@ function add_new_lot($link, $lot_data) {
         return mysqli_insert_id($link);
     };
 }
+
+function get_my_lots($link) {
+    $sql = 'SElECT `lots`.`title` AS `lots_title`,
+                `lots`.`starting_price`,
+                `lots`.`description`,
+                `lots`.`img_path`,
+                `lots`.`finishing_date`,
+                `lots`.`winner_id`,
+                `lots`.`starting_date`,
+                `categories`.`name` AS categories_name,
+                MAX(`rates`.`rate_amount`) AS rate_amount
+            FROM lots
+                INNER JOIN categories
+                ON `lots`.`category_id` = `categories`.`id`
+                LEFT JOIN rates
+                ON `lots`.`id` = `rates`.`lots_id`
+                INNER JOIN users ON lots.user_id = ?
+            GROUP BY
+                `lots`.`id`,
+                `lots`.`title`,
+                `lots`.`starting_price`,
+                `lots`.`img_path`,
+                `categories`.`name`
+            ORDER BY `lots`.`starting_date`;';
+    return db_select ($link, $sql, [$_GET['id']]);
+    };
