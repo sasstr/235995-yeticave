@@ -12,7 +12,8 @@ if (empty($_SESSION['user'])) {
 }
 
 if (isset($_GET['id'])) {
-    $my_lots = get_my_lots($link);
+    $lots_user_id = $_GET['id'];
+    $my_lots = get_my_lots($link, $lots_user_id);
 
     $my_lots_data = [
         'page_categories' => $page_categories,

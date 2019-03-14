@@ -13,22 +13,25 @@
               <img src="<?= htmlspecialchars($lot['img_path']) ?>" width="54" height="40" alt="Сноуборд">
             </div>
             <h3 class="rates__title"><a href="lot.html"><?= htmlspecialchars($lot['lots_title']) ?></a></h3>
+            <p><?= htmlspecialchars($_SESSION['user']['0']['contacts']) ?></p>
           </td>
           <td class="rates__category">
             <?= htmlspecialchars($lot['categories_name']) ?>
           </td>
           <td class="rates__timer">
-            <div class="timer timer--finishing">07:13:34 <?= isset($diff_time) ? show_left_time($diff_time) : ''; ?></div>
+            <div class="timer timer--finishing"><!-- 07:13:34  --><?= isset($lot['finishing_date']) ? show_left_time($lot['finishing_date']) : ''; ?></div>
           </td>
           <td class="rates__price">
-            10 999 р <?= isset($lot['rate_amount']) ? $lot['rate_amount'] : $lot['starting_price'] ?>
+            <!-- 10 999 р  --><?= isset($lot['rate_amount']) ? format_price($lot['rate_amount']) : format_price($lot['starting_price']) ?>
           </td>
           <td class="rates__time">
-            5 минут назад <?= format_time_rate($lot['starting_date']) ?>
+            <!-- 5 минут назад  --><?= format_time_rate($lot['starting_date']) ?>
           </td>
         </tr>
         <? endforeach ?>
-        <!-- <tr class="rates__item">
+
+
+        <tr class="rates__item">
           <td class="rates__info">
             <div class="rates__img">
               <img src="img/rate2.jpg" width="54" height="40" alt="Сноуборд">
@@ -150,6 +153,6 @@
           <td class="rates__time">
             19.03.17 в 08:21
           </td>
-        </tr> -->
+        </tr>
       </table>
     </section>

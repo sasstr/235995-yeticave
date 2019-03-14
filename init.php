@@ -345,7 +345,7 @@ function add_new_lot($link, $lot_data) {
     };
 }
 
-function get_my_lots($link) {
+function get_my_lots($link, $lots_user_id) {
     $sql = 'SElECT `lots`.`title` AS `lots_title`,
                 `lots`.`starting_price`,
                 `lots`.`description`,
@@ -368,5 +368,5 @@ function get_my_lots($link) {
                 `lots`.`img_path`,
                 `categories`.`name`
             ORDER BY `lots`.`starting_date`;';
-    return db_select ($link, $sql, [$_GET['id']]);
+    return db_select ($link, $sql, $lots_user_id);
     };
