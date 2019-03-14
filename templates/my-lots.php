@@ -6,27 +6,29 @@
     <section class="rates container">
       <h2>Мои ставки</h2>
       <table class="rates__list">
+      <? foreach($my_lots as $lot) : ?>
         <tr class="rates__item">
           <td class="rates__info">
             <div class="rates__img">
-              <img src="img/rate1.jpg" width="54" height="40" alt="Сноуборд">
+              <img src="<?= htmlspecialchars($lot['img_path']) ?>" width="54" height="40" alt="Сноуборд">
             </div>
-            <h3 class="rates__title"><a href="lot.html">2014 Rossignol District Snowboard</a></h3>
+            <h3 class="rates__title"><a href="lot.html"><?= htmlspecialchars($lot['lots_title']) ?></a></h3>
           </td>
           <td class="rates__category">
-            Доски и лыжи
+            <?= htmlspecialchars($lot['categories_name']) ?>
           </td>
           <td class="rates__timer">
-            <div class="timer timer--finishing">07:13:34</div>
+            <div class="timer timer--finishing">07:13:34 <?= isset($diff_time) ? show_left_time($diff_time) : ''; ?></div>
           </td>
           <td class="rates__price">
-            10 999 р
+            10 999 р <?= isset($lot['rate_amount']) ? $lot['rate_amount'] : $lot['starting_price'] ?>
           </td>
           <td class="rates__time">
-            5 минут назад
+            5 минут назад <?= format_time_rate($lot['starting_date']) ?>
           </td>
         </tr>
-        <tr class="rates__item">
+        <? endforeach ?>
+        <!-- <tr class="rates__item">
           <td class="rates__info">
             <div class="rates__img">
               <img src="img/rate2.jpg" width="54" height="40" alt="Сноуборд">
@@ -148,6 +150,6 @@
           <td class="rates__time">
             19.03.17 в 08:21
           </td>
-        </tr>
+        </tr> -->
       </table>
     </section>
