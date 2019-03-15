@@ -15,9 +15,16 @@ if (isset($_GET['id'])) {
     $lots_user_id = $_GET['id'];
     $my_lots = get_my_lots($link, $lots_user_id);
 
-    $my_lots_data = [
+    if(isset($my_lots)) {
+        $my_lots_data = [
         'page_categories' => $page_categories,
         'my_lots' => $my_lots,
+        'categories' => $categories
+    ];
+    include_template ('my-lots', 'Мои лоты', $categories, $user_avatar, $my_lots_data, $page_categories);
+    }
+    $my_lots_data = [
+        'page_categories' => $page_categories,
         'categories' => $categories
     ];
     include_template ('my-lots', 'Мои лоты', $categories, $user_avatar, $my_lots_data, $page_categories);

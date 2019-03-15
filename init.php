@@ -368,5 +368,6 @@ function get_my_lots($link, $lots_user_id) {
                 `lots`.`img_path`,
                 `categories`.`name`
             ORDER BY `lots`.`starting_date`;';
-    return db_select ($link, $sql, $lots_user_id);
+    $res = db_select ($link, $sql, [(int) $lots_user_id]);
+    return isset($res) ? $res : null;
     };

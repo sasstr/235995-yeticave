@@ -6,20 +6,22 @@
     <section class="rates container">
       <h2>Мои ставки</h2>
       <table class="rates__list">
+      <? if(isset($my_lots)) : ?>
       <? foreach($my_lots as $lot) : ?>
         <tr class="rates__item">
           <td class="rates__info">
             <div class="rates__img">
               <img src="<?= htmlspecialchars($lot['img_path']) ?>" width="54" height="40" alt="Сноуборд">
             </div>
-            <h3 class="rates__title"><a href="lot.html"><?= htmlspecialchars($lot['lots_title']) ?></a></h3>
+            <h3 class="rates__title"><a href="lot.php<?= '?id=' . $_SESSION['user'][0]['id'] ?> "><?= htmlspecialchars($lot['lots_title']) ?></a></h3>
             <p><?= htmlspecialchars($_SESSION['user']['0']['contacts']) ?></p>
           </td>
           <td class="rates__category">
             <?= htmlspecialchars($lot['categories_name']) ?>
           </td>
           <td class="rates__timer">
-            <div class="timer timer--finishing"><!-- 07:13:34  --><?= isset($lot['finishing_date']) ? show_left_time($lot['finishing_date']) : ''; ?></div>
+          <? $my_lots_date = check_my_lots_date($lot['finishing_date'], $_SESSION['user'][0]['id']) ?? ''; rate_msg  ?>
+            <div class="timer timer--finishing"><!-- 07:13:34  --><?= isset($my_lots_date['rate_msg']) ? show_left_time($lot['finishing_date']) : ''; ?></div>
           </td>
           <td class="rates__price">
             <!-- 10 999 р  --><?= isset($lot['rate_amount']) ? format_price($lot['rate_amount']) : format_price($lot['starting_price']) ?>
@@ -29,6 +31,7 @@
           </td>
         </tr>
         <? endforeach ?>
+        <? endif ?>
 
 
         <tr class="rates__item">

@@ -321,3 +321,18 @@ function check_category_value ($categories, $new_lot_category) {
     }
     return 'Выбирите одну из существующих в списке категорий';
 };
+
+function check_my_lots_date ($end_date, $winner_id) {
+    if($end_date <= time() && $winner_id !== null ) {
+        return ['rate_msg' => 'Ставка выиграла',
+                'class_value' => 'timer--win'];
+    } elseif ($end_date <= time() && $winner_id === null) {
+        return ['rate_msg' => 'Торги окончены',
+                'class_value' => 'timer--end'];
+    } elseif (strtotime($end_date - time()) <= SECONDS_AMOUNT['DAY'] ) {
+        return ['rate_msg' => $end_date,
+                'class_value' => 'timer--finishing'];
+    }
+    return ['rate_msg' => $end_date,
+            'class_value' => ''];
+};
