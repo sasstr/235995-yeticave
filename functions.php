@@ -321,18 +321,23 @@ function check_category_value ($categories, $new_lot_category) {
     }
     return 'Выбирите одну из существующих в списке категорий';
 };
+/**
+ * Функция возращает массив дынных по моему лоту
+ *
+ * @param string $end_date
+ * @param integer $winner_id
+ * @param array $my_lots_data
+ * @return array $my_lots_data
+ */
 
-function check_my_lots_date ($end_date, $winner_id) {
-    if($end_date <= time() && $winner_id !== null ) {
-        return ['rate_msg' => 'Ставка выиграла',
-                'class_value' => 'timer--win'];
-    } elseif ($end_date <= time() && $winner_id === null) {
-        return ['rate_msg' => 'Торги окончены',
-                'class_value' => 'timer--end'];
-    } elseif (strtotime($end_date - time()) <= SECONDS_AMOUNT['DAY'] ) {
-        return ['rate_msg' => $end_date,
-                'class_value' => 'timer--finishing'];
+function check_my_lots_date ($end_date, $winner_id, $my_lots_data) {
+    if(strtotime($end_date) <= time() && $winner_id !== null ) {
+        return $my_lots_data['winner'];
+    } elseif (strtotime($end_date) <= time() && $winner_id === null) {
+        return $my_lots_data['rate_end'];
+    } elseif (strtotime($end_date) - time() <= SECONDS_AMOUNT['DAY']) {
+        return $my_lots_data['rate_low_time'];
     }
-    return ['rate_msg' => $end_date,
-            'class_value' => ''];
+    return $my_lots_data['rate_msg'];
 };
+

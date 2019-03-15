@@ -12,8 +12,26 @@ if (empty($_SESSION['user'])) {
 }
 
 if (isset($_GET['id'])) {
+
     $lots_user_id = $_GET['id'];
     $my_lots = get_my_lots($link, $lots_user_id);
+    if(isset($lot['finishing_date'])) {
+        $my_lots_data = ['rate_winner' => ['rate_msg' => 'Ставка выиграла',
+                                    'class_value' => 'timer--win',
+                                    'rate_class_value' => 'rates__item--win'],
+                    'rate_low_time' => ['rate_msg' => $lot['finishing_date'],
+                                    'class_value' => 'timer--finishing',
+                                    'rate_class_value' => 'rates__item--end'],
+                    'rate_end' => ['rate_msg' => 'Торги окончены',
+                                    'class_value' => 'timer--end',
+                                    'rate_class_value' => 'rates__item--end'],
+                    'rate_msg' => ['rate_msg' => $lot['finishing_date'],
+                                    'class_value' => '',
+                                    'rate_class_value' => '']
+                ];
+        $winner_id = $lot['winner_id'];
+        $lot_data = check_my_lots_date ($end_date, $winner_id, $my_lots_data);
+    }
 
     if(isset($my_lots)) {
         $my_lots_data = [

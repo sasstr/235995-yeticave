@@ -20,7 +20,7 @@
             <?= htmlspecialchars($lot['categories_name']) ?>
           </td>
           <td class="rates__timer">
-          <? $my_lots_date = check_my_lots_date($lot['finishing_date'], $_SESSION['user'][0]['id']) ?? ''; rate_msg  ?>
+          <? $my_lots_date = check_my_lots_date($lot['finishing_date'], $_SESSION['user'][0]['id']) ?? ''; $rate_msg  ?>
             <div class="timer timer--finishing"><!-- 07:13:34  --><?= isset($my_lots_date['rate_msg']) ? show_left_time($lot['finishing_date']) : ''; ?></div>
           </td>
           <td class="rates__price">
