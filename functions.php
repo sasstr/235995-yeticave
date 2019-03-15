@@ -332,7 +332,7 @@ function check_category_value ($categories, $new_lot_category) {
 
 function check_my_lots_date ($end_date, $winner_id, $my_lots_data) {
     if(strtotime($end_date) <= time() && $winner_id !== null ) {
-        return $my_lots_data['winner'];
+        return $my_lots_data['rate_winner'];
     } elseif (strtotime($end_date) <= time() && $winner_id === null) {
         return $my_lots_data['rate_end'];
     } elseif (strtotime($end_date) - time() <= SECONDS_AMOUNT['DAY']) {
