@@ -340,4 +340,3 @@ function check_my_lots_date ($end_date, $winner_id, $my_lots_data) {
     }
     return $my_lots_data['rate_msg'];
 };
-

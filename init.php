@@ -143,7 +143,7 @@ function add_new_rate_to_db($link, $data = []) {
 /**
  * Функция возращает результат запроса по выборке из базы данных
  *
- * @param resource $link
+ * @param resource $link рескрс соединения
  * @param string $sql подготовленное выражение
  * @param integer $lot_id номер id по которому надо получить
  *
@@ -159,7 +159,7 @@ function select_data_by_lot_id ($link, $sql, $lot_id) {
 /**
  * Функция возращает результат запроса по выборке из базы данных
  *
- * @param resource $link
+ * @param resource $link рескрс соединения
  * @param string $sql подготовленное выражение
  * @param integer $lot_id номер id по которому надо получить
  *
@@ -183,7 +183,7 @@ function select_starting_price_data_by_id ($link, $lot_id) {
 /**
  * Функция возращает результат запроса по выборке из базы данных
  *
- * @param resource $link
+ * @param resource $link рескрс соединения
  * @param string $sql подготовленное выражение
  * @param integer $lot_id номер id по которому надо получить
  *
@@ -208,7 +208,7 @@ function select_history_data_by_id ($link, $lot_id) {
 /**
  * Функция возращает результат запроса по выборке из базы данных
  *
- * @param resource $link
+ * @param resource $link рескрс соединения
  * @param string $sql подготовленное выражение
  * @param integer $lot_id номер id по которому надо получить
  * @return Возращает результат запроса по выборке из базы данных
@@ -238,19 +238,25 @@ function select_rates_data_by_id ($link, $lot_id) {
 /**
  * Функция возращает ID пользователя по email
  *
- * @param resource $link
- * @param string $email
- * @return array
+ * @param resource $link рескрс соединения
+ * @param string $email пользователя
+ * @return array массив с ID пользователя
  */
 function select_id_by_email ($link, $email) {
-    $email = mysqli_real_escape_string($link, $sign_up['email']);
+    $email_checked = mysqli_real_escape_string($link, $email);
     $sql = "SELECT id FROM users WHERE email = ?";
     $stmt = mysqli_prepare($link, $sql);
-    mysqli_stmt_bind_param($stmt, 's', $email);
+    mysqli_stmt_bind_param($stmt, 's', $email_checked);
     mysqli_stmt_execute($stmt);
     return mysqli_fetch_assoc(mysqli_stmt_execute($stmt));
 };
-
+/**
+ * Возращает массив лотов по полнотекстовому поиску или сообщение о ошибке
+ *
+ * @param resource $link рескрс соединения
+ * @param string $search_text
+ * @param array/string
+ */
 function search_ft_to_db ($link, $search_text) {
     $search_query = trim($search_text);
     if (!empty($search_query)) {
@@ -370,4 +376,21 @@ function get_my_lots($link, $lots_user_id) {
             ORDER BY `lots`.`starting_date`;';
     $res = db_select ($link, $sql, [(int) $lots_user_id]);
     return isset($res) ? $res : null;
-    };
+};
+
+/**
+ * Возращает лоты которые не имеют победителя и время их вышло
+ *
+ * @param resource $link ресурс соединения
+ * @return array массив с лотами по запросу к базе данных
+ */
+function db_get_lots_not_winners($link) {
+    $sql = 'SELECT id, title, user_id
+        FROM lots
+        WHERE finishing_date <= NOW() AND winner_id IS NULL;';
+    $query = mysqli_query($link, $sql);
+    if ($query) {
+        $res = mysqli_fetch_all($query, MYSQLI_ASSOC);
+    }
+    return [];
+};
