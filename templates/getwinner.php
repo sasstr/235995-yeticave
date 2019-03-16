@@ -23,6 +23,11 @@ $transport->setPassword('htmlacademy');
 
 // Формирование сообщения
 $message = new Swift_Message("Ваша ставка победила");
+// Content-type тела письма	text/html
+$content_type = $message->getHeaders()->get('Content-Type');
+$content_type->setValue('text/html');
+$content_type->setParameter('charset', 'utf-8');
+
 $message->setTo(["sasstr@gmail.com" => "sasstr"]);
 $message->setBody("Ваша ставка победила");
 $message->setFrom("keks@phpdemo.ru", "YetiCave Ваша ставка победила");
