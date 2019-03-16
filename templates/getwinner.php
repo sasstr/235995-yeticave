@@ -6,7 +6,15 @@ require_once('functions.php');
 require_once('init.php');
 require_once('data.php');
 
-/* Алгоритм работы:
+/*
+Остальные параметры перечислены ниже:
+Имя параметра	Значение
+Тема письма	Ваша ставка победила
+Отправитель	keks@phpdemo.ru
+Получатель	E-mail пользователя-победителя
+Content-type тела письма	text/html
+
+Алгоритм работы:
 
 1/ Найти все лоты без победителей, дата истечения
 которых меньше или равна текущей дате;  +++
@@ -43,24 +51,17 @@ if(isset($winners) && count($winners) > 0) {
     $logger = new Swift_Plugins_Loggers_ArrayLogger();
     $mailer->registerPlugin(new Swift_Plugins_LoggerPlugin($logger));
 
-    $result = $mailer->send($message);
+    // $result = $mailer->send($message);
 
-    if ($result) {
-        print("Победителям письма успешно отправлены");
-    }
-    else {
-        print("Не удалось отправить письма: " . $logger->dump());
+    try {
+        $result = $mailer->send($message);
+        if ($result) {
+            print("Победителям письма успешно отправлены");
+        }
+        else {
+            print("Не удалось отправить письма: " . $logger->dump());
+        }
+    } catch (Swift_TransportException $ex) {
+        print($ex->getMessage() . '<br>');
     }
 }
-
-
-
-/*
-Остальные параметры перечислены ниже:
-Имя параметра	Значение
-Тема письма	Ваша ставка победила
-Отправитель	keks@phpdemo.ru
-Получатель	E-mail пользователя-победителя
-Content-type тела письма	text/html
-
-*/
