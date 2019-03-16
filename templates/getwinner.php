@@ -1,5 +1,10 @@
 <?php
 require_once('vendor/autoload.php');
+require_once('constants.php');
+require_once('config.php');
+require_once('functions.php');
+require_once('init.php');
+require_once('data.php');
 
 function db_get_lots_not_winners($link) {
     $sql = 'SELECT id, title, user_id
@@ -11,17 +16,33 @@ function db_get_lots_not_winners($link) {
     }
     return [];
 };
+// Конфигурация траспорта
+$transport = new Swift_SmtpTransport('phpdemo.ru', 25);
+$transport->setUsername('keks@phpdemo.ru');
+$transport->setPassword('htmlacademy');
 
-/* $transport = new Swift_SmtpTransport('smtp.example.org', 25);
 // Формирование сообщения
-$message = new Swift_Message("Просмотры вашей гифки");
-$message->setTo(["keks@htmlacademy.ru" => "Кекс"]);
-$message->setBody("Вашу гифку «Кот и пылесос» посмотрело больше 1 млн!");
-$message->setFrom("mail@giftube.academy", "GifTube");
+$message = new Swift_Message("Ваша ставка победила");
+$message->setTo(["sasstr@gmail.com" => "sasstr"]);
+$message->setBody("Ваша ставка победила");
+$message->setFrom("keks@phpdemo.ru", "YetiCave Ваша ставка победила");
 // Отправка сообщения
 $mailer = new Swift_Mailer($transport);
-$mailer->send($message);
+// Чтобы иметь максимально подробную информацию о процессе отправки сообщений
+// мы попросим SwiftMailer журналировать все происходящее внутри массива.
+$logger = new Swift_Plugins_Loggers_ArrayLogger();
+$mailer->registerPlugin(new Swift_Plugins_LoggerPlugin($logger));
 
+$result = $mailer->send($message);
+
+if ($result) {
+    print("Рассылка успешно отправлена");
+}
+else {
+    print("Не удалось отправить рассылку: " . $logger->dump());
+}
+
+/*
 Остальные параметры перечислены ниже:
 Имя параметра	Значение
 Тема письма	Ваша ставка победила
