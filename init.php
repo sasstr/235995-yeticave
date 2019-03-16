@@ -206,7 +206,7 @@ function select_history_data_by_id ($link, $lot_id) {
 };
 
 /**
- * Функция возращает результат запроса по выборке из базы данных
+ * Функция возращает результат запроса по выборке из базы данных по ID лота
  *
  * @param resource $link рескрс соединения
  * @param string $sql подготовленное выражение
@@ -390,7 +390,7 @@ function db_get_lots_not_winners($link) {
         WHERE finishing_date <= NOW() AND winner_id IS NULL;';
     $query = mysqli_query($link, $sql);
     if ($query) {
-        $res = mysqli_fetch_all($query, MYSQLI_ASSOC);
+        return mysqli_fetch_all($query, MYSQLI_ASSOC);
     }
     return [];
 };

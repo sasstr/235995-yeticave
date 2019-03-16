@@ -18,6 +18,9 @@ $winners = db_get_lots_not_winners($link);
 
 if(isset($winners) && count($winners) > 0) {
 
+    foreach ($winners as $winner) {
+        $rate_amount = select_rates_data_by_id($link, $winner['id']);
+    }
     // Конфигурация траспорта
     $transport = new Swift_SmtpTransport('phpdemo.ru', 25);
     $transport->setUsername('keks@phpdemo.ru');
@@ -43,10 +46,10 @@ if(isset($winners) && count($winners) > 0) {
     $result = $mailer->send($message);
 
     if ($result) {
-        print("Рассылка успешно отправлена");
+        print("Победителям письма успешно отправлены");
     }
     else {
-        print("Не удалось отправить рассылку: " . $logger->dump());
+        print("Не удалось отправить письма: " . $logger->dump());
     }
 }
 
