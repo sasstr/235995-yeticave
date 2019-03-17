@@ -6,21 +6,13 @@ require_once('functions.php');
 require_once('init.php');
 require_once('data.php');
 
-/*
-Остальные параметры перечислены ниже:
-Имя параметра	Значение
-Тема письма	Ваша ставка победила
-Отправитель	keks@phpdemo.ru
-Получатель	E-mail пользователя-победителя
-Content-type тела письма	text/html
-
-Алгоритм работы:
-
+/*    Алгоритм работы:
 1/ Найти все лоты без победителей, дата истечения
 которых меньше или равна текущей дате;  +++
-2/ Для каждого такого лота найти последнюю ставку;
+2/ Для каждого такого лота найти последнюю ставку; +++
 3/ Записать в лот победителем автора последней ставки;
-4/ Отправить победителю на email письмо — поздравление с победой; */
+4/ Отправить победителю на email письмо — поздравление с победой; +++
+ */
 
 $winners = db_get_lots_not_winners($link);
 
@@ -28,6 +20,9 @@ if(isset($winners) && count($winners) > 0) {
 
     foreach ($winners as $winner) {
         $rate_amount = select_rates_data_by_id($link, $winner['id']);
+        /* $sql = 'INSERT INTO lots (winner_id) VALUES (?);';
+        $winner_data = [$rate_amount['id']];
+        db_insert($link, $sql, $winner_data); */
     }
     // Конфигурация траспорта
     $transport = new Swift_SmtpTransport('phpdemo.ru', 25);
@@ -50,8 +45,6 @@ if(isset($winners) && count($winners) > 0) {
     // мы попросим SwiftMailer журналировать все происходящее внутри массива.
     $logger = new Swift_Plugins_Loggers_ArrayLogger();
     $mailer->registerPlugin(new Swift_Plugins_LoggerPlugin($logger));
-
-    // $result = $mailer->send($message);
 
     try {
         $result = $mailer->send($message);
