@@ -6,7 +6,7 @@ require_once('init.php');
 require_once('data.php');
 
 if($link) {
-    $cur_page = $_GET['page'] ?? 1;
+    $cur_page = isset($_GET['page']) ? intval($_GET['page']) : 1;
     $page_items = 9;
 
     $result = mysqli_query($link, "SELECT COUNT(*) as cnt FROM lots;");
