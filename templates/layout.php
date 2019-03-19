@@ -28,6 +28,7 @@
                 <p><?= htmlspecialchars($_SESSION['user']['0']['name']) ?></p>
                 <a href="/logout.php">Выход</a>
                 <img src="<?= htmlspecialchars($user_avatar) ?>" width="40" height="40" alt="Пользователь">
+                <a href="/my-lots.php<?= '?id=' . htmlspecialchars($_SESSION['user']['0']['id']) ?>">Мои лоты</a>
             </div>
         <? else: ?>
             <ul class="user-menu__list">

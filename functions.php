@@ -321,3 +321,22 @@ function check_category_value ($categories, $new_lot_category) {
     }
     return 'Выбирите одну из существующих в списке категорий';
 };
+/**
+ * Функция возращает массив дынных по моему лоту
+ *
+ * @param string $end_date
+ * @param integer $winner_id
+ * @param array $my_lots_data
+ * @return array $my_lots_data
+ */
+
+function check_my_lots_date ($end_date, $winner_id, $my_lots_data) {
+    if(strtotime($end_date) <= time() && $winner_id !== null ) {
+        return $my_lots_data['rate_winner'];
+    } elseif (strtotime($end_date) <= time() && $winner_id === null) {
+        return $my_lots_data['rate_end'];
+    } elseif (strtotime($end_date) - time() <= SECONDS_AMOUNT['DAY']) {
+        return $my_lots_data['rate_low_time'];
+    }
+    return $my_lots_data['rate_msg'];
+};

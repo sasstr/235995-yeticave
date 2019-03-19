@@ -5,14 +5,34 @@ require_once('functions.php');
 require_once('init.php');
 require_once('data.php');
 
-$my_lots_page = [
-    'categories' => $categories,
-];
+if (empty($_SESSION['user'])) {
+    http_response_code(403);
+    header("Location: login.php");
+    exit();
+}
 
-$my_lots = render('my-lots', $my_lots_page);
-print render('layout', [
-    'content' => $my_lots,
-    'title' => 'Мои лоты',
-    'categories' => $categories,
-    'user_avatar' => $user_avatar
-]);
+if (isset($_GET['id'])) {
+
+    $lots_user_id = $_GET['id'];
+    $my_lots = get_my_lots($link, $lots_user_id);
+
+    if(isset($my_lots)) {
+        $my_lots_data = [
+        'page_categories' => $page_categories,
+        'my_lots' => $my_lots,
+        'categories' => $categories
+    ];
+    include_template ('my-lots', 'Мои лоты', $categories, $user_avatar, $my_lots_data, $page_categories);
+    }
+    $my_lots_data = [
+        'page_categories' => $page_categories,
+        'categories' => $categories
+    ];
+    include_template ('my-lots', 'Мои лоты', $categories, $user_avatar, $my_lots_data, $page_categories);
+}
+
+$my_lots_data = [
+    'page_categories' => $page_categories,
+    'categories' => $categories
+];
+include_template ('my-lots', 'Мои лоты', $categories, $user_avatar, $my_lots_data, $page_categories);

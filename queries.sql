@@ -1,11 +1,11 @@
-INSERT INTO categories(`name`)
+INSERT INTO categories(`name`, `class_name`)
 VALUES
-  ('Доски и лыжи'),
-  ('Крепления'),
-  ('Ботинки'),
-  ('Одежда'),
-  ('Инструменты'),
-  ('Разное');
+  ('Доски и лыжи', 'promo__item--boards'),
+  ('Крепления', 'promo__item--attachment'),
+  ('Ботинки', 'promo__item--boots'),
+  ('Одежда', 'promo__item--clothing'),
+  ('Инструменты', 'promo__item--tools'),
+  ('Разное', 'promo__item--other');
 
 INSERT INTO lots(`title`, `description`, `img_path`, `starting_price`, `starting_date`, `rate_step`, `finishing_date`, `user_id`, `winner_id`, `category_id`)
 VALUES
