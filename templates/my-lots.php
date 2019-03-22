@@ -8,22 +8,7 @@
       <table class="rates__list">
       <? if(isset($my_lots)) : ?>
       <? foreach($my_lots as $lot) : ?>
-      <? $my_lots_data = ['rate_winner' => ['rate_msg' => 'Ставка выиграла',
-                                            'timer_class_value' => 'timer--win',
-                                            'item_class_value' => 'rates__item--win'],
-                        'rate_low_time' => ['rate_msg' => show_left_time($lot['finishing_date']),
-                                            'timer_class_value' => 'timer--finishing',
-                                            'item_class_value' => ''],
-                            'rate_end' => ['rate_msg' => 'Торги окончены',
-                                            'timer_class_value' => 'timer--end',
-                                            'item_class_value' => 'rates__item--end'],
-                            'rate_msg' => ['rate_msg' => show_left_time($lot['finishing_date']),
-                                            'timer_class_value' => '',
-                                            'item_class_value' => '']
-            ];
-        $end_date = $lot['finishing_date'];
-        $winner_id = $lot['winner_id'] ?? null;
-        $lot_data = check_my_lots_date ($end_date, $winner_id, $my_lots_data); ?>
+      <? $lot_data = get_lot_data($lot) ?>
         <tr class="rates__item <?= isset($lot_data['item_class_value']) ? $lot_data['item_class_value'] : '' ?>">
           <td class="rates__info">
             <div class="rates__img">

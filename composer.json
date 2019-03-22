@@ -10,6 +10,6 @@
         }
     ],
     "require": {
-      "swiftmailer/swiftmailer": "^6.2"
+      "swiftmailer/swiftmailer": "6.2"
     }
 }

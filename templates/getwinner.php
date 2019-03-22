@@ -20,14 +20,14 @@ if(isset($winners) && count($winners) > 0) {
 
     foreach ($winners as $winner) {
         $rate_amount = select_rates_data_by_id($link, $winner['id']);
-        /* $sql = 'INSERT INTO lots (winner_id) VALUES (?);';
-        $winner_data = [$rate_amount['id']];
-        db_insert($link, $sql, $winner_data); */
+        /* // Записать в лот победителем автора последней ставки
+        $rate_amount_id = $rate_amount['id'];
+        insert_winner_to_db ($link, $rate_amount_id); */
     }
     // Конфигурация траспорта
-    $transport = new Swift_SmtpTransport('phpdemo.ru', 25);
+    /* $transport = new Swift_SmtpTransport('phpdemo.ru', 25);
     $transport->setUsername('keks@phpdemo.ru');
-    $transport->setPassword('htmlacademy');
+    $transport->setPassword('htmlacademy'); */
 
     // Формирование сообщения
     $message = new Swift_Message("Ваша ставка победила");
@@ -40,7 +40,7 @@ if(isset($winners) && count($winners) > 0) {
     $message->setBody("Ваша ставка победила");
     $message->setFrom("keks@phpdemo.ru", "YetiCave Ваша ставка победила");
     // Отправка сообщения
-    $mailer = new Swift_Mailer($transport);
+    $mailer = new Swift_Mailer($mail_config['0']);
     // Чтобы иметь максимально подробную информацию о процессе отправки сообщений
     // мы попросим SwiftMailer журналировать все происходящее внутри массива.
     $logger = new Swift_Plugins_Loggers_ArrayLogger();

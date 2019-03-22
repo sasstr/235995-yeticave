@@ -1,4 +1,6 @@
 <?php
+require_once('vendor/autoload.php');
+
 const TEMPLATE_PATH = 'templates/';
 const PHP_EXTENSION = '.php';
 const UPLOAD_DIR = __DIR__ . '/upload/';
@@ -10,6 +12,12 @@ const DB_SETUP = [
     'LOGIN' => 'root',
     'PASSWORD' => '',
     'NAME' => 'yeticave'
+];
+
+$mail_config = [
+    $transport = new Swift_SmtpTransport('phpdemo.ru', 25),
+    $transport->setUsername('keks@phpdemo.ru'),
+    $transport->setPassword('htmlacademy')
 ];
 
 session_start();
