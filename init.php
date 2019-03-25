@@ -323,14 +323,8 @@ function get_lots_by_category_id($link, $categ_id) {
                         categories.name
                     ORDER BY lots.`starting_date`
                     LIMIT 9;';
-    $res = db_select ($link, $sql, [$categ_id]);
+    $res = db_select ($link, $sql, [(int) $categ_id]);
     return ($res) ? $res : [];
-
-    /* $result = mysqli_query($link, $sql);
-    if ($result !== false) {
-        return mysqli_fetch_all($result , MYSQLI_ASSOC);
-    }
-    return []; */
 };
 
 function add_new_lot($link, $lot_data) {
@@ -393,4 +387,15 @@ function db_get_lots_not_winners($link) {
         return mysqli_fetch_all($query, MYSQLI_ASSOC);
     }
     return [];
+};
+/**
+ * Заносит в лот победителем автора последней ставки
+ *
+ * @param resource $link ресурс соединения
+ * @param integer $rate_amount_id ID ставки победителя
+ * @return void
+ */
+function insert_winner_to_db ($link, $rate_amount_id) {
+    $sql = 'INSERT INTO lots (winner_id) VALUES (?);';
+    db_insert($link, $sql, [$rate_amount_id]);
 };

@@ -331,12 +331,31 @@ function check_category_value ($categories, $new_lot_category) {
  */
 
 function check_my_lots_date ($end_date, $winner_id, $my_lots_data) {
-    if(strtotime($end_date) <= time() && $winner_id !== null ) {
+    if($end_date <= time() && $winner_id !== null ) {
         return $my_lots_data['rate_winner'];
-    } elseif (strtotime($end_date) <= time() && $winner_id === null) {
+    } elseif ($end_date <= time() && $winner_id === null) {
         return $my_lots_data['rate_end'];
-    } elseif (strtotime($end_date) - time() <= SECONDS_AMOUNT['DAY']) {
+    } elseif ($end_date - time() <= SECONDS_AMOUNT['DAY']) {
         return $my_lots_data['rate_low_time'];
     }
     return $my_lots_data['rate_msg'];
 };
+
+function get_lot_data ($lot = []) {
+    $my_lots_data = ['rate_winner' => ['rate_msg' => 'Ставка выиграла',
+                                            'timer_class_value' => 'timer--win',
+                                            'item_class_value' => 'rates__item--win'],
+                        'rate_low_time' => ['rate_msg' => show_left_time($lot['finishing_date']),
+                                            'timer_class_value' => 'timer--finishing',
+                                            'item_class_value' => ''],
+                            'rate_end' => ['rate_msg' => 'Торги окончены',
+                                            'timer_class_value' => 'timer--end',
+                                            'item_class_value' => 'rates__item--end'],
+                            'rate_msg' => ['rate_msg' => show_left_time($lot['finishing_date']),
+                                            'timer_class_value' => '',
+                                            'item_class_value' => '']
+            ];
+        $end_date = strtotime($lot['finishing_date']);
+        $winner_id = $lot['winner_id'] ?? null;
+        return check_my_lots_date ($end_date, $winner_id, $my_lots_data);
+    };
