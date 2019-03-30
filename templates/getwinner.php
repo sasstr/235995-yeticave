@@ -28,6 +28,9 @@ if(isset($winners) && count($winners) > 0) {
     /* $transport = new Swift_SmtpTransport('phpdemo.ru', 25);
     $transport->setUsername('keks@phpdemo.ru');
     $transport->setPassword('htmlacademy'); */
+    $mail_content = render('email.php', [
+        'winner' => $winner
+    ]);
 
     // Формирование сообщения
     $message = new Swift_Message("Ваша ставка победила");
