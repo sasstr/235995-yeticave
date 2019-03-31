@@ -16,8 +16,11 @@
         <div class="lot-item__right">
         <? if (isset($_SESSION['user']) && $rate_limit) : ?>
           <div class="lot-item__state">
+            <? if($time_to_end_lot === "Время делать ставки вышло") : ?>
+                <span>Время делать ставки вышло</span>
+            <? else : ?>
             <div class="lot-item__timer timer">
-              <!-- 10:54 --> <?= isset($diff_time) ? show_left_time($diff_time) : ''; ?>
+              <?= isset($diff_time) ? show_left_time($diff_time) : ''; ?>
             </div>
             <div class="lot-item__cost-state">
               <div class="lot-item__rate">
@@ -29,15 +32,17 @@
                 Мин. ставка <span><?= isset($min_rate) ? format_price($min_rate) : '' ?></span>
               </div>
             </div>
-            <form class="lot-item__form" action=""  method="post" enctype="application/x-www-form-urlencoded">
-              <p class="lot-item__form-item form__item <?= isset($errors['cost']) ? 'form__item--invalid' : '' ?>">
-                <label for="cost">Ваша ставка</label>
-                <input type="hidden" name="id" value='<?= isset($lot_id) ? htmlspecialchars($lot_id) : ''; ?>'>
-                <input id="cost" type="text" name="cost" placeholder="<?= isset($min_rate) ? htmlspecialchars($min_rate) : ''; ?>">
-                <span class="form__error"><?= isset($errors['cost']) ? htmlspecialchars($errors['cost']) : '' ?></span>
-              </p>
-              <button type="submit" class="button">Сделать ставку</button>
-            </form>
+
+                <form class="lot-item__form" action=""  method="post" enctype="application/x-www-form-urlencoded">
+                <p class="lot-item__form-item form__item <?= isset($errors['cost']) ? 'form__item--invalid' : '' ?>">
+                    <label for="cost">Ваша ставка</label>
+                    <input type="hidden" name="id" value='<?= isset($lot_id) ? htmlspecialchars($lot_id) : ''; ?>'>
+                    <input id="cost" type="text" name="cost" placeholder="<?= isset($min_rate) ? htmlspecialchars($min_rate) : ''; ?>">
+                    <span class="form__error"><?= isset($errors['cost']) ? htmlspecialchars($errors['cost']) : '' ?></span>
+                </p>
+                <button type="submit" class="button">Сделать ставку</button>
+                </form>
+            <? endif ?>
           </div>
           <? endif ?>
           <div class="history">
