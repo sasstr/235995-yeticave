@@ -348,6 +348,7 @@ function add_new_lot($link, $lot_data) {
 
 function get_my_lots($link, $lots_user_id) {
     $sql = 'SElECT `lots`.`title` AS `lots_title`,
+                `lots`.`id`,
                 `lots`.`starting_price`,
                 `lots`.`description`,
                 `lots`.`img_path`,
@@ -396,9 +397,9 @@ function db_get_lots_not_winners($link) {
  * @param integer $rate_amount_id ID ставки победителя
  * @return void
  */
-function insert_winner_to_db ($link, $rate_amount_id) {
+function insert_winner_to_db ($link, $rate_user_id) {
     $sql = 'INSERT INTO lots (winner_id) VALUES (?);';
-    db_insert($link, $sql, [$rate_amount_id]);
+    db_insert($link, $sql, [$rate_user_id]);
 };
 
 function get_lots_pagination($link, $page_items, $offset) {
@@ -425,7 +426,7 @@ function get_lots_pagination($link, $page_items, $offset) {
                 lots.img_path,
                 categories.name
             ORDER BY lots.`starting_date`
-            LIMIT' . $page_items . ' OFFSET ' . $offset . ';';
+            LIMIT ? OFFSET ? ;';  // переделать на подготовленное выражение
     $result = mysqli_query($link, $sql);
     if ($result !== false) {
         return mysqli_fetch_all($result , MYSQLI_ASSOC);

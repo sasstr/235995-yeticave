@@ -8,8 +8,26 @@ require_once('data.php');
 if($link) {
     $cur_page = isset($_GET['page']) ? intval($_GET['page']) : 1;
     $page_items = 9;
+// учитывать лоты по каетегориям на стр лоты категорий
+    // $result = mysqli_query($link, "SELECT COUNT(*) as cnt FROM lots;");
+// учитывать лоты по каетегориям на стр лоты категорий
+    $result_category = mysqli_query($link, "SELECT COUNT(*) as cnt
+    FROM lots
+    INNER JOIN categories
+    ON lots.category_id = categories.id
+    WHERE lots.finishing_date > NOW()
+    AND lots.winner_id IS NULL;");
+// учитывать лоты по поиску на стр лоты поиска
+    $result_search = mysqli_query($link, "SELECT COUNT(*) as cnt
+    FROM lots
+    WHERE lots.finishing_date > NOW()
+    AND lots.winner_id IS NULL;");
+// для главной исключить завершенные лоты
+    $result_index = mysqli_query($link, "SELECT COUNT(*) as cnt
+                                    FROM lots
+                                    WHERE lots.finishing_date > NOW()
+                                    AND lots.winner_id IS NULL;");
 
-    $result = mysqli_query($link, "SELECT COUNT(*) as cnt FROM lots;");
     $items_count = mysqli_fetch_assoc($result)['cnt'];
 
     $pages_count = ceil($items_count / $page_items);
