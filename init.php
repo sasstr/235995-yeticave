@@ -215,6 +215,7 @@ function select_history_data_by_id ($link, $lot_id) {
  */
 function select_rates_data_by_id ($link, $lot_id) {
     $sql = 'SELECT  `users`.`id`,
+                    `users`.`name`,
                     `rates`.`rate_amount`,
                     `lots`.`rate_step`,
                     `lots`.`starting_price`,

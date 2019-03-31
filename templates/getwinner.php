@@ -28,7 +28,7 @@ if(isset($winners) && count($winners) > 0) {
     /* $transport = new Swift_SmtpTransport('phpdemo.ru', 25);
     $transport->setUsername('keks@phpdemo.ru');
     $transport->setPassword('htmlacademy'); */
-    $mail_content = render('email.php', [
+    $mail_content = render('email', [
         'winner' => $winner
     ]);
 
@@ -41,7 +41,7 @@ if(isset($winners) && count($winners) > 0) {
 
     $message->setTo(["sasstr@gmail.com" => "sasstr"]);
     $message->setBody("Ваша ставка победила");
-    $message->setFrom("keks@phpdemo.ru", "YetiCave Ваша ставка победила");
+    $message->setFrom("a.stra21@yandex.ru", "YetiCave Ваша ставка победила");
     // Отправка сообщения
     $mailer = new Swift_Mailer($mail_config['0']);
     // Чтобы иметь максимально подробную информацию о процессе отправки сообщений
