@@ -15,9 +15,19 @@ const DB_SETUP = [
 ];
 
 $mail_config = [
+    $transport = new Swift_SmtpTransport('smtp.yandex.ru', 465, 'SSL'),
+    $transport->setUsername('a.stra21@yandex.ru'),
+    $transport->setPassword('1043803str')
+];
+
+/* $mail_config = [
     $transport = new Swift_SmtpTransport('phpdemo.ru', 25),
     $transport->setUsername('keks@phpdemo.ru'),
     $transport->setPassword('htmlacademy')
 ];
+setUsername($yandexEmail)
+    ->setPassword($yandexPassword)
+    ->setEncryption('SSL');
+*/
 
 session_start();

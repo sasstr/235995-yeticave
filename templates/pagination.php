@@ -17,9 +17,5 @@ if($link) {
 
     $pages = range(1, $pages_count);
 
-    // запрос на показ девяти самых популярных гифок
-    /* $sql = 'SELECT gifs.id, title, path, like_count, users.name FROM gifs '
-        . 'JOIN users ON gifs.user_id = users.id '
-        . 'ORDER BY show_count DESC LIMIT ' . $page_items . ' OFFSET ' . $offset; */
+    $lots_pagination = get_lots_pagination($link, $page_items, $offset);
 }
-

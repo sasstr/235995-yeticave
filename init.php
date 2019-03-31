@@ -215,6 +215,7 @@ function select_history_data_by_id ($link, $lot_id) {
  */
 function select_rates_data_by_id ($link, $lot_id) {
     $sql = 'SELECT  `users`.`id`,
+                    `users`.`name`,
                     `rates`.`rate_amount`,
                     `lots`.`rate_step`,
                     `lots`.`starting_price`,
@@ -398,4 +399,36 @@ function db_get_lots_not_winners($link) {
 function insert_winner_to_db ($link, $rate_amount_id) {
     $sql = 'INSERT INTO lots (winner_id) VALUES (?);';
     db_insert($link, $sql, [$rate_amount_id]);
+};
+
+function get_lots_pagination($link, $page_items, $offset) {
+    $sql = 'SElECT `lots`.`title` AS `lots_title`,
+                `lots`.`id`,
+                `lots`.`starting_price`,
+                lots.`img_path`,
+                lots.`finishing_date`,
+                lots.`starting_date`,
+                categories.name AS categories_name,
+                count(rates.lots_id) AS rates_count,
+                MAX(rates.rate_amount) AS rate_amount
+            FROM lots
+                INNER JOIN categories
+                ON lots.category_id = categories.id
+                LEFT JOIN rates
+                ON lots.id = rates.lots_id
+            WHERE lots.finishing_date > NOW()
+            AND lots.winner_id IS NULL
+            GROUP BY
+                lots.id,
+                lots.title,
+                lots.starting_price,
+                lots.img_path,
+                categories.name
+            ORDER BY lots.`starting_date`
+            LIMIT' . $page_items . ' OFFSET ' . $offset . ';';
+    $result = mysqli_query($link, $sql);
+    if ($result !== false) {
+        return mysqli_fetch_all($result , MYSQLI_ASSOC);
+    }
+    return [];
 };
