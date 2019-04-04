@@ -14,12 +14,11 @@ if(isset($winners) && count($winners) > 0) {
         $rate_data = select_rates_data_by_id($link, $winner['id']);
         // Записать в лот победителем автора последней ставки
         insert_winner_to_db ($link, $winner['user_id']);
-    }
         $mail_content = render('email', [
             'winner' => $winner,
             'rate_data' => $rate_data
         ]);
-
+    } // перенести ниже но надо решить проблему спама!!! яндекс не отправляет сразу несколько писем.
         // Формирование сообщения
         $message = new Swift_Message("Ваша ставка победила");
         // Content-type тела письма	text/html
@@ -47,5 +46,5 @@ if(isset($winners) && count($winners) > 0) {
         } catch (Swift_TransportException $ex) {
             print($ex->getMessage() . '<br>');
         }
-
+// перенести конец foreach сюда TODO
 }

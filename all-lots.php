@@ -10,7 +10,7 @@ if ($_GET['id'] && $_GET['name']) {
     $page_title = $_GET['name'];
     $category_lots = get_lots_by_category_id($link, $categ_id);
 
-    include_template ('all-lots', 'Все лоты', $categories, $user_avatar,[
+    include_template ('all-lots', "Все лоты в категории: $page_title", $categories, $user_avatar,[
         'categories' => $categories,
         'page_name' => $page_title,
         'category_lots' => $category_lots,

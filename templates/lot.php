@@ -32,7 +32,6 @@
                 Мин. ставка <span><?= isset($min_rate) ? format_price($min_rate) : '' ?></span>
               </div>
             </div>
-
                 <form class="lot-item__form" action=""  method="post" enctype="application/x-www-form-urlencoded">
                 <p class="lot-item__form-item form__item <?= isset($errors['cost']) ? 'form__item--invalid' : '' ?>">
                     <label for="cost">Ваша ставка</label>
