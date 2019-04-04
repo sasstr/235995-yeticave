@@ -11,22 +11,29 @@ if($link) {
 // учитывать лоты по каетегориям на стр лоты категорий
     // $result = mysqli_query($link, "SELECT COUNT(*) as cnt FROM lots;");
 // учитывать лоты по каетегориям на стр лоты категорий
-    $result_category = mysqli_query($link, "SELECT COUNT(*) as cnt
+    $sql = "SELECT COUNT(*) as cnt
     FROM lots
-    INNER JOIN categories
+    JOIN categories
     ON lots.category_id = categories.id
     WHERE lots.finishing_date > NOW()
-    AND lots.winner_id IS NULL;");
+    AND lots.winner_id IS NULL
+    AND lots.category_id = (SELECT categories.id
+                            FROM categories
+                            WHERE categories.name = ?);";
+    $category_name = $_GET['name'];
+    $result_category = db_select ($link, $sql, [$category_name]);
+
+    // $result_category = mysqli_query($link, $sql);
 // учитывать лоты по поиску на стр лоты поиска
     $result_search = mysqli_query($link, "SELECT COUNT(*) as cnt
     FROM lots
     WHERE lots.finishing_date > NOW()
     AND lots.winner_id IS NULL;");
 // для главной исключить завершенные лоты
-    $result_index = mysqli_query($link, "SELECT COUNT(*) as cnt
+    /* $result_index = mysqli_query($link, "SELECT COUNT(*) as cnt
                                     FROM lots
                                     WHERE lots.finishing_date > NOW()
-                                    AND lots.winner_id IS NULL;");
+                                    AND lots.winner_id IS NULL;"); */
 
     $items_count = mysqli_fetch_assoc($result)['cnt'];
 
