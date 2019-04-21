@@ -7,7 +7,9 @@
       <section class="lots">
         <h2>Результаты поиска по запросу «<span><?= htmlspecialchars($search_ft_to_db) ?></span>»</h2>
         <ul class="lots__list">
-        <? if (count($res_search) >= 1) : ?>
+        <? if (count($res_search) < 1) : ?> <!-- если запрос пустой -->
+            <h2>Ничего не найдено по вашему запросу</h2>
+        <? elseif (count($res_search) <= 9) : ?> <!-- если лотов меньше или равно 9 -->
         <? foreach($res_search as $val): ?>
           <li class="lots__item lot">
             <div class="lot__image">
@@ -28,8 +30,8 @@
             </div>
           </li>
           <? endforeach ?>
-          <? else : ?>
-          <h2>Ничего не найдено по вашему запросу</h2>
+          <? else : ?> <!-- если лотов более 9 шт. -->
+
           <? endif ?>
         </ul>
       </section>

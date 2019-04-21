@@ -12,7 +12,7 @@ if($link) {
     // $result = mysqli_query($link, "SELECT COUNT(*) as cnt FROM lots;");
 // учитывать лоты по каетегориям на стр лоты категорий
 
-    if(isset($_GET['id']) && int ($_GET['id'])) {
+    if(int (isset($_GET['id']))) {
         $sql = "SELECT COUNT(*) as cnt
                 FROM lots
                 JOIN categories
@@ -26,15 +26,15 @@ if($link) {
 
     // $result_category = mysqli_query($link, $sql);
 // учитывать лоты по поиску на стр лоты поиска
-    $result_search = mysqli_query($link, "SELECT COUNT(*) as cnt
+    /* $result_search = mysqli_query($link, "SELECT COUNT(*) as cnt
     FROM lots
     WHERE lots.finishing_date > NOW()
-    AND lots.winner_id IS NULL;");
+    AND lots.winner_id IS NULL;"); */
 // для главной исключить завершенные лоты
-    /* $result_index = mysqli_query($link, "SELECT COUNT(*) as cnt
+    $result_index = mysqli_query($link, "SELECT COUNT(*) as cnt
                                     FROM lots
                                     WHERE lots.finishing_date > NOW()
-                                    AND lots.winner_id IS NULL;"); */
+                                    AND lots.winner_id IS NULL;");
 
     $items_count = mysqli_fetch_assoc($result)['cnt'];
 

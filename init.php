@@ -261,7 +261,7 @@ function select_id_by_email ($link, $email) {
 function search_ft_to_db ($link, $search_text) {
     $search_query = trim($search_text);
     if (!empty($search_query)) {
-    $sql = 'SELECT  `lots`.`id`,
+    $sql =      'SELECT `lots`.`id`,
                         `lots`.`img_path`,
                         `lots`.`title`,
                         `lots`.`starting_price`,
@@ -274,7 +274,7 @@ function search_ft_to_db ($link, $search_text) {
                 AND (`lots`.`winner_id` IS NULL)
                 AND (`lots`.`finishing_date` > NOW())
                 ORDER BY `lots`.`starting_date` DESC;';
-                return db_select ($link, $sql, [$search_query]);
+    return db_select ($link, $sql, [$search_query]);
     }
     return 'Надо набрать поисковый запрос';
 };
