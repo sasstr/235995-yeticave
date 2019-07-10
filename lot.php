@@ -7,8 +7,6 @@ require_once('data.php');
 
 unset($_SESSION['post_cost_error']);
 
-
-
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_SESSION['user'])) {
     $id = (int) $_POST['id'];
     $lot = get_lot_by_id($link, $id);

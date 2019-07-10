@@ -4,7 +4,7 @@ require_once('config.php');
 require_once('functions.php');
 require_once('init.php');
 require_once('data.php');
-require_once('templates/getwinner.php');
+/* require_once('templates/getwinner.php'); */
 
 $major_indexes = [
   'categories' => $categories,
